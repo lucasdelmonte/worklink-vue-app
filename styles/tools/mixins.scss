@@ -1,0 +1,22 @@
+// Fonts
+@mixin fontBold($font-size, $letter-spacing, $line-height, $color) {
+  font-family: $fontBold;
+  @include fontConfig($font-size, $letter-spacing, $line-height, $color);
+}
+
+@mixin fontMedium($font-size, $letter-spacing, $line-height, $color) {
+  font-family: $fontMedium;
+  @include fontConfig($font-size, $letter-spacing, $line-height, $color);
+}
+
+@mixin fontRegular($font-size, $letter-spacing, $line-height, $color) {
+  font-family: $fontRegular;
+  @include fontConfig($font-size, $letter-spacing, $line-height, $color);
+}
+
+@mixin fontConfig($font-size, $letter-spacing, $line-height, $color) {
+  font-size: $font-size;
+  letter-spacing: $letter-spacing;
+  line-height: $line-height;
+  color: $color;
+}
