@@ -1,0 +1,98 @@
+.button {
+    width: 100%;
+    text-align: center;
+    border-radius: .5rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 350ms ease;
+    cursor: pointer;
+
+    &.button--primary-white {
+        background: $color-primary-1;
+        border: .1rem solid $color-primary-1;
+        @include fontBold(1.4rem, .07rem, 2.1rem, $color-primary-2);
+
+        &:hover:not([disabled]),
+        &.active:not([disabled]) {
+            background: $color-grey-5;
+            border: .1rem solid $color-primary-2;
+        }
+    }
+
+    &.button--primary-black {
+        background: $color-primary-2;
+        border: .1rem solid $color-primary-2;
+        @include fontBold(1.4rem, .07rem, 2.1rem, $color-primary-1);
+
+        &:hover:not([disabled]),
+        &.active:not([disabled]) {
+            background: $color-primary-3;
+            color: $color-primary-2;
+            border: .1rem solid $color-primary-3;
+        }
+    }
+
+    &.button--primary-white,
+    &.button--primary-black {
+        &[disabled] {
+            cursor: not-allowed;
+            color: $color-grey-50;
+            background: $color-grey-15;
+        }
+    }
+
+    &.button--secondary-white {
+        background: transparent;
+        border: .1rem solid $color-grey-30;
+        outline: 0;
+        @include fontBold(1.4rem, .07rem, 2.1rem, $color-primary-1);
+
+        &:hover:not([disabled]),
+        &.active:not([disabled]) {
+            border: .1rem solid $color-primary-1;
+            outline: .1rem solid $color-primary-1;
+        }
+
+        &[disabled] {
+            cursor: not-allowed;
+            color: $color-grey-30;
+            border: .1rem solid $color-grey-30;
+            outline: 0;
+        }
+    }
+
+    &.button--secondary-black {
+        color: $color-primary-2;
+        background: $color-primary-1;
+        border: .1rem solid $color-grey-50;
+        outline: 0;
+        @include fontBold(1.4rem, .07rem, 2.1rem, $color-black);
+
+        &:hover:not([disabled]),
+        &.active:not([disabled]) {
+            border: .1rem solid $color-primary-2;
+            outline: .1rem solid $color-primary-2;
+        }
+
+        &[disabled] {
+            cursor: not-allowed;
+            color: $color-grey-50;
+            background: transparent;
+            border: .1rem solid $color-grey-15;
+            outline: 0;
+        }
+    }
+
+    &.button--tertiary-black {
+        background: $color-primary-3;
+        text-transform: uppercase;
+        border: none;
+        outline: none;
+        @include fontBold(1.4rem, 0.028rem, 2rem, $color-primary-2);
+
+        &[disabled] {
+            cursor: not-allowed;
+            color: $color-grey-50;
+        }
+    }
+}

@@ -1,0 +1,83 @@
+.form {
+  &__title {
+    margin-top: 0;
+    margin-bottom: 1.6rem;
+    text-align: center;
+    @include fontBold(3.2rem, 0, 5.4rem, $color-primary-2);
+  }
+  &__social {
+    margin-bottom: 1.6rem;
+    @include display-flex(row, center, center, nowrap, 0 2rem);
+
+    .social {
+      width: 3.8rem;
+      height: 3.8rem;
+      border-radius: 50%;
+      display: block;
+      border: .1rem solid $color-primary-2;
+      text-decoration: none;
+      color: $color-primary-2;
+      font-size: 1.4rem;
+      transition: scale 650ms ease;
+      @include display-flex(row, center, center, nowrap, 0);
+
+      &:hover {
+        scale: 1.1;
+        color: $color-primary-1;
+        background: $color-primary-2;
+      }
+    }
+  }
+  &__subtext {
+    display: block;
+    margin-bottom: 1.8rem;
+    text-align: center;
+    @include fontRegular(1.4rem, 0, 1.8rem, $color-primary-2);
+  }
+  &__forgot {
+    display: block;
+    width: fit-content;
+    margin-top: 2rem;
+    padding-bottom: .8rem;
+    text-decoration: none;
+    @include fontRegular(1.4rem, 0, 1.8rem, $color-primary-2);
+  }
+  .button {
+    margin-top: 1.8rem;
+    min-height: 4rem;
+  }
+}
+
+.field {
+  height: 5.2rem;
+  margin-bottom: 1.6rem;
+  @include display-flex(column-reverse, flex-start, flex-start, nowrap, 1rem 0);
+
+  &__label,
+  &__input {
+    width: 100%;
+  }
+  &__label {
+    transition: all 350ms ease;
+    @include fontRegular(1.4rem, .04rem, 2rem, $color-grey-50);
+  }
+  &__input {
+    padding: 0;
+    height: 3.2rem;
+    border: none;
+    border-bottom: .1rem solid $color-grey-50;
+    @include fontRegular(1.4rem, 0, 2rem, $color-primary-2);
+
+    &:focus-visible {
+      outline: none;
+    }
+    &:focus {
+      border-color: $color-primary-2;
+
+      & + .field__label {
+        font-size: 1.2rem;
+        color: $color-primary-2;
+      }
+    }
+  }
+}

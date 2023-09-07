@@ -5,3 +5,12 @@ html {
 body {
   background: $color-grey-5;
 }
+
+.hidden {
+  display: none;
+}
+
+.visibility-hidden {
+  visibility: hidden;
+  opacity: 0;
+}

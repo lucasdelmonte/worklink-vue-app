@@ -10,4 +10,11 @@
 
 <style lang="scss">
   @import '../styles/main.scss';
+
+  main {
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
 </style>
