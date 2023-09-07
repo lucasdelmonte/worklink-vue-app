@@ -22,7 +22,7 @@
         </div>
         <div class="field">
           <input class="field__input" type="password" name="password" />
-          <label class="field__label" for="password">Password</label>
+          <label class="field__label" for="password">Password*</label>
         </div>
         <button class="button button--primary-black">Sign Up</button>
       </form>

@@ -1,19 +1,24 @@
 <template>
-  <div class="container" open>
+  <div class="container" :open="containerOpen">
     <div class="container__column container__column--sign-in">
       <Login />
     </div>
     <div class="container__column container__column--sign-up">
       <SignUp />
     </div>
-    <Overlay />
+    <Overlay @toggleContainer="toggleContainerOpen" :containerOpen="containerOpen" />
   </div>
 </template>
 
 <script setup lang="ts">
-  import Login from './Login.vue';
-  import SignUp from './SignUp.vue';
-  import Overlay from './Overlay.vue';
+  import { ref } from 'vue';
+  import Login from './Login.vue'
+  import SignUp from './SignUp.vue'
+  import Overlay from './Overlay.vue'
+  
+  let containerOpen = ref(true)
+
+  const toggleContainerOpen = () => containerOpen.value = !containerOpen.value
 </script>
 
 <style scoped lang="scss">
@@ -37,13 +42,13 @@
     grid-template-rows: 1fr;
     grid-template-columns: repeat(2, 1fr); 
 
-    &[open] {
+    &[open=true] {
       .overlay {
         left: 100%;
         translate: -100%;
       }
     }
-    &:not([open]) {
+    &[open=false] {
       .overlay {
         left: 0%;
         translate: 0;
