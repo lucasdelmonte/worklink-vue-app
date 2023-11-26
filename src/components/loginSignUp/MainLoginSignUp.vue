@@ -31,7 +31,7 @@
     left: 50%;
     translate: -50% -50%;
     max-width: 95rem;
-    max-height: 55rem;
+    max-height: 60rem;
     height: 100%;
     width: calc(100% - 5rem);
     box-shadow: .5rem .5rem 2rem rgba($color: $color-primary-2, $alpha: .14);

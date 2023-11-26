@@ -7,12 +7,12 @@
     <div class="overlay__left">
       <h1 class="overlay__title">Welcome Back!</h1>
       <p class="overlay__subtext">Please login with your account info</p>
-      <button class="button button--tertiary-black" @click="$emit('toggleContainer')">Sign In</button>
+      <button class="button button--tertiary-black" @click="$emit('toggleContainer')">Sign Up</button>
     </div>
     <div class="overlay__right">
       <h1 class="overlay__title">Hello!</h1>
       <p class="overlay__subtext">Enter your data and be part of our network</p>
-      <button class="button button--tertiary-black" @click="$emit('toggleContainer')">Sign Up</button>
+      <button class="button button--tertiary-black" @click="$emit('toggleContainer')">Sign In</button>
     </div>
   </div>
 </template>
@@ -96,7 +96,7 @@
       &__left,
       &__right {
         margin: 0;
-        @include fontBold(3.6rem, 0rem, 3rem, $color-primary-1)
+        @include fontBold(3.6rem, 0rem, 3rem, $color-primary-1);
       }
       &__right {
         -webkit-text-stroke: .1rem $color-primary-1;
