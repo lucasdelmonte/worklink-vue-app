@@ -4,8 +4,8 @@
       <form @submit.prevent="handleSubmit" class="sign-in__form form">
         <h1 class="form__title">Sign in</h1>
         <div class="form__social">
-          <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+          <a @click="handleSubmitFacebook" class="social"><i class="fab fa-facebook-f"></i></a>
+          <a @click="handleSubmitGoogle" class="social"><i class="fab fa-google-plus-g"></i></a>
         </div>
         <span class="form__subtext">or use your account</span>
         <div class="field">
@@ -31,6 +31,14 @@
     password: ''
   })
 
+  const handleSubmitFacebook = (): void => {
+    // Facebook login
+    console.log('Login using facebook');
+  }
+  const handleSubmitGoogle = (): void => {
+    // Google login
+    console.log('Login using google');
+  }
   const handleSubmit = (): void => {
     console.log(userData.value);
   }

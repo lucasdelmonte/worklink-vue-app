@@ -1,16 +1,16 @@
 @font-face {
   font-family: fontBold;
-  src: url(../../public/Poppins-Bold.ttf);
+  src: url(/Poppins-Bold.ttf);
 }
 
 @font-face {
   font-family: fontMedium;
-  src: url(../../public/Poppins-Medium.ttf);
+  src: url(/Poppins-Medium.ttf);
 }
 
 @font-face {
   font-family: fontRegular;
-  src: url(../../public/Poppins-Regular.ttf);
+  src: url(/Poppins-Regular.ttf);
 }
 
 $fontBold: fontBold;

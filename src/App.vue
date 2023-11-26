@@ -1,10 +1,12 @@
 <script setup lang="ts">
   import MainLoginSignUp from './components/loginSignUp/MainLoginSignUp.vue'
+  import PopUp from './components/notificationPopUp/PopUp.vue'
 </script>
 
 <template>
   <main>
     <MainLoginSignUp />
+    <PopUp :show="true" :operationStatus="true" :messaje="'Successful operation'" />
   </main>
 </template>
 

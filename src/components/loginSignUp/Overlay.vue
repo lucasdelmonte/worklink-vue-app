@@ -88,7 +88,7 @@
     }
     .title {
       position: absolute;
-      top: 2rem;
+      top: 3rem;
       left: 50%;
       translate: -50% 0;
       @include display-flex(row, center, center, nowrap, 0 .2rem);

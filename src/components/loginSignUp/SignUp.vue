@@ -4,17 +4,17 @@
       <form @submit.prevent="handleSubmit" class="sign-up__form form">
         <h1 class="form__title">Create Account</h1>
         <div class="form__social">
-          <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+          <a @click="handleSubmitFacebook" class="social"><i class="fab fa-facebook-f"></i></a>
+          <a @click="handleSubmitGoogle" class="social"><i class="fab fa-google-plus-g"></i></a>
         </div>
         <span class="form__subtext">or use your email for registration</span>
         <div class="form__switch">
-            <input @change="setType('client')" type="radio" id="client" name="client-type" value="client" checked />
-            <label for="client">Client</label>
-            <input @change="setType('provider')" type="radio" id="provider" name="client-type" value="provider" />
-            <label for="provider">Provider</label>
-            <input @change="setType('business')" type="radio" id="business" name="client-type" value="business" />
-            <label for="business">Business</label>
+          <input @change="setType('client')" type="radio" id="client" name="client-type" value="client" checked />
+          <label for="client">Client</label>
+          <input @change="setType('provider')" type="radio" id="provider" name="client-type" value="provider" />
+          <label for="provider">Provider</label>
+          <input @change="setType('business')" type="radio" id="business" name="client-type" value="business" />
+          <label for="business">Business</label>
         </div>
         <template v-if="userType == 'client'">
           <!-- Client fields -->
@@ -78,6 +78,14 @@
     userType.value = type
   }
 
+  const handleSubmitFacebook = (): void => {
+    // Facebook register
+    console.log('Register using facebook');
+  }
+  const handleSubmitGoogle = (): void => {
+    // Google register
+    console.log('Register using google');
+  }
   const handleSubmit = (): void => {
     switch (userType.value) {
       case 'client':
