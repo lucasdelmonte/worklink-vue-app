@@ -1,12 +1,10 @@
 <script setup lang="ts">
-  import MainLoginSignUp from './components/loginSignUp/MainLoginSignUp.vue'
-  import PopUp from './components/notificationPopUp/PopUp.vue'
+  
 </script>
 
 <template>
   <main>
-    <MainLoginSignUp />
-    <PopUp :show="true" :operationStatus="true" :messaje="'Successful operation'" />
+    <router-view></router-view>
   </main>
 </template>
 
@@ -15,8 +13,14 @@
 
   main {
     overflow: hidden;
-    width: 100vw;
-    height: 100vh;
+    width: calc(100vw - 3.2rem);
+    height: calc(100vh - 3.2rem);
     position: relative;
+    padding: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem 0;
+    align-items: stretch;
+    @include display-flex(column, flex-start, stretch, nowrap, 1.6rem 0);
   }
 </style>
