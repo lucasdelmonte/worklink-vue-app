@@ -6,8 +6,9 @@
     </div>
     <h1 class="header__title">Work<span>Link</span></h1>
     <div class="header__user">
-      <IconWishlist :width="17" :height="16" />
-      <IconUser :width="12" :height="18" />
+      <button><IconWishlist :width="17" :height="16" /></button>
+      <button><IconUser :width="12" :height="18" /></button>
+      <button @click="userStore.logoutUser">Logout</button>
     </div>
   </header>
   <div class="main-content">
@@ -43,20 +44,20 @@
 </template>
 
 <script setup lang="ts">
-  import { useUserStore } from '@/stores/user'
   import { ref, Ref } from 'vue'
   import IconUser from '@/components/icons/IconUser.vue'
   import IconWishlist from '@/components/icons/IconWishlist.vue'
+  import { useUserStore } from '../stores/user'
 
-  const menuState: Ref<boolean> = ref(false)
-  const toggleMenu = () => {
-    menuState.value = !menuState.value
-  }
   const userStore = useUserStore()
+  const menuState: Ref<boolean> = ref(false)
+
+  const toggleMenu = () => menuState.value = !menuState.value
 </script>
 
 <style scoped lang="scss">
   @import '../../styles/main.scss';
+
   .header {
     background: $color-white;
     border-radius: 1rem;

@@ -17,7 +17,10 @@
           <label class="field__label" for="password">Password*</label>
         </div>
         <a href="#" class="form__forgot hover-underline hover-underline--right">Forgot your password?</a>
-        <button class="button button--primary-black">Sign In</button>
+        <button class="button button--primary-black" :class="{ 'button--loading': userStore.loadingUser }">
+          Sign In
+          <IconSpinner :width="20" :height="20" :stroke="'#000000'" />
+        </button>
       </form>
     </div>
   </div>
@@ -25,25 +28,53 @@
 
 <script setup lang="ts">
   import { ref } from 'vue'
+  import { useUserStore } from '../../stores/user'
+  import IconSpinner from '@/components/icons/IconSpinner.vue'
 
   const userData = ref({
-    email: '',
-    password: ''
+    email: 'delmontelucas678@gmail.com',
+    password: 'WorkLink2k23'
   })
+  const userStore = useUserStore()
 
   const handleSubmitFacebook = (): void => {
     // Facebook login
-    console.log('Login using facebook');
+    console.log('Login using facebook')
   }
   const handleSubmitGoogle = (): void => {
     // Google login
-    console.log('Login using google');
+    console.log('Login using google')
   }
-  const handleSubmit = (): void => {
-    console.log(userData.value);
+  const handleSubmit = async(): Promise<void> => {
+    if(!userData.value.email || !userData.value.password) return
+    await userStore.loginUser(userData.value.email, userData.value.password)
   }
 </script>
 
 <style scoped lang="scss">
   @import '../../../styles/main.scss';
+
+  .button { 
+    position: relative;
+    &.button--loading {
+      font-size: 0;
+      pointer-events: none;
+      &.button--primary-black {
+        background-color: $color-primary-3;
+        border-color: $color-primary-3;
+      }
+      .spinner {
+        scale: 1;
+        display: flex;
+      }
+    }
+    .spinner {
+      scale: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      translate: -50% -50%;
+      z-index: 1;
+    }
+  }
 </style>

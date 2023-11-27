@@ -37,19 +37,23 @@
             <label class="field__label" for="name">Business name*</label>
           </div>
         </template>
+        <!-- General fields -->
         <div class="field">
-          <input v-model="generalData.email" class="field__input" id="email" type="email" name="email" />
+          <input v-model.trim="generalData.email" class="field__input" id="email" type="email" name="email" />
           <label class="field__label" for="email">Email*</label>
         </div>
         <div class="field">
-          <input v-model="generalData.password" class="field__input" id="password" type="password" name="password" />
+          <input v-model.trim="generalData.password" class="field__input" id="password" type="password" name="password" />
           <label class="field__label" for="password">Password*</label>
         </div>
         <div class="field">
-          <input v-model="generalData.password_confirm" class="field__input" id="password_confirm" type="password" name="password_confirm" />
+          <input v-model.trim="generalData.password_confirm" class="field__input" id="password_confirm" type="password" name="password_confirm" />
           <label class="field__label" for="password_confirm">Password again*</label>
         </div>
-        <button class="button button--primary-black">Sign Up</button>
+        <button class="button button--primary-black" :class="{ 'button--loading': userStore.loadingUser }">
+          Sign Up
+          <IconSpinner :width="20" :height="20" :stroke='"#000000"' />
+        </button>
       </form>
     </div>
   </div>
@@ -57,6 +61,10 @@
 
 <script setup lang="ts">
   import { ref, Ref } from 'vue'
+  import { useUserStore } from '../../stores/user'
+  import IconSpinner from '@/components/icons/IconSpinner.vue'
+
+  const userStore = useUserStore()
 
   const userType: Ref<string> = ref('client')
   const clientData = ref({
@@ -80,25 +88,30 @@
 
   const handleSubmitFacebook = (): void => {
     // Facebook register
-    console.log('Register using facebook');
+    console.log('Register using facebook')
   }
   const handleSubmitGoogle = (): void => {
     // Google register
-    console.log('Register using google');
+    console.log('Register using google')
   }
-  const handleSubmit = (): void => {
+  const handleSubmit = async (): Promise<void> => {
+    if(generalData.value.password !== generalData.value.password_confirm) return
+
     switch (userType.value) {
       case 'client':
-        console.log(clientData.value)
-        console.log(generalData.value)
+        if(!clientData.value.name || !generalData.value.email || !generalData.value.password || !generalData.value.password_confirm)
+        console.log('Client');
+        await userStore.registerUser(generalData.value.email, generalData.value.password, clientData.value.name)
         break;
+
       case 'provider':
-        console.log(providerData.value)
-        console.log(generalData.value)
+        if(!providerData.value.name || !generalData.value.email || !generalData.value.password || !generalData.value.password_confirm)
+        userStore.registerUser(generalData.value.email, generalData.value.password, providerData.value.name)
         break;
+
       case 'business':
-        console.log(businessData.value)
-        console.log(generalData.value)
+        if(!businessData.value.name || !generalData.value.email || !generalData.value.password || !generalData.value.password_confirm)
+        userStore.registerUser(generalData.value.email, generalData.value.password, businessData.value.name)
         break;
 
       default:
@@ -110,6 +123,29 @@
 <style scoped lang="scss">
   @import '../../../styles/main.scss';
 
+  .button { 
+    position: relative;
+    &.button--loading {
+      font-size: 0;
+      pointer-events: none;
+      &.button--primary-black {
+        background-color: $color-primary-3;
+        border-color: $color-primary-3;
+      }
+      .spinner {
+        scale: 1;
+        display: flex;
+      }
+    }
+    .spinner {
+      scale: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      translate: -50% -50%;
+      z-index: 1;
+    }
+  }
   .form {
     &__switch {
       height: 3.7rem;

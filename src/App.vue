@@ -1,12 +1,13 @@
-<script setup lang="ts">
-  
-</script>
-
 <template>
   <main>
     <router-view></router-view>
   </main>
 </template>
+
+<script setup lang="ts">
+  import { useUserStore } from './stores/user'
+  const userStore = useUserStore()
+</script>
 
 <style lang="scss">
   @import '../styles/main.scss';
