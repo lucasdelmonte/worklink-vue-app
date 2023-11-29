@@ -136,7 +136,7 @@
     top: 0;
     right: 0;
     background: transparent;
-    z-index: 1;
+    z-index: 2;
     min-width: 16rem;
     text-align: right;
     transition: translate 350ms ease;

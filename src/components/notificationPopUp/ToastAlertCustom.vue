@@ -37,7 +37,7 @@
     max-width: 40rem;
     width: fit-content;
     min-height: 6rem;
-    padding-right: 1.4rem;
+    padding: .8rem 1.4rem .8rem 0;
     background-color: $color-white;
     box-shadow: .5rem .5rem 2rem rgba($color: $color-primary-2, $alpha: .14);
     position: fixed;

@@ -14,17 +14,33 @@
       <p class="overlay__subtext">Enter your data and be part of our network</p>
       <button class="button button--tertiary-black" @click="$emit('toggleContainer')">Sign In</button>
     </div>
+    <div class="language">
+      <p class="language__title">Language</p>
+      <div class="form__switch">
+        <input @change="(evt) => setStoreLanguage(evt.target as HTMLInputElement | null)" type="radio" id="en" name="lang" value="en" checked />
+        <label for="en">En</label>
+        <input @change="(evt) => setStoreLanguage(evt.target as HTMLInputElement | null)" type="radio" id="es" name="lang" value="es" />
+        <label for="es">Es</label>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
   import { computed } from '@vue/reactivity'
+  import { useLangStore } from '../../stores/language'
+
+  const langStore = useLangStore()
 
   const props = defineProps({
     containerOpen: Boolean,
 	})
 
   const reactiveProps = computed(() => props)
+  const setStoreLanguage = ( target: HTMLInputElement | null ) => {
+    if(!target) return
+    langStore.setLanguage(target.value)
+  }
 </script>
 
 <style scoped lang="scss">
@@ -101,6 +117,53 @@
       &__right {
         -webkit-text-stroke: .1rem $color-primary-1;
         color: transparent;
+      }
+    }
+    .language {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      translate: -50% 0;
+      @include display-flex(column, center, center, nowrap, 0 .2rem);
+
+      &__title {
+        margin: 0 0 .8rem 0;
+        text-align: center;
+        @include fontRegular(1.4rem, 0, 1.8rem, $color-primary-1);
+      }
+    }
+    .form {
+      &__switch {
+        height: 3rem;
+        width: 100%;
+        box-shadow: .2rem .2rem 1rem #0000000D;
+        padding: .3rem .4rem;
+        margin-bottom: 2.7rem;
+        border-radius: 1.9rem;
+        background: $color-primary-3;
+        @include display-flex(row, space-between, center, nowrap, 0);
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0 .6rem;
+
+        input {
+          display: none;
+
+          &:checked + label {
+            background: $color-primary-2;
+            color: $color-primary-1;
+          }
+        }
+        label {
+          cursor: pointer;
+          transition: background 350ms ease, color 350ms ease;
+          height: 100%;
+          background: $color-primary-3;
+          border-radius: 2rem;
+          padding: 0 1rem;
+          @include display-flex(row, center, center, nowrap, 0);
+          @include fontRegular(1.4rem, 0, 1.7rem, $color-primary-2)
+        }
       }
     }
   }

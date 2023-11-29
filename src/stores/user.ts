@@ -10,6 +10,7 @@ import {
 } from 'firebase/auth'
 import { auth } from '@/firebaseConfig'
 import router from '@/router'
+import { enLang } from '@/assets/en-dictionary'
 
 const toastAction = ref(false)
 const toastTitle = ref('')
@@ -24,29 +25,29 @@ export const useUserStore = defineStore('user', {
     setToast(result: string): void {
       const toastAlertStore = useToastAlertStore()
       switch (result) {
-        case 'login-ok':
-          toastTitle.value = 'Successful login'
-          toastMessage.value = ''
+        case `${ enLang.login.ok.result }`:
+          toastTitle.value = enLang.login.ok.title
+          toastMessage.value = enLang.login.ok.message
           break;
-        case 'login-error':
-          toastTitle.value = 'There was a problem logging in'
-          toastMessage.value = `Please try again and check the fields`
+        case `${ enLang.login.error.result }`:
+          toastTitle.value = enLang.login.error.title
+          toastMessage.value = enLang.login.error.message
           break;
-        case 'register-ok':
-          toastTitle.value = 'Successful register'
-          toastMessage.value = 'Automatic redirection to home page'
+        case `${ enLang.register.ok.result }`:
+          toastTitle.value = enLang.register.ok.title
+          toastMessage.value = enLang.register.ok.message
           break;
-        case 'register-error':
-          toastTitle.value = 'There was a problem registering'
-          toastMessage.value = `Please try again and check the fields`
+        case `${ enLang.register.error.result }`:
+          toastTitle.value = enLang.register.error.title
+          toastMessage.value = enLang.register.error.message
           break;
-        case 'logout-ok':
-          toastTitle.value = 'Logged out successfully'
-          toastMessage.value = ''
+        case `${ enLang.logout.ok.result }`:
+          toastTitle.value = enLang.logout.ok.title
+          toastMessage.value = enLang.logout.ok.message
           break;
-        case 'logout-error':
-          toastTitle.value = 'An error occurred while signing out'
-          toastMessage.value = `Please try again and check the fields`
+        case `${ enLang.logout.error.result }`:
+          toastTitle.value = enLang.logout.error.title
+          toastMessage.value = enLang.logout.error.message
           break;
 
         default:
@@ -64,10 +65,10 @@ export const useUserStore = defineStore('user', {
         })
         this.userData = { email: user.email, uid: user.uid }
         router.push('/')
-        this.setToast('register-ok')
+        this.setToast(enLang.register.ok.result)
       } catch (e) {
         console.log(e)
-        this.setToast('register-error')
+        this.setToast(enLang.register.error.result)
       } finally {
         this.loadingUser = false
       }
@@ -78,10 +79,10 @@ export const useUserStore = defineStore('user', {
         const { user } = await signInWithEmailAndPassword(auth, email, password)
         this.userData = { email: user.email, uid: user.uid }
         router.push('/')
-        this.setToast('login-ok')
+        this.setToast(enLang.login.ok.result)
       } catch (e) {
         console.log(e)
-        this.setToast('login-error')
+        this.setToast(enLang.login.error.result)
       } finally {
         this.loadingUser = false
       }
@@ -91,10 +92,10 @@ export const useUserStore = defineStore('user', {
         await signOut(auth)
         this.userData = {}
         router.push('/login-register')
-        this.setToast('logout-ok')
+        this.setToast(enLang.logout.ok.result)
       } catch (e) {
         console.log(e)
-        this.setToast('logout-error')
+        this.setToast(enLang.logout.error.result)
       }
     },
     currentUser() {
