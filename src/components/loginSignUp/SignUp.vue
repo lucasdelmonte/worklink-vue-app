@@ -2,7 +2,7 @@
   <div class="sign-up">
     <div class="sign-up__container">
       <form @submit.prevent="handleSubmit" class="sign-up__form form">
-        <h1 class="form__title">Create Account</h1>
+        <h1 class="form__title">{{ langStore.lang.register.form.title }}</h1>
         <div class="form__social form__social--hidden">
           <a @click="handleSubmitFacebook" class="social"><i class="fab fa-facebook-f"></i></a>
           <a @click="handleSubmitGoogle" class="social"><i class="fab fa-google-plus-g"></i></a>
@@ -10,48 +10,48 @@
         <span class="form__subtext form__subtext--hidden">or use your email for registration</span>
         <div class="form__switch">
           <input @change="setType('client')" type="radio" id="client" name="client-type" value="client" checked />
-          <label for="client">Client</label>
+          <label for="client">{{ langStore.lang.register.form.switch.client }}</label>
           <input @change="setType('provider')" type="radio" id="provider" name="client-type" value="provider" />
-          <label for="provider">Provider</label>
+          <label for="provider">{{ langStore.lang.register.form.switch.provider }}</label>
           <input @change="setType('business')" type="radio" id="business" name="client-type" value="business" />
-          <label for="business">Business</label>
+          <label for="business">{{ langStore.lang.register.form.switch.business }}</label>
         </div>
         <template v-if="userType == 'client'">
           <!-- Client fields -->
           <div class="field">
             <input v-model="clientData.name" class="field__input" id="name" type="text" />
-            <label class="field__label" for="name">Name and lastname*</label>
+            <label class="field__label" for="name">{{ langStore.lang.register.form.name_lastname_input }}</label>
           </div>
         </template>
         <template v-else-if="userType == 'provider'">
           <!-- Provider fields -->
           <div class="field">
             <input v-model="providerData.name" class="field__input" id="name" type="text" />
-            <label class="field__label" for="name">Name and lastname*</label>
+            <label class="field__label" for="name">{{ langStore.lang.register.form.name_lastname_input }}</label>
           </div>
         </template>
         <template v-else>
           <!-- Business fields -->
           <div class="field">
             <input v-model="providerData.name" class="field__input" id="name" type="text" />
-            <label class="field__label" for="name">Business name*</label>
+            <label class="field__label" for="name">{{ langStore.lang.register.form.business_name_input }}</label>
           </div>
         </template>
         <!-- General fields -->
         <div class="field">
           <input v-model.trim="generalData.email" class="field__input" id="email" type="email" name="email" />
-          <label class="field__label" for="email">Email*</label>
+          <label class="field__label" for="email">{{ langStore.lang.register.form.email_input }}</label>
         </div>
         <div class="field">
           <input v-model.trim="generalData.password" class="field__input" id="password" type="password" name="password" />
-          <label class="field__label" for="password">Password*</label>
+          <label class="field__label" for="password">{{ langStore.lang.register.form.password_input }}</label>
         </div>
         <div class="field">
           <input v-model.trim="generalData.password_confirm" class="field__input" id="password_confirm" type="password" name="password_confirm" />
-          <label class="field__label" for="password_confirm">Password again*</label>
+          <label class="field__label" for="password_confirm">{{ langStore.lang.register.form.password_again_input }}</label>
         </div>
         <button class="button button--primary-black" :class="{ 'button--loading': userStore.loadingUser }">
-          Sign Up
+          {{ langStore.lang.register.form.button }}
           <IconSpinner :width="20" :height="20" :stroke='"#000000"' />
         </button>
       </form>
@@ -60,11 +60,17 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, Ref } from 'vue'
+  import { ref, Ref, onMounted } from 'vue'
   import { useUserStore } from '../../stores/user'
   import IconSpinner from '@/components/icons/IconSpinner.vue'
+  import { useLangStore } from '../../stores/language'
 
   const userStore = useUserStore()
+  const langStore = useLangStore()
+  onMounted(() => {
+    const dataString: string | null = localStorage.getItem('worklink-lang-selected')
+    if(dataString) langStore.setLanguage(dataString)
+  })
 
   const userType: Ref<string> = ref('client')
   const clientData = ref({

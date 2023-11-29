@@ -1,4 +1,43 @@
 export const esLang = {
+  "header": {
+    "megamenu": {
+      "provider_categories": { 
+        "title": "Categories",
+        "categories": {
+          "a_c": "A/A",
+          "construction_worker": "Construcción",
+          "architect": "Arquitecto",
+          "cars": "Automóviles",
+          "beauty": "Belleza",
+          "welfare": "Bienestar",
+          "carpenter": "Carpintero",
+          "locksmith": "Cerrajero",
+          "setter": "Montador",
+          "pest_control": "Control de plagas",
+          "caregivers": "Cuidadores",
+          "decorator": "Decorador",
+          "electrician": "Electricista",
+          "events": "Eventos",
+          "gasman": "Gasista",
+          "blacksmith": "Herrero",
+          "gardener": "Jardinero",
+          "cleaning": "Limpieza",
+          "pets": "Mascotas",
+          "mover": "Mudanza",
+          "pools": "Piscinas",
+          "painter": "Pintor",
+          "plumber": "Fontanero",
+          "reforms": "Reformas",
+          "upholsterer": "Tapicero",
+          "technical": "Técnico",
+        }
+      }
+    },
+    "user": {
+      "view_profile": "Ver perfil",
+      "logout": "Cerrar sesión"
+    }
+  },
   "login": {
     "form": {
       "title": "Iniciar sesión",
@@ -30,7 +69,7 @@ export const esLang = {
       "switch": {
         "client": "Cliente",
         "provider": "Proveedor",
-        "Business": "Negocio",
+        "business": "Negocio",
       },
       "name_lastname_input": "Nombre y apellido*",
       "business_name_input": "Nombre del negocio*",

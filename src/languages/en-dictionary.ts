@@ -1,4 +1,43 @@
 export const enLang = {
+  "header": {
+    "megamenu": {
+      "provider_categories": {
+        "title": "Categories",
+        "categories": {
+          "a_c": "A/C",
+          "construction_worker": "Construction",
+          "architect": "Architect",
+          "cars": "Cars",
+          "beauty": "Beauty",
+          "welfare": "Welfare",
+          "carpenter": "Carpenter",
+          "locksmith": "Locksmith",
+          "setter": "Setter",
+          "pest_control": "Pest control",
+          "caregivers": "Caregivers",
+          "decorator": "Decorator",
+          "electrician": "Electrician",
+          "events": "Events",
+          "gasman": "Gasman",
+          "blacksmith": "blacksmith",
+          "gardener": "Gardener",
+          "cleaning": "Cleaning",
+          "pets": "Pets",
+          "mover": "Mover",
+          "pools": "Pools",
+          "painter": "Painter",
+          "plumber": "Plumber",
+          "reforms": "Reforms",
+          "upholsterer": "Upholsterer",
+          "technical": "Technical"
+        }
+      }
+    },
+    "user": {
+      "view_profile": "View profile",
+      "logout": "Logout"
+    }
+  },
   "login": {
     "form": {
       "title": "Sign in",
@@ -30,7 +69,7 @@ export const enLang = {
       "switch": {
         "client": "Client",
         "provider": "Provider",
-        "Business": "Business",
+        "business": "Business",
       },
       "name_lastname_input": "Name and lastname*",
       "business_name_input": "Business name*",
