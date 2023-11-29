@@ -10,7 +10,7 @@ import {
 } from 'firebase/auth'
 import { auth } from '@/firebaseConfig'
 import router from '@/router'
-import { enLang } from '@/assets/en-dictionary'
+import { useLangStore } from './language'
 
 const toastAction = ref(false)
 const toastTitle = ref('')
@@ -24,30 +24,31 @@ export const useUserStore = defineStore('user', {
   actions: {
     setToast(result: string): void {
       const toastAlertStore = useToastAlertStore()
+      const langStore = useLangStore()
       switch (result) {
-        case `${ enLang.login.ok.result }`:
-          toastTitle.value = enLang.login.ok.title
-          toastMessage.value = enLang.login.ok.message
+        case `${ langStore.lang.login.ok.result }`:
+          toastTitle.value = langStore.lang.login.ok.title
+          toastMessage.value = langStore.lang.login.ok.message
           break;
-        case `${ enLang.login.error.result }`:
-          toastTitle.value = enLang.login.error.title
-          toastMessage.value = enLang.login.error.message
+        case `${ langStore.lang.login.error.result }`:
+          toastTitle.value = langStore.lang.login.error.title
+          toastMessage.value = langStore.lang.login.error.message
           break;
-        case `${ enLang.register.ok.result }`:
-          toastTitle.value = enLang.register.ok.title
-          toastMessage.value = enLang.register.ok.message
+        case `${ langStore.lang.register.ok.result }`:
+          toastTitle.value = langStore.lang.register.ok.title
+          toastMessage.value = langStore.lang.register.ok.message
           break;
-        case `${ enLang.register.error.result }`:
-          toastTitle.value = enLang.register.error.title
-          toastMessage.value = enLang.register.error.message
+        case `${ langStore.lang.register.error.result }`:
+          toastTitle.value = langStore.lang.register.error.title
+          toastMessage.value = langStore.lang.register.error.message
           break;
-        case `${ enLang.logout.ok.result }`:
-          toastTitle.value = enLang.logout.ok.title
-          toastMessage.value = enLang.logout.ok.message
+        case `${ langStore.lang.logout.ok.result }`:
+          toastTitle.value = langStore.lang.logout.ok.title
+          toastMessage.value = langStore.lang.logout.ok.message
           break;
-        case `${ enLang.logout.error.result }`:
-          toastTitle.value = enLang.logout.error.title
-          toastMessage.value = enLang.logout.error.message
+        case `${ langStore.lang.logout.error.result }`:
+          toastTitle.value = langStore.lang.logout.error.title
+          toastMessage.value = langStore.lang.logout.error.message
           break;
 
         default:
@@ -57,6 +58,7 @@ export const useUserStore = defineStore('user', {
       toastAlertStore.updateToast(toastAction, toastTitle, toastMessage)
     },
     async registerUser(email: string, password: string, displayName: string) {
+      const langStore = useLangStore()
       this.loadingUser = true
       try {
         const { user } = await createUserWithEmailAndPassword(auth, email, password)
@@ -65,37 +67,39 @@ export const useUserStore = defineStore('user', {
         })
         this.userData = { email: user.email, uid: user.uid }
         router.push('/')
-        this.setToast(enLang.register.ok.result)
+        this.setToast(langStore.lang.register.ok.result)
       } catch (e) {
         console.log(e)
-        this.setToast(enLang.register.error.result)
+        this.setToast(langStore.lang.register.error.result)
       } finally {
         this.loadingUser = false
       }
     },
     async loginUser(email: string, password: string) {
+      const langStore = useLangStore()
       this.loadingUser = true
       try {
         const { user } = await signInWithEmailAndPassword(auth, email, password)
         this.userData = { email: user.email, uid: user.uid }
         router.push('/')
-        this.setToast(enLang.login.ok.result)
+        this.setToast(langStore.lang.login.ok.result)
       } catch (e) {
         console.log(e)
-        this.setToast(enLang.login.error.result)
+        this.setToast(langStore.lang.login.error.result)
       } finally {
         this.loadingUser = false
       }
     },
     async logoutUser() {
+      const langStore = useLangStore()
       try {
         await signOut(auth)
         this.userData = {}
         router.push('/login-register')
-        this.setToast(enLang.logout.ok.result)
+        this.setToast(langStore.lang.logout.ok.result)
       } catch (e) {
         console.log(e)
-        this.setToast(enLang.logout.error.result)
+        this.setToast(langStore.lang.logout.error.result)
       }
     },
     currentUser() {

@@ -13,43 +13,43 @@
   <div class="main-content">
     <div class="user-options" :open="userOptionsState">
       <ul class="user-options__list">
-        <li><a>View profile</a></li>
-        <li><a class="hover-underline hover-underline--right" @click="userStore.logoutUser">Logout</a></li>
+        <li><a>{{ langStore.lang.header.user.view_profile }}</a></li>
+        <li><a class="hover-underline hover-underline--right" @click="userStore.logoutUser">{{ langStore.lang.header.user.logout }}</a></li>
       </ul>
     </div>
     <div class="megamenu" :open="menuState">
       <nav class="megamenu__nav">
         <ul class="megamenu__list-first-level">
-          <li><a>Categories</a></li>
+          <li><a>{{ langStore.lang.header.megamenu.provider_categories.title }}</a></li>
         </ul>
         <div>
           <ul class="megamenu__list-second-level">
-            <li><a class="hover-underline hover-underline--right" data-lang-es="A/A">A/C</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Albañil">Construction worker</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Arquitecto">Architect</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Autos">Cars</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Belleza">Beauty</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Bienestar">Welfare</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Carpintero">Carpenter</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Cerrajero">Locksmith</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Colocador">Setter</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Control de plagas">pest control</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Cuidadores">Caregivers</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Decorador">Decorator</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Electricista">Electrician</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Eventos">Events</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Gasista">Gasman</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Herrero">blacksmith</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Jardinero">Gardener</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Limpieza">Cleaning</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Mascotas">Pets</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Mudancero">Mover</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Piletas">Pools</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Pintor">Painter</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Plomero">Plumber</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Reformas">Reforms</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Tapicero">Upholsterer</a></li>
-            <li><a class="hover-underline hover-underline--right" data-lang-es="Técnico">Technical</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.a_c }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.construction_worker }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.architect }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.cars }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.beauty }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.welfare }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.carpenter }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.locksmith }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.setter }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.pest_control }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.caregivers }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.decorator }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.electrician }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.events }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.gasman }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.blacksmith }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.gardener }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.cleaning }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.pets }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.mover }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.pools }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.painter }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.plumber }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.reforms }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.upholsterer }}</a></li>
+            <li><a class="hover-underline hover-underline--right">{{ langStore.lang.header.megamenu.provider_categories.categories.technical }}</a></li>
           </ul>
         </div>
       </nav>
@@ -59,14 +59,21 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, Ref } from 'vue'
+  import { ref, Ref, onMounted } from 'vue'
   import IconUser from '@/components/icons/IconUser.vue'
   import IconWishlist from '@/components/icons/IconWishlist.vue'
   import { useUserStore } from '../stores/user'
+  import { useLangStore } from '../stores/language'
 
   const userStore = useUserStore()
   const menuState: Ref<boolean> = ref(false)
   const userOptionsState: Ref<boolean> = ref(false)
+  const langStore = useLangStore()
+
+  onMounted(() => {
+    const dataString: string | null = localStorage.getItem('worklink-lang-selected')
+    if(dataString) langStore.setLanguage(dataString)
+  })
 
   const toggleMenu = () => menuState.value = !menuState.value
   const toggleUserOptions = () => userOptionsState.value = !userOptionsState.value
