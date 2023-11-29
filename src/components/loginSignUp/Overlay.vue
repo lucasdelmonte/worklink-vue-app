@@ -5,21 +5,21 @@
       <h2 class="title__right">Link</h2>
     </div>
     <div class="overlay__left">
-      <h1 class="overlay__title">Welcome Back!</h1>
-      <p class="overlay__subtext">Please login with your account info</p>
-      <button class="button button--tertiary-black" @click="$emit('toggleContainer')">Sign Up</button>
+      <h1 class="overlay__title">{{ lang.login.overlay.title }}</h1>
+      <p class="overlay__subtext">{{ lang.login.overlay.subtitle }}</p>
+      <button class="button button--tertiary-black" @click="$emit('toggleContainer')">{{ lang.login.overlay.button }}</button>
     </div>
     <div class="overlay__right">
-      <h1 class="overlay__title">Hello!</h1>
-      <p class="overlay__subtext">Enter your data and be part of our network</p>
-      <button class="button button--tertiary-black" @click="$emit('toggleContainer')">Sign In</button>
+      <h1 class="overlay__title">{{ lang.register.overlay.title }}</h1>
+      <p class="overlay__subtext">{{ lang.register.overlay.subtitle }}</p>
+      <button class="button button--tertiary-black" @click="$emit('toggleContainer')">{{ lang.register.overlay.button }}</button>
     </div>
     <div class="language">
-      <p class="language__title">Language</p>
+      <p class="language__title">{{ lang.login.overlay.language }}</p>
       <div class="form__switch">
-        <input @change="(evt) => setStoreLanguage(evt.target as HTMLInputElement | null)" type="radio" id="en" name="lang" value="en" checked />
+        <input @change="(evt) => setStoreLanguage(evt.target as HTMLInputElement | null)" type="radio" id="en" name="lang" value="en" :checked="enInput" />
         <label for="en">En</label>
-        <input @change="(evt) => setStoreLanguage(evt.target as HTMLInputElement | null)" type="radio" id="es" name="lang" value="es" />
+        <input @change="(evt) => setStoreLanguage(evt.target as HTMLInputElement | null)" type="radio" id="es" name="lang" value="es" :checked="esInput" />
         <label for="es">Es</label>
       </div>
     </div>
@@ -27,19 +27,40 @@
 </template>
 
 <script setup lang="ts">
-  import { computed } from '@vue/reactivity'
   import { useLangStore } from '../../stores/language'
+  import { enLang } from '@/languages/en-dictionary'
+  import { esLang } from '@/languages/es-dictionary'
+  import { ref, onMounted, computed } from 'vue'
 
   const langStore = useLangStore()
 
   const props = defineProps({
     containerOpen: Boolean,
 	})
-
   const reactiveProps = computed(() => props)
+
+  const lang = ref(enLang)
+  const enInput = ref(false)
+  const esInput = ref(false)
+  
+  onMounted(() => {
+    const dataString: string | null = localStorage.getItem('worklink-lang-selected')
+    if(dataString) {
+      lang.value = dataString === 'en' ? enLang : esLang
+      if(dataString === 'en') {
+        enInput.value = true
+        esInput.value = false
+      } else {
+        enInput.value = false
+        esInput.value = true
+      }
+    }
+  });
+
   const setStoreLanguage = ( target: HTMLInputElement | null ) => {
     if(!target) return
     langStore.setLanguage(target.value)
+    lang.value = langStore.state === 'en' ? enLang : esLang
   }
 </script>
 

@@ -10,7 +10,8 @@ import {
 } from 'firebase/auth'
 import { auth } from '@/firebaseConfig'
 import router from '@/router'
-import { enLang } from '@/assets/en-dictionary'
+import { enLang } from '@/languages/en-dictionary'
+import { esLang } from '@/languages/es-dictionary'
 
 const toastAction = ref(false)
 const toastTitle = ref('')

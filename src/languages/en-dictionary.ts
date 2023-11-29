@@ -10,7 +10,8 @@ export const enLang = {
     "overlay": {
       "title": "Welcome Back!",
       "subtitle": "Please login with your acoount info",
-      "button": "SIGN UP"
+      "button": "SIGN UP",
+      "language": "Language"
     },
     "ok": {
       "result": "login-ok",
@@ -41,7 +42,8 @@ export const enLang = {
     "overlay": {
       "title": "Hello!",
       "subtitle": "Enter your data and be part of our network",
-      "button": "SIGN IN"
+      "button": "SIGN IN",
+      "language": "Language"
     },
     "ok": {
       "result": "register-ok",
