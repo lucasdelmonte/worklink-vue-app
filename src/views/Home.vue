@@ -24,32 +24,32 @@
         </ul>
         <div>
           <ul class="megamenu__list-second-level">
-            <li><a class="hover-underline hover-underline--right">A/A</a></li>
-            <li><a class="hover-underline hover-underline--right">Albañil</a></li>
-            <li><a class="hover-underline hover-underline--right">Arquitecto</a></li>
-            <li><a class="hover-underline hover-underline--right">Autos</a></li>
-            <li><a class="hover-underline hover-underline--right">Belleza</a></li>
-            <li><a class="hover-underline hover-underline--right">Bienestar</a></li>
-            <li><a class="hover-underline hover-underline--right">Carpintero</a></li>
-            <li><a class="hover-underline hover-underline--right">Cerrajero</a></li>
-            <li><a class="hover-underline hover-underline--right">Colocador</a></li>
-            <li><a class="hover-underline hover-underline--right">Control de plagas</a></li>
-            <li><a class="hover-underline hover-underline--right">Cuidadores</a></li>
-            <li><a class="hover-underline hover-underline--right">Decorador</a></li>
-            <li><a class="hover-underline hover-underline--right">Electricista</a></li>
-            <li><a class="hover-underline hover-underline--right">Eventos</a></li>
-            <li><a class="hover-underline hover-underline--right">Gasista</a></li>
-            <li><a class="hover-underline hover-underline--right">Herrero</a></li>
-            <li><a class="hover-underline hover-underline--right">Jardinero</a></li>
-            <li><a class="hover-underline hover-underline--right">Limpieza</a></li>
-            <li><a class="hover-underline hover-underline--right">Mascotas</a></li>
-            <li><a class="hover-underline hover-underline--right">Mudancero</a></li>
-            <li><a class="hover-underline hover-underline--right">Piletas</a></li>
-            <li><a class="hover-underline hover-underline--right">Pintor</a></li>
-            <li><a class="hover-underline hover-underline--right">Plomero</a></li>
-            <li><a class="hover-underline hover-underline--right">Reformas</a></li>
-            <li><a class="hover-underline hover-underline--right">Tapicero</a></li>
-            <li><a class="hover-underline hover-underline--right">Técnico</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="A/A">A/C</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Albañil">Construction worker</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Arquitecto">Architect</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Autos">Cars</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Belleza">Beauty</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Bienestar">Welfare</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Carpintero">Carpenter</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Cerrajero">Locksmith</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Colocador">Setter</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Control de plagas">pest control</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Cuidadores">Caregivers</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Decorador">Decorator</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Electricista">Electrician</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Eventos">Events</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Gasista">Gasman</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Herrero">blacksmith</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Jardinero">Gardener</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Limpieza">Cleaning</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Mascotas">Pets</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Mudancero">Mover</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Piletas">Pools</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Pintor">Painter</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Plomero">Plumber</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Reformas">Reforms</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Tapicero">Upholsterer</a></li>
+            <li><a class="hover-underline hover-underline--right" data-lang-es="Técnico">Technical</a></li>
           </ul>
         </div>
       </nav>
