@@ -1,42 +1,39 @@
 <template>
-  <div class="popup" :class="setVisibility">
-    <div class="popup__image">
-      <div v-if="reactiveProps.operationStatus"> 
+  <div class="toast" :class="{ 'toast--hidden': !toastAlertStore.state }">
+    <div class="toast__image">
+      <div v-if="toastAlertStore.actionResult"> 
         <IconSuccess :width="30" :height="30" />
       </div>
       <div v-else>
         <IconError :width="30" :height="30" />
       </div>
     </div>
-    <div class="popup__message">
-      <h2>The operation {{ reactiveProps.operationStatus ? 'was successful' : 'failed' }}.</h2>
-      <p>{{ reactiveProps.messaje }}</p>
+    <div class="toast__message">
+      <h2>{{ toastAlertStore.title }}</h2>
+      <p>{{ toastAlertStore.message }}</p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { computed } from '@vue/reactivity';
-  import IconSuccess from '../icons/IconSuccess.vue';
-  import IconError from '../icons/IconError.vue';
+  import IconSuccess from '../icons/IconSuccess.vue'
+  import IconError from '../icons/IconError.vue'
+  import { useToastAlertStore } from '../../stores/toastAlert'
+  import { watch } from 'vue'
 
-  const props = defineProps({
-    show: Boolean,
-    operationStatus: Boolean,
-		messaje: String
-	})
-  
-  const reactiveProps = computed(() => props)  
+  const toastAlertStore = useToastAlertStore()
 
-  const setVisibility = computed(() => {
-    return reactiveProps.value.show ? 'popup--visible' : 'popup--hidden'
-  })
-</script>
+  watch(() => toastAlertStore.state, () => {
+    setTimeout(() => {
+      toastAlertStore.state = false
+    }, 3000);
+  }, { deep: true })
+</script> 
 
 <style scoped lang="scss">
   @import '../../../styles/main.scss';
 
-  .popup {
+  .toast {
     max-width: 40rem;
     width: fit-content;
     min-height: 6rem;
@@ -44,19 +41,16 @@
     background-color: $color-white;
     box-shadow: .5rem .5rem 2rem rgba($color: $color-primary-2, $alpha: .14);
     position: fixed;
-    bottom: 3rem;
+    bottom: .6rem;
     left: 50%;
     transform: translateX(-50%);
     display: grid;
     grid-template-columns: 6rem 1fr;
     border-radius: 1rem;
     transition: translate 350ms ease;
-
+    translate: 0;
     &--hidden {
       translate: 0 200%;
-    }
-    &--visible {
-      translate: 0;
     }
     &__image {
       @include display-flex(row, center, center, nowrap, 0);

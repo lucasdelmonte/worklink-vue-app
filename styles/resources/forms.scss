@@ -10,6 +10,9 @@
     cursor: pointer;
     @include display-flex(row, center, center, nowrap, 0 2rem);
 
+    &--hidden {
+      display: none;
+    }
     .social {
       width: 3.8rem;
       height: 3.8rem;
@@ -33,7 +36,11 @@
     display: block;
     margin-bottom: 1.8rem;
     text-align: center;
-    @include fontRegular(1.4rem, 0, 1.8rem, $color-primary-2);
+    @include fontRegular(1.4rem, 0, 1.8rem, $color-black);
+
+    &--hidden {
+      display: none;
+    }
   }
   &__forgot {
     display: block;
@@ -41,7 +48,7 @@
     margin-top: 2rem;
     padding-bottom: .8rem;
     text-decoration: none;
-    @include fontRegular(1.4rem, 0, 1.8rem, $color-primary-2);
+    @include fontRegular(1.4rem, 0, 1.8rem, $color-black);
   }
   .button {
     margin-top: 1.8rem;
@@ -67,17 +74,17 @@
     height: 3.2rem;
     border: none;
     border-bottom: .1rem solid $color-grey-50;
-    @include fontRegular(1.4rem, 0, 2rem, $color-primary-2);
+    @include fontRegular(1.4rem, 0, 2rem, $color-black);
 
     &:focus-visible {
       outline: none;
     }
     &:focus {
-      border-color: $color-primary-2;
+      border-color: $color-black;
 
       & + .field__label {
         font-size: 1.2rem;
-        color: $color-primary-2;
+        color: $color-black;
       }
     }
   }
