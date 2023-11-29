@@ -3,11 +3,11 @@
     <div class="sign-in__container">
       <form @submit.prevent="handleSubmit" class="sign-in__form form">
         <h1 class="form__title">Sign in</h1>
-        <div class="form__social">
+        <div class="form__social form__social--hidden">
           <a @click="handleSubmitFacebook" class="social"><i class="fab fa-facebook-f"></i></a>
           <a @click="handleSubmitGoogle" class="social"><i class="fab fa-google-plus-g"></i></a>
         </div>
-        <span class="form__subtext">or use your account</span>
+        <span class="form__subtext form__subtext--hidden">or use your account</span>
         <div class="field">
           <input v-model="userData.email" class="field__input" type="email" name="email" />
           <label class="field__label" for="email">Email*</label>

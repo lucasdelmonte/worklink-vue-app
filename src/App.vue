@@ -1,12 +1,12 @@
 <template>
   <main>
     <router-view></router-view>
+    <ToastAlertCustom />
   </main>
 </template>
 
 <script setup lang="ts">
-  import { useUserStore } from './stores/user'
-  const userStore = useUserStore()
+  import ToastAlertCustom from './components/notificationPopUp/ToastAlertCustom.vue'
 </script>
 
 <style lang="scss">

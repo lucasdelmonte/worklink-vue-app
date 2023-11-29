@@ -3,11 +3,11 @@
     <div class="sign-up__container">
       <form @submit.prevent="handleSubmit" class="sign-up__form form">
         <h1 class="form__title">Create Account</h1>
-        <div class="form__social">
+        <div class="form__social form__social--hidden">
           <a @click="handleSubmitFacebook" class="social"><i class="fab fa-facebook-f"></i></a>
           <a @click="handleSubmitGoogle" class="social"><i class="fab fa-google-plus-g"></i></a>
         </div>
-        <span class="form__subtext">or use your email for registration</span>
+        <span class="form__subtext form__subtext--hidden">or use your email for registration</span>
         <div class="form__switch">
           <input @change="setType('client')" type="radio" id="client" name="client-type" value="client" checked />
           <label for="client">Client</label>

@@ -4,37 +4,52 @@
       <div></div>
       <div></div>
     </div>
-    <h1 class="header__title">Work<span>Link</span></h1>
+    <h1 class="header__title"><a href="/">Work<span>Link</span></a></h1>
     <div class="header__user">
-      <button><IconWishlist :width="17" :height="16" /></button>
-      <button><IconUser :width="12" :height="18" /></button>
-      <button @click="userStore.logoutUser">Logout</button>
+      <a href="/"><IconWishlist :width="17" :height="16" /></a>
+      <a @click="toggleUserOptions"><IconUser :width="12" :height="18" /></a>
     </div>
   </header>
   <div class="main-content">
+    <div class="user-options" :open="userOptionsState">
+      <ul class="user-options__list">
+        <li><a>View profile</a></li>
+        <li><a class="hover-underline hover-underline--right" @click="userStore.logoutUser">Logout</a></li>
+      </ul>
+    </div>
     <div class="megamenu" :open="menuState">
       <nav class="megamenu__nav">
         <ul class="megamenu__list-first-level">
-          <li><a>Menu 1</a></li>
-          <li><a>Menu 2</a></li>
-          <li><a>Menu 3</a></li>
-          <li><a>Menu 4</a></li>
+          <li><a>Categories</a></li>
         </ul>
         <div>
           <ul class="megamenu__list-second-level">
-            <li><a class="hover-underline hover-underline--right">Opción 1</a></li>
-            <li><a class="hover-underline hover-underline--right">Opción 2</a></li>
-            <li><a class="hover-underline hover-underline--right">Opción 3</a></li>
-            <li><a class="hover-underline hover-underline--right">Opción 4</a></li>
-            <li><a class="hover-underline hover-underline--right">Opción 5</a></li>
-            <li><a class="hover-underline hover-underline--right">Opción 6</a></li>
-            <li><a class="hover-underline hover-underline--right">Opción 7</a></li>
-            <li><a class="hover-underline hover-underline--right">Opción 8</a></li>
-            <li><a class="hover-underline hover-underline--right">Opción 9</a></li>
-            <li><a class="hover-underline hover-underline--right">Opción 10</a></li>
-            <li><a class="hover-underline hover-underline--right">Opción 11</a></li>
-            <li><a class="hover-underline hover-underline--right">Opción 12</a></li>
-            <li><a class="hover-underline hover-underline--right">Opción 13</a></li>
+            <li><a class="hover-underline hover-underline--right">A/A</a></li>
+            <li><a class="hover-underline hover-underline--right">Albañil</a></li>
+            <li><a class="hover-underline hover-underline--right">Arquitecto</a></li>
+            <li><a class="hover-underline hover-underline--right">Autos</a></li>
+            <li><a class="hover-underline hover-underline--right">Belleza</a></li>
+            <li><a class="hover-underline hover-underline--right">Bienestar</a></li>
+            <li><a class="hover-underline hover-underline--right">Carpintero</a></li>
+            <li><a class="hover-underline hover-underline--right">Cerrajero</a></li>
+            <li><a class="hover-underline hover-underline--right">Colocador</a></li>
+            <li><a class="hover-underline hover-underline--right">Control de plagas</a></li>
+            <li><a class="hover-underline hover-underline--right">Cuidadores</a></li>
+            <li><a class="hover-underline hover-underline--right">Decorador</a></li>
+            <li><a class="hover-underline hover-underline--right">Electricista</a></li>
+            <li><a class="hover-underline hover-underline--right">Eventos</a></li>
+            <li><a class="hover-underline hover-underline--right">Gasista</a></li>
+            <li><a class="hover-underline hover-underline--right">Herrero</a></li>
+            <li><a class="hover-underline hover-underline--right">Jardinero</a></li>
+            <li><a class="hover-underline hover-underline--right">Limpieza</a></li>
+            <li><a class="hover-underline hover-underline--right">Mascotas</a></li>
+            <li><a class="hover-underline hover-underline--right">Mudancero</a></li>
+            <li><a class="hover-underline hover-underline--right">Piletas</a></li>
+            <li><a class="hover-underline hover-underline--right">Pintor</a></li>
+            <li><a class="hover-underline hover-underline--right">Plomero</a></li>
+            <li><a class="hover-underline hover-underline--right">Reformas</a></li>
+            <li><a class="hover-underline hover-underline--right">Tapicero</a></li>
+            <li><a class="hover-underline hover-underline--right">Técnico</a></li>
           </ul>
         </div>
       </nav>
@@ -51,8 +66,10 @@
 
   const userStore = useUserStore()
   const menuState: Ref<boolean> = ref(false)
+  const userOptionsState: Ref<boolean> = ref(false)
 
   const toggleMenu = () => menuState.value = !menuState.value
+  const toggleUserOptions = () => userOptionsState.value = !userOptionsState.value
 </script>
 
 <style scoped lang="scss">
@@ -70,16 +87,23 @@
 
     &__title {
       margin: 0;
-      @include fontBold(3rem, 0rem, 3rem, $color-primary-2);
+      a {
+        text-decoration: none;
+        @include fontBold(3rem, 0rem, 3rem, $color-primary-2);
+      }
       span {
         -webkit-text-stroke: .1rem $color-primary-2;
         color: transparent;
       }
     }
     &__user {
+      cursor: pointer;
       text-align: right;
-      @include fontBold(1.6rem, 0rem, 2rem, $color-primary-2);
       @include display-flex(row, flex-end, center, nowrap, 0 1.6rem);
+
+      a {
+        @include display-flex(row, center, center, nowrap, 0)
+      }
     }
     &__menu {
       width: 1.9rem;
@@ -104,6 +128,46 @@
         border-radius: 5rem;
         background-color: $color-black;
         display: block;
+      }
+    }
+  }
+  .user-options {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: transparent;
+    z-index: 1;
+    min-width: 16rem;
+    text-align: right;
+    transition: translate 350ms ease;
+    translate: 0 -110%;
+
+    &[open="true"] {
+      transition: translate 350ms ease;
+      translate: 0 0;
+    }
+    &__list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      background: $color-white;
+      border-radius: 1rem;
+      padding: 2rem 1.6rem;
+      box-shadow: .5rem .5rem 2rem rgba($color: $color-primary-2, $alpha: .14);
+
+      li {
+        padding: 0 0 1.6rem 0;
+        margin: 0;
+        @include fontRegular(1.6rem, 0rem, 2rem, $color-primary-2);
+
+        a {
+          text-decoration: none;
+          padding-bottom: .6rem;
+          cursor: pointer;
+        }
+      }
+      li:last-child {
+        padding-bottom: 0;
       }
     }
   }
@@ -165,13 +229,12 @@
       list-style: none;
       width: 100%;
       padding-left: 2rem;
-      max-height: 20rem;
-      @include display-flex(row, flex-start, flex-start, wrap, 1.6rem);
+      @include display-flex(row, space-between, flex-start, wrap, 1.6rem);
 
       li {
         padding: 0 0 1.6rem 0;
         @include fontRegular(1.4rem, 0, 2rem, $color-black);
-        min-width: 12rem;
+        min-width: 14rem;
         a {
           cursor: pointer;
           padding-bottom: .6rem;

@@ -10,6 +10,9 @@
     cursor: pointer;
     @include display-flex(row, center, center, nowrap, 0 2rem);
 
+    &--hidden {
+      display: none;
+    }
     .social {
       width: 3.8rem;
       height: 3.8rem;
@@ -34,6 +37,10 @@
     margin-bottom: 1.8rem;
     text-align: center;
     @include fontRegular(1.4rem, 0, 1.8rem, $color-black);
+
+    &--hidden {
+      display: none;
+    }
   }
   &__forgot {
     display: block;

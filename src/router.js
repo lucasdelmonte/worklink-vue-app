@@ -6,7 +6,6 @@ import LoginRegister from './views/LoginRegister.vue'
 const requireAuth = async (to, from, next) => {
   const userStore = useUserStore()
   const user = await userStore.currentUser()
-  console.log(user)
   user ? next() : next('/login-register')
 }
 
