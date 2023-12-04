@@ -106,5 +106,8 @@ export const esLang = {
       "title": "Ocurrió un error al cerrar sesión",
       "message": "Por favor, inténtalo de nuevo y verifica los campos"
     }
+  },
+  "card": {
+    "btn_details": "Ver detalle"
   }
 }

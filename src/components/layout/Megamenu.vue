@@ -85,24 +85,42 @@
       padding: 2rem 1.6rem;
       box-shadow: .5rem .5rem 2rem rgba($color: $color-primary-2, $alpha: .14);
       display: grid;
-      grid-template-columns: 22rem 1fr;
+      grid-template-columns: 1fr;
+      grid-template-rows: 3rem auto;
+      gap: 1.4rem 0;
+
+      @include desktop-up {
+        grid-template-columns: 22rem 1fr;
+        grid-template-rows: auto;
+        gap: 0;
+      }
     }
     &__list-first-level {
       margin: 0;
       padding: 0;
       list-style: none;
       width: 100%;
-      max-width: 25rem;
       position: relative;
+      @include desktop-up {
+        max-width: 25rem;
+      }
 
       &::after {
         content: "";
         position: absolute;
-        top: 0;
-        right: 0;
-        height: 100%;
-        width: .1rem;
+        bottom: 0;
+        left: 0;
+        height: .1rem;
+        width: 100%;
         background: $color-grey-15;
+        @include desktop-up {
+          top: 0;
+          right: 0;
+          bottom: unset;
+          left: unset;
+          height: 100%;
+          width: .1rem;
+        }
       }
       li {
         padding: 0 0 1.6rem 0;
@@ -122,8 +140,10 @@
       padding: 0;
       list-style: none;
       width: 100%;
-      padding-left: 2rem;
-      @include display-flex(row, space-between, flex-start, wrap, 1.6rem);
+      @include display-flex(row, flex-start, flex-start, wrap, 1.6rem);
+      @include desktop-up {
+        padding-left: 2rem;
+      }
 
       li {
         padding: 0 0 1.6rem 0;

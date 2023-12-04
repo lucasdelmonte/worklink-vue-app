@@ -70,8 +70,6 @@
         a {
           @include fontRegular(1.6rem, 0rem, 2rem, $color-primary-2);
           text-decoration: none;
-        }
-        span {
           padding-bottom: .6rem;
           cursor: pointer;
         }

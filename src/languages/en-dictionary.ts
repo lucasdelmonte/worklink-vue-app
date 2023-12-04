@@ -106,5 +106,8 @@ export const enLang = {
       "title": "An error occurred while signing out",
       "message": "Please try again and check the fields"
     }
+  },
+  "card": {
+    "btn_details": "View detail"
   }
 }
