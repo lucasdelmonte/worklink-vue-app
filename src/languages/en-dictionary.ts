@@ -19,7 +19,7 @@ export const enLang = {
           "electrician": "Electrician",
           "events": "Events",
           "gasman": "Gasman",
-          "blacksmith": "blacksmith",
+          "blacksmith": "Blacksmith",
           "gardener": "Gardener",
           "cleaning": "Cleaning",
           "pets": "Pets",

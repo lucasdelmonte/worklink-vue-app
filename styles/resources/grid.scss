@@ -1,0 +1,27 @@
+.grid {
+  display: grid;
+  gap: 1.6rem;
+
+  &.grid--desktop-1 {
+    grid-template-columns: 1fr;
+  }
+  @include desktop-up {
+    &.grid--tablet-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    &.grid--tablet-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  @include notebook-up {
+    &.grid--desktop-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    &.grid--desktop-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    &.grid--desktop-5 {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+}
