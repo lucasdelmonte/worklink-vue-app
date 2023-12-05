@@ -1,12 +1,16 @@
 <template>
   <main>
     <router-view></router-view>
+    <ModalProviderDetails />
+    <DrawerProviderRequest />
     <ToastAlertCustom />
   </main>
 </template>
 
 <script setup lang="ts">
   import ToastAlertCustom from './components/notificationPopUp/ToastAlertCustom.vue'
+  import ModalProviderDetails from './components/modals/ModalProviderDetails.vue'
+  import DrawerProviderRequest from './components/drawers/DrawerProviderRequest.vue'
 </script>
 
 <style lang="scss">

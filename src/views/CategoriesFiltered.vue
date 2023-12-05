@@ -46,7 +46,7 @@
             </div>
             <h4 class="card__title">{{ provider.full_name }}</h4>
             <p class="card__description">{{ provider.business[0].description }}</p>
-            <button class="card__view-more">{{ langStore.lang.card.btn_details }} <IconArrowRight /></button>
+            <button @click="toggleModal(provider)" class="card__view-more">{{ langStore.lang.card.btn_details }} <IconArrowRight :width="16" :height="16" :fill="'#000000'" /></button>
           </div>
           <div class="card__gradient"></div>
         </div>
@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, Ref, onMounted, onUpdated } from 'vue'
+  import { ref, Ref, onUpdated } from 'vue'
   import { useUserStore } from '../stores/user'
   import { useLangStore } from '../stores/language'
   import { useRoute } from 'vue-router';
@@ -65,6 +65,18 @@
   import { IProviderFiltered } from '../interfaces/ProviderInterfaces'
   import Megamenu from '../components/layout/Megamenu.vue'
   import IconArrowRight from '@/components/icons/IconArrowRight.vue'
+  import { useModalProviderCardStore } from '@/stores/modalProviderCard';
+
+  const providerCard = useModalProviderCardStore()
+
+  const toggleModal = (provider: any) => {
+    providerCard.state = !providerCard.state
+    providerCard.provider_id = provider.id
+    providerCard.provider_name = provider.full_name
+    providerCard.provider_business_description = provider.business[0].description
+    providerCard.provider_business_category = provider.business[0].category
+    providerCard.provider_business_rating = provider.business[0].rating
+  }
 
   const userStore = useUserStore()
   const providerStore = useProviderStore()

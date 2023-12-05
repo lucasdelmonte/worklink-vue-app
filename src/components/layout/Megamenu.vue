@@ -1,7 +1,7 @@
 <template>
   <div class="megamenu" :open="menuState">
     <!-- User type client or business -->
-    <nav class="megamenu__nav" v-if="ROLE === 'client'">
+    <nav class="megamenu__nav" v-if="ROLE === 'client' || ROLE === 'business'">
       <ul class="megamenu__list-first-level">
         <li><a>{{ langStore.lang.header.megamenu.provider_categories.title }}</a></li>
       </ul>
