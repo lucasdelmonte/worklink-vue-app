@@ -9,12 +9,20 @@
         <div>
           <h2 class="form__title form__title--left">Request</h2>
           <div class="field">
+            <input v-model="requestData.date" class="field__input" id="date" type="date" />
+            <label class="field__label" for="date">Date</label>
+          </div>
+          <div class="field">
             <input v-model="requestData.title" class="field__input" id="title" type="text" />
             <label class="field__label" for="title">Title</label>
           </div>
           <div class="field field--text-area">
             <textarea v-model="requestData.description" rows="10" id="description" class="field__input field__input--text-area" name="description"></textarea>
             <label class="field__label" for="description">Description</label>
+          </div>
+          <div class="field field--file">
+            <input @change="(evt) => loadImages(evt)" class="field__input field__input--file hidden" type="file" id="images" name="awsfiles" accept=".jpg,.jpeg,.png" multiple>
+            <label class="field__label field__label--file" for="images">Select images</label>
           </div>
         </div>
         <button @click="toggleRequest" class="drawer__create-request button button--primary-black">Finalize Request</button>
@@ -27,40 +35,48 @@
 </template>
 
 <script setup lang="ts">
-  import IconArrowRight from '../icons/IconArrowRight.vue'
   import { useModalProviderCardStore } from '../../stores/modalProviderCard'
   import { useDrawerProviderRequestStore } from '../../stores/drawerProviderRequest'
-  import { ref, onUpdated } from 'vue'
+  import { ref, Ref, onUpdated } from 'vue'
 
   const providerCard = useModalProviderCardStore()
   const providerRequest = useDrawerProviderRequestStore()
 
-  const title = ref('What is Lorem Ipsum?')
-  const description = ref(`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`)
+  const date = ref('') as Ref<string>
+  const title = ref('') as Ref<string>
+  const description = ref('') as Ref<string>
+  const images = ref([]) as Ref<[]>
   
   const requestData = ref({
     category: providerCard.provider_business_category,
+    date: date.value,
     title: title.value,
     description: description.value,
-    images: ['image1.png','image1.png']
+    images: images.value
   })
-
+  
+  const loadImages = (evt: Event) => {
+    const target: HTMLInputElement = evt.target as HTMLInputElement || null
+    images.value = []
+    const files = target.files;
+    if(!files) return
+    const array = [...files].map((file) => {
+      return file.name
+    })
+    images.value = array as []
+    requestData.value.images = images.value
+  }
   const toggleDrawer = () => {
     providerRequest.state = !providerRequest.state
     providerRequest.resetAttributes()
   }
-  const toggleRequest = () => {
-    // TEMPORARY COMMENT
-    // providerRequest.state = !providerRequest.state 
+  const handleSubmit = () => {
+    console.log(requestData.value)
+    return
     providerRequest.createRequest()
   }
-  const handleSubmit = () => {
-    console.log('Submit')
-    console.log(requestData.value)
-  }
   onUpdated(() => {
-    if(requestData.value.category === providerCard.provider_business_category) return
-    requestData.value.category = providerCard.provider_business_category
+    if(requestData.value.category !== providerCard.provider_business_category) requestData.value.category = providerCard.provider_business_category
   })
 </script>
 
