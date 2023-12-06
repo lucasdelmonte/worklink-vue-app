@@ -14,6 +14,9 @@
       <template v-for="provider in (providersFiltered as IProviderFiltered[])">
         <div class="card">
           <div class="card__content" style="background-image: url('https://cdn.shopify.com/s/files/1/0618/8115/5826/files/white-black-digital-art-monochrome-abstract-reflection-206803-wallhere.com.jpg?v=1701723919');">
+            <div class="card__wishlist">
+              <IconWishlist :width="17" :height="16" />
+            </div>
             <img class="card__media" src="https://cdn.shopify.com/s/files/1/0618/8115/5826/files/user.jpg?v=1701717572" alt="Provider" lazyload>
           </div>
           <div class="card__information">
@@ -65,7 +68,8 @@
   import { IProviderFiltered } from '../interfaces/ProviderInterfaces'
   import Megamenu from '../components/layout/Megamenu.vue'
   import IconArrowRight from '@/components/icons/IconArrowRight.vue'
-  import { useModalProviderCardStore } from '@/stores/modalProviderCard';
+  import { useModalProviderCardStore } from '@/stores/modalProviderCard'
+  import IconWishlist from '@/components/icons/IconWishlist.vue'
 
   const providerCard = useModalProviderCardStore()
 
@@ -183,6 +187,23 @@
         svg {
           transform: translateX(.4rem);
         }
+      }
+    }
+    &__wishlist {
+      position: absolute;
+      top: .4rem;
+      left: .4rem;
+      z-index: 0;
+      background-color: rgba($color: $color-white, $alpha: 1);
+      border-radius: 50%;
+      width: 3rem;
+      height: 3rem;
+      @include display-flex(row, center, center, nowrap, 0);
+      cursor: pointer;
+      box-shadow: 0 .3rem .6rem #00000014;
+
+      svg {
+        width: 100%;
       }
     }
     &__content {
