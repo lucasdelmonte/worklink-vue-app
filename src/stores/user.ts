@@ -25,6 +25,7 @@ export const useUserStore = defineStore('user', {
     setToast(result: string): void {
       const toastAlertStore = useToastAlertStore()
       const langStore = useLangStore()
+      
       switch (result) {
         case `${ langStore.lang.login.ok.result }`:
           toastTitle.value = langStore.lang.login.ok.title

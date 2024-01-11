@@ -10,6 +10,7 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false"
   },
   "dependencies": {
+    "dotenv": "^16.3.1",
     "firebase": "^10.6.0",
     "pinia": "^2.1.7",
     "vue": "^3.3.4",
