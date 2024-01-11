@@ -1,10 +1,11 @@
 export interface User {
+  name: string,
   email: string,
-  password: string
+  password: string,
+  password_confirm: string
 }
 
 type UserClient = User & {
-  name: string,
   lastname: string
 }
 
@@ -20,13 +21,19 @@ type Prettify<T> = {
   [K in keyof T] : T[K]
 } & {}
 
-type client = Prettify<UserClient>
-type provider = Prettify<UserProvider>
-type business = Prettify<UserBusiness>
+type IUserClient = Prettify<UserClient>
+type IUserProvider = Prettify<UserProvider>
+type IUserBusiness = Prettify<UserBusiness>
 
-const cliente: client = { email: 'delmontelucas@gmail.com', password: 'test123', name: 'Lucas', lastname: 'Delmonte' }
+const client: IUserClient = { name: "Lucas Delmonte", email: 'delmontelucas@gmail.com', password: 'test123', password_confirm: 'test123' , name: 'Lucas', lastname: 'Delmonte' }
 
-const servicio: provider = { email: 'worklink@gmail.com', password: 'test123', service: 'Reparación de PCs' }
+const provider: IUserProvider = { name: "Fullhard", email: 'worklink@gmail.com', password: 'test123', password_confirm: 'test123' , service: 'Reparación de PCs' }
 
-const negocio: business = { email: 'worklink@gmail.com', password: 'test123', dedication: 'Informatica' }
+const business: IUserBusiness = { name: "Teraflop", email: 'worklink@gmail.com', password: 'test123', password_confirm: 'test123' , dedication: 'Informatica' }
+
+export {
+  type IUserClient,
+  type IUserProvider,
+  type IUserBusiness
+}
 

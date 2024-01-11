@@ -67,16 +67,46 @@
   margin-bottom: 1.6rem;
   @include display-flex(column-reverse, flex-start, flex-start, nowrap, 1rem 0);
 
-  &--text-area {
+  &--text-area,
+  &--file {
     height: fit-content;
   }
   &__label,
   &__input {
     width: 100%;
   }
+  &__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    &:empty {
+      display: none;
+    }
+    li {
+      padding-bottom: .6rem;
+      @include fontRegular(1.4rem, .04rem, 2rem, $color-black);  
+    }
+    li:last-child {
+      padding-bottom: 0;
+    }
+  }
   &__label {
     transition: all 350ms ease;
     @include fontRegular(1.4rem, .04rem, 2rem, $color-grey-50);
+
+    &--file {
+      cursor: pointer;
+      height: 5rem;
+      border-radius: 1.6rem;
+      border: .1rem groove $color-grey-50;
+      border-style: dashed;
+      @include display-flex(row, center, center, nowrap, 0); 
+
+      &:hover {
+        border-color: $color-black;
+      }
+    }
   }
   &__input {
     padding: 0;
@@ -88,7 +118,8 @@
     &:focus-visible {
       outline: none;
     }
-    &:focus {
+    &:focus,
+    &.has-value {
       border-color: $color-black;
 
       & + .field__label {
@@ -103,6 +134,10 @@
       border-radius: 1.6rem;
       padding: .8rem 1rem;
       border: .1rem solid $color-grey-50;
+    }
+    &--file {
+      border: 0;
+      height: 4rem;
     }
   }
 }
