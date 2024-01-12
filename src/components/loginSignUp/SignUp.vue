@@ -13,34 +13,18 @@
           <label for="client">{{ langStore.lang.register.form.switch.client }}</label>
           <input @change="setType('provider')" type="radio" id="provider" name="client-type" value="provider" />
           <label for="provider">{{ langStore.lang.register.form.switch.provider }}</label>
-          <input @change="setType('business')" type="radio" id="business" name="client-type" value="business" />
-          <label for="business">{{ langStore.lang.register.form.switch.business }}</label>
         </div>
-        <template v-if="userType == 'client'">
-          <!-- Client fields -->
-          <div class="field">
-            <input v-model="clientData.name" class="field__input" id="name" type="text" />
-            <label class="field__label" for="name">{{ langStore.lang.register.form.name_lastname_input }}</label>
-          </div>
-        </template>
-        <template v-else-if="userType == 'provider'">
-          <!-- Provider fields -->
-          <div class="field">
-            <input v-model="providerData.name" class="field__input" id="name" type="text" />
-            <label class="field__label" for="name">{{ langStore.lang.register.form.name_lastname_input }}</label>
-          </div>
-        </template>
-        <template v-else>
-          <!-- Business fields -->
-          <div class="field">
-            <input v-model="providerData.name" class="field__input" id="name" type="text" />
-            <label class="field__label" for="name">{{ langStore.lang.register.form.business_name_input }}</label>
-          </div>
-        </template>
-        <!-- General fields -->
+        <div class="field">
+          <input v-model="generalData.full_name" class="field__input" id="name" type="text" />
+          <label class="field__label" for="name">{{ langStore.lang.register.form.name_lastname_input }}</label>
+        </div>
         <div class="field">
           <input v-model.trim="generalData.email" class="field__input" id="email" type="email" name="email" />
           <label class="field__label" for="email">{{ langStore.lang.register.form.email_input }}</label>
+        </div>
+        <div class="field">
+          <input v-model.trim="generalData.phone" class="field__input" id="phone" type="phone" name="phone" />
+          <label class="field__label" for="phone">{{ langStore.lang.register.form.phone_input }}</label>
         </div>
         <div class="field">
           <input v-model.trim="generalData.password" class="field__input" id="password" type="password" name="password" />
@@ -60,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, Ref, onMounted } from 'vue'
+  import { ref, onMounted } from 'vue'
   import { useUserStore } from '../../stores/user'
   import IconSpinner from '@/components/icons/IconSpinner.vue'
   import { useLangStore } from '../../stores/language'
@@ -72,18 +56,12 @@
     if(dataString) langStore.setLanguage(dataString)
   })
 
-  const userType: Ref<string> = ref('client')
-  const clientData = ref({
-    name: 'Client data'
-  })
-  const providerData = ref({
-    name: 'Provider data'
-  })
-  const businessData = ref({
-    name: 'Business data'
-  })
+  const userType = ref('client')
+
   const generalData = ref({
+    full_name: 'Lucas Delmonte',
     email: 'delmontelucas678@gmail.com',
+    phone: '3476589504',
     password: 'WorkLink2k23',
     password_confirm: 'WorkLink2k23',
   })
@@ -100,24 +78,17 @@
     // Google register
     console.log('Register using google')
   }
+
   const handleSubmit = async (): Promise<void> => {
     if(generalData.value.password !== generalData.value.password_confirm) return
-
+    if(!generalData.value.full_name || !generalData.value.email || !generalData.value.password || !generalData.value.password_confirm || !generalData.value.phone) return
     switch (userType.value) {
       case 'client':
-        if(!clientData.value.name || !generalData.value.email || !generalData.value.password || !generalData.value.password_confirm)
-        console.log('Client');
-        await userStore.registerUser(generalData.value.email, generalData.value.password, clientData.value.name)
+        await userStore.registerUser('CLIENTE', generalData.value.email, generalData.value.password, generalData.value.full_name, generalData.value.phone)
         break;
 
       case 'provider':
-        if(!providerData.value.name || !generalData.value.email || !generalData.value.password || !generalData.value.password_confirm)
-        userStore.registerUser(generalData.value.email, generalData.value.password, providerData.value.name)
-        break;
-
-      case 'business':
-        if(!businessData.value.name || !generalData.value.email || !generalData.value.password || !generalData.value.password_confirm)
-        userStore.registerUser(generalData.value.email, generalData.value.password, businessData.value.name)
+        await userStore.registerUser('PROVEEDOR', generalData.value.email, generalData.value.password, generalData.value.full_name, generalData.value.phone)
         break;
 
       default:
@@ -163,7 +134,7 @@
       background: $color-primary-2;
       @include display-flex(row, space-between, center, nowrap, 0);
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 0 .6rem;
 
       input {

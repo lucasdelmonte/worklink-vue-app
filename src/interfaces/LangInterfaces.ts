@@ -61,6 +61,7 @@ interface RegisterForm {
   name_lastname_input: string;
   business_name_input: string;
   email_input: string;
+  phone_input: string;
   password_input: string;
   password_again_input: string;
   button: string;

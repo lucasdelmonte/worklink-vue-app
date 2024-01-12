@@ -6,14 +6,12 @@ import CategoriesFiltered from './views/CategoriesFiltered.vue'
 
 const requireAuth = async (to, from, next) => {
   const userStore = useUserStore()
-  const user = await userStore.currentUser()
-  user ? next() : next('/login-register')
+  userStore.userData != {} ? next() : next('/login-register')
 }
 
 const requireAuthAndInitialization = async (to, from, next) => {
   const userStore = useUserStore()
-  const user = await userStore.currentUser()
-  user && CategoriesFiltered ? next() : next()
+  userStore.userData != {} && CategoriesFiltered ? next() : next()
 }
 
 

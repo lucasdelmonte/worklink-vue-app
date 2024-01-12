@@ -58,43 +58,71 @@ export const useUserStore = defineStore('user', {
       toastAction.value = result.includes('-ok') ? true : false
       toastAlertStore.updateToast(toastAction, toastTitle, toastMessage)
     },
-    async registerUser(email: string, password: string, displayName: string) {
+    async registerUser(role: string, email: string, password: string, full_name: string, phone: string) {
+      const URL = 'http://localhost:4000/users'
       const langStore = useLangStore()
+      const data = {
+        "rol": role,
+        "email": email,
+        "password": password,
+        "nombre_apellido": full_name,
+        "telefono": phone,
+        "puntuacion": 0
+      }
       this.loadingUser = true
       try {
-        const { user } = await createUserWithEmailAndPassword(auth, email, password)
-        await updateProfile(user, {
-          displayName,
+        const response = await fetch(URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
         })
-        this.userData = { email: user.email, uid: user.uid }
+    
+        const responseData = await response.json();
+        this.userData = data
+        console.log(responseData)
         router.push('/')
         this.setToast(langStore.lang.register.ok.result)
-      } catch (e) {
-        console.log(e)
+      } catch (error) {
+        console.error(error)
         this.setToast(langStore.lang.register.error.result)
       } finally {
         this.loadingUser = false
       }
     },
     async loginUser(email: string, password: string) {
+      const URL = 'http://localhost:4000/users/login'
       const langStore = useLangStore()
+      const data = {
+        "email": email,
+        "password": password
+      }
       this.loadingUser = true
       try {
-        const { user } = await signInWithEmailAndPassword(auth, email, password)
-        this.userData = { email: user.email, uid: user.uid }
+        const response = await fetch(URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        })
+
+        const responseData = await response.json()
+        this.userData = data
+        console.log(responseData)
         router.push('/')
         this.setToast(langStore.lang.login.ok.result)
-      } catch (e) {
-        console.log(e)
+      } catch (error) {
+        console.error(error)
         this.setToast(langStore.lang.login.error.result)
       } finally {
         this.loadingUser = false
       }
     },
-    async logoutUser() {
+    logoutUser() {
       const langStore = useLangStore()
       try {
-        await signOut(auth)
         this.userData = {}
         router.push('/login-register')
         this.setToast(langStore.lang.logout.ok.result)
@@ -102,14 +130,6 @@ export const useUserStore = defineStore('user', {
         console.log(e)
         this.setToast(langStore.lang.logout.error.result)
       }
-    },
-    currentUser() {
-      return new Promise((resolve, reject) => {
-        onAuthStateChanged(auth, (user) => {
-          this.userData = user ? { email: user.email, uid: user.uid } : {}
-          resolve(user)
-        }, e => reject(console.log(e)))
-      })
     }
   },
 })
