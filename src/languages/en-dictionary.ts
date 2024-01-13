@@ -65,7 +65,7 @@ export const enLang = {
   },
   "register": {
     "form": {
-      "title": "Sign in",
+      "title": "Sign up",
       "switch": {
         "client": "Client",
         "provider": "Provider",

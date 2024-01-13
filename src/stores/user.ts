@@ -78,10 +78,15 @@ export const useUserStore = defineStore('user', {
           },
           body: JSON.stringify(data),
         })
-    
-        const responseData = await response.json();
-        this.userData = data
+
+        const responseData = await response.json()
         console.log(responseData)
+        if (!response.ok) {
+          throw new Error('Request error')
+        }
+
+        this.userData = data
+
         router.push('/')
         this.setToast(langStore.lang.register.ok.result)
       } catch (error) {
@@ -109,8 +114,12 @@ export const useUserStore = defineStore('user', {
         })
 
         const responseData = await response.json()
-        this.userData = data
         console.log(responseData)
+        if (!response.ok) {
+          throw new Error('Request error')
+        }
+
+        this.userData = data
         router.push('/')
         this.setToast(langStore.lang.login.ok.result)
       } catch (error) {
