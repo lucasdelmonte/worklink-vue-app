@@ -1,37 +1,42 @@
 <template>
   <Header @toggleMenu="toggleMenu" @toggleUserOptions="toggleUserOptions" :menuState="menuState"></Header>
-  
-  <div class="main-content">
-    <Megamenu @toggleMenu="toggleMenu" :menuState="menuState"></Megamenu>
 
+  <div class="main-content main-content--accounts">
+    <Megamenu @toggleMenu="toggleMenu" :menuState="menuState"></Megamenu>
     <div class="user-options" :open="userOptionsState">
       <ul class="user-options__list">
         <li><RouterLink class="hover-underline hover-underline--right" :to="`/account/${userStore.userData._id}`">{{ langStore.lang.header.user.view_profile }}</RouterLink></li>
         <li><RouterLink class="hover-underline hover-underline--right" @click="userStore.logoutUser" :to="'/login-register'">{{ langStore.lang.header.user.logout }}</RouterLink></li>
       </ul>
     </div>
-    
-    <h2>Home page</h2>
+    <div class="account" v-if="userStore.userData.rol === 'CLIENTE'">
+      <ClientAccount />
+    </div>
+    <div class="account" v-else-if="userStore.userData.rol === 'PROVEEDOR'">
+      <ProviderAccount />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue'
-  import type { Ref } from 'vue'
   import { useUserStore } from '../stores/user'
   import { useLangStore } from '../stores/language'
+  import { ref } from 'vue'
+  import type { Ref } from 'vue'
+  import { useRoute } from 'vue-router'
   import Header from '../components/layout/Header.vue'
   import Megamenu from '../components/layout/Megamenu.vue'
+  import ProviderAccount from './ProviderAccount.vue'
+  import ClientAccount from './ClientAccount.vue'
 
   const userStore = useUserStore()
+  const route = useRoute()
+  const langStore = useLangStore()
   const menuState: Ref<boolean> = ref(false)
   const userOptionsState: Ref<boolean> = ref(false)
-  const langStore = useLangStore()
 
-  onMounted(() => {
-    const dataString: string | null = localStorage.getItem('worklink-lang-selected')
-    if(dataString) langStore.setLanguage(dataString)
-  })
+  console.log(route.params.id)
+  console.log(userStore.userData.rol);
 
   const toggleMenu = () => menuState.value = !menuState.value
   const toggleUserOptions = () => userOptionsState.value = !userOptionsState.value
@@ -48,9 +53,22 @@
     box-shadow: .5rem .5rem 2rem rgba($color: $color-primary-2, $alpha: .14);
     height: 100%;
 
+    &--accounts {
+      padding: 0;
+      border: .1rem solid $color-black;
+    }
+
     h2 {
-      margin: 0;
-      @include fontBold(3.4rem, 0, 4rem, $color-black);
+      margin: 0 0 2rem 0;
+      @include fontRegular(2.8rem, 0, 3.6rem, $color-black);
+    }
+    .grid {
+      position: relative;
+    }
+
+    .account {
+      height: 100%;
+      box-sizing: border-box;
     }
   }
 </style>
