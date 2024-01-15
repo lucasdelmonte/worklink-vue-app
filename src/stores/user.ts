@@ -1,16 +1,9 @@
 import { defineStore } from 'pinia'
 import { useToastAlertStore } from './toastAlert'
 import { ref } from 'vue'
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  signOut, 
-  updateProfile, 
-  onAuthStateChanged
-} from 'firebase/auth'
-import { auth } from '@/firebaseConfig'
 import router from '@/router'
 import { useLangStore } from './language'
+import type { IUser } from '../interfaces/UserInterfaces'
 
 const toastAction = ref(false)
 const toastTitle = ref('')
@@ -18,7 +11,7 @@ const toastMessage = ref('')
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    userData: {},
+    userData: {} as IUser,
     loadingUser: false
   }),
   actions: {
@@ -79,13 +72,10 @@ export const useUserStore = defineStore('user', {
           body: JSON.stringify(data),
         })
 
-        const responseData = await response.json()
-        console.log(responseData)
-        if (!response.ok) {
-          throw new Error('Request error')
-        }
+        if (!response.ok) throw new Error('Request error')
 
-        this.userData = data
+        const responseData = await response.json()
+        this.userData = responseData.data as IUser
 
         router.push('/')
         this.setToast(langStore.lang.register.ok.result)
@@ -113,13 +103,11 @@ export const useUserStore = defineStore('user', {
           body: JSON.stringify(data),
         })
 
-        const responseData = await response.json()
-        console.log(responseData)
-        if (!response.ok) {
-          throw new Error('Request error')
-        }
+        if (!response.ok) throw new Error('Request error')
 
-        this.userData = data
+        const responseData = await response.json()
+        this.userData = responseData.data as IUser
+
         router.push('/')
         this.setToast(langStore.lang.login.ok.result)
       } catch (error) {
@@ -132,7 +120,7 @@ export const useUserStore = defineStore('user', {
     logoutUser() {
       const langStore = useLangStore()
       try {
-        this.userData = {}
+        this.userData = {} as IUser
         router.push('/login-register')
         this.setToast(langStore.lang.logout.ok.result)
       } catch (e) {

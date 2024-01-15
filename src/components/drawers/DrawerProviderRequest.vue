@@ -25,7 +25,7 @@
             <label class="field__label field__label--file" for="images">Select images</label>
           </div>
         </div>
-        <button @click="toggleRequest" class="drawer__create-request button button--primary-black">Finalize Request</button>
+        <button class="drawer__create-request button button--primary-black">Create Request</button>
       </form>
       <div class="drawer__buttons">
         <button @click="toggleDrawer" class="drawer__back button button--primary-white">Close</button>
@@ -35,9 +35,10 @@
 </template>
 
 <script setup lang="ts">
+  import { ref, onUpdated } from 'vue'
+  import type { Ref } from 'vue'
   import { useModalProviderCardStore } from '../../stores/modalProviderCard'
   import { useDrawerProviderRequestStore } from '../../stores/drawerProviderRequest'
-  import { ref, Ref, onUpdated } from 'vue'
 
   const providerCard = useModalProviderCardStore()
   const providerRequest = useDrawerProviderRequestStore()

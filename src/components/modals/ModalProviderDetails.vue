@@ -33,7 +33,7 @@
           </span>
         </div>
         <h4 class="card__title">{{ providerCard.provider_name }}</h4>
-        <h5 class="card__category">Category {{ providerCard.provider_business_category }}</h5>
+        <h5 class="card__category">{{ providerCard.provider_business_category }}</h5>
         <p class="card__description">{{ providerCard.provider_business_description }}</p>
       </div>
       <div class="card__buttons">
