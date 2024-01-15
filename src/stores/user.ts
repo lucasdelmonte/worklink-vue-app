@@ -72,9 +72,10 @@ export const useUserStore = defineStore('user', {
           body: JSON.stringify(data),
         })
 
-        if (!response.ok) throw new Error('Request error')
-
         const responseData = await response.json()
+
+        if (!response.ok && responseData.error) throw new Error(responseData.message)
+
         this.userData = responseData.data as IUser
 
         router.push('/')
@@ -103,9 +104,10 @@ export const useUserStore = defineStore('user', {
           body: JSON.stringify(data),
         })
 
-        if (!response.ok) throw new Error('Request error')
-
         const responseData = await response.json()
+
+        if (!response.ok && responseData.error) throw new Error(responseData.message)
+
         this.userData = responseData.data as IUser
 
         router.push('/')
