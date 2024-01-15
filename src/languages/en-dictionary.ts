@@ -65,7 +65,7 @@ export const enLang = {
   },
   "register": {
     "form": {
-      "title": "Sign in",
+      "title": "Sign up",
       "switch": {
         "client": "Client",
         "provider": "Provider",
@@ -74,6 +74,7 @@ export const enLang = {
       "name_lastname_input": "Name and lastname*",
       "business_name_input": "Business name*",
       "email_input": "Email*",
+      "phone_input": "Phone*",
       "password_input": "Password*",
       "password_again_input": "Password again*",
       "button": "SIGN UP"

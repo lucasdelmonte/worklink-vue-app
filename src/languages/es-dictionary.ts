@@ -74,6 +74,7 @@ export const esLang = {
       "name_lastname_input": "Nombre y apellido*",
       "business_name_input": "Nombre del negocio*",
       "email_input": "Correo electrónico*",
+      "phone_input": "Teléfono*",
       "password_input": "Contraseña*",
       "password_again_input": "Repetir contraseña*",
       "button": "REGISTRARSE"

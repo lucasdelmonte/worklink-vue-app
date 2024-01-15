@@ -52,6 +52,7 @@
     // Google login
     console.log('Login using google')
   }
+
   const handleSubmit = async(): Promise<void> => {
     if(!userData.value.email || !userData.value.password) return
     await userStore.loginUser(userData.value.email, userData.value.password)

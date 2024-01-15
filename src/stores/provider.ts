@@ -1,27 +1,46 @@
 import { defineStore } from 'pinia'
-import { providers } from '../assets/providers'
+import type { IBusiness, IBusinessFiltered } from '../interfaces/BusinessInterfaces'
 
 export const useProviderStore = defineStore('provider', {
   state: () => ({
-    providerData: providers.providers,
-    filteredProviders: []
+    providers: [],
+    filteredProviders: [],
+    isLoading: false
   }),
   actions: {
-    getProviders(category: string) {
-      return this.providerData.filter(provider => provider.businesses.some(business => business.category.toLowerCase() === category.toLowerCase()))
-        .map(provider => ({
-          id: provider.id,
-          full_name: provider.full_name,
-          business: provider.businesses
-            .filter(business => business.category.toLowerCase() === category.toLowerCase())
-            .map(business => ({
-              id: business.id,
-              name: business.name,
-              category: business.category,
-              description: business.description,
-              rating: business.rating,
-            })),
+    async getBusinessFiltered(category: string) {
+      this.isLoading = true
+      try {
+        const URL = `http://localhost:4000/negocios?categoria=${ category }`
+        const response = await fetch(URL)
+
+        if (!response.ok) throw new Error('Request error')
+
+        const dataRes = await response.json()
+        const data = dataRes.data as IBusiness[]
+
+        const businessFiltered: IBusinessFiltered[] = data.map((business: IBusiness) => ({
+          id: business._id,
+          name: business.nombre,
+          rating: business.proveedor.puntuacion,
+          category: business.categoria,
+          description: business.descripcion,
+          is_active: business.isActive,
+          provider: {
+            id: business.proveedor._id,
+            full_name: business.proveedor.nombre_apellido,
+            email: business.proveedor.email,
+            phone: business.proveedor.telefono,
+            rating: business.proveedor.puntuacion,
+            is_active: business.proveedor.isActive
+          }
         }))
+        return businessFiltered
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.isLoading = false
+      }
     }
   },
 })

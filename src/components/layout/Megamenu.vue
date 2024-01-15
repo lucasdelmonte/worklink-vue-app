@@ -1,38 +1,15 @@
 <template>
   <div class="megamenu" :open="menuState">
-    <!-- User type client or business -->
-    <nav class="megamenu__nav" v-if="ROLE === 'client' || ROLE === 'business'">
+    <!-- User type client -->
+    <nav class="megamenu__nav" v-if="ROLE === 'CLIENT'">
       <ul class="megamenu__list-first-level">
         <li><a>{{ langStore.lang.header.megamenu.provider_categories.title }}</a></li>
       </ul>
       <div>
         <ul class="megamenu__list-second-level">
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/a-c">{{ langStore.lang.header.megamenu.provider_categories.categories.a_c }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/construction">{{ langStore.lang.header.megamenu.provider_categories.categories.construction_worker }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/architect">{{ langStore.lang.header.megamenu.provider_categories.categories.architect }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/cars">{{ langStore.lang.header.megamenu.provider_categories.categories.cars }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/beauty">{{ langStore.lang.header.megamenu.provider_categories.categories.beauty }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/welfare">{{ langStore.lang.header.megamenu.provider_categories.categories.welfare }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/carpenter">{{ langStore.lang.header.megamenu.provider_categories.categories.carpenter }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/locksmith">{{ langStore.lang.header.megamenu.provider_categories.categories.locksmith }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/setter">{{ langStore.lang.header.megamenu.provider_categories.categories.setter }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/pest-control">{{ langStore.lang.header.megamenu.provider_categories.categories.pest_control }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/caregivers">{{ langStore.lang.header.megamenu.provider_categories.categories.caregivers }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/decorator">{{ langStore.lang.header.megamenu.provider_categories.categories.decorator }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/electrician">{{ langStore.lang.header.megamenu.provider_categories.categories.electrician }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/events">{{ langStore.lang.header.megamenu.provider_categories.categories.events }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/gasman">{{ langStore.lang.header.megamenu.provider_categories.categories.gasman }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/blacksmith">{{ langStore.lang.header.megamenu.provider_categories.categories.blacksmith }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/gardener">{{ langStore.lang.header.megamenu.provider_categories.categories.gardener }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/cleaning">{{ langStore.lang.header.megamenu.provider_categories.categories.cleaning }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/pets">{{ langStore.lang.header.megamenu.provider_categories.categories.pets }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/mover">{{ langStore.lang.header.megamenu.provider_categories.categories.mover }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/pools">{{ langStore.lang.header.megamenu.provider_categories.categories.pools }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/painter">{{ langStore.lang.header.megamenu.provider_categories.categories.painter }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/plumber">{{ langStore.lang.header.megamenu.provider_categories.categories.plumber }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/reforms">{{ langStore.lang.header.megamenu.provider_categories.categories.reforms }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/upholsterer">{{ langStore.lang.header.megamenu.provider_categories.categories.upholsterer }}</RouterLink></li>
-          <li><RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" to="/categories/technical">{{ langStore.lang.header.megamenu.provider_categories.categories.technical }}</RouterLink></li>
+          <li v-for="category in CategoriasType">
+            <RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" :to="`/categories/${category}`">{{ category }}</RouterLink>
+          </li>
         </ul>
       </div>
     </nav>
@@ -49,10 +26,11 @@
   import { RouterLink } from 'vue-router'
   import { useLangStore } from '../../stores/language'
   import { onMounted } from 'vue'
+  import { CategoriasType } from '../../interfaces/CategoriesInterfaces'
 
   const langStore = useLangStore()
+  const ROLE = 'CLIENT' // Dinamic role
 
-  const ROLE = 'client' // Dinamic role
   defineProps({
     menuState: Boolean
   })
