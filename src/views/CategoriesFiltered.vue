@@ -6,8 +6,8 @@
 
     <div class="user-options" :open="userOptionsState">
       <ul class="user-options__list">
-        <li><a>{{ langStore.lang.header.user.view_profile }}</a></li>
-        <li><a class="hover-underline hover-underline--right" @click="userStore.logoutUser">{{ langStore.lang.header.user.logout }}</a></li>
+        <li><RouterLink class="hover-underline hover-underline--right" :to="`/account/${userStore.userData._id}`">{{ langStore.lang.header.user.view_profile }}</RouterLink></li>
+        <li><RouterLink class="hover-underline hover-underline--right" @click="userStore.logoutUser" :to="'/login-register'">{{ langStore.lang.header.user.logout }}</RouterLink></li>
       </ul>
     </div>
     <div class="grid grid--desktop-4 grid--tablet-3 grid--mobile-1">
@@ -66,7 +66,7 @@
   import type { Ref } from 'vue'
   import { useUserStore } from '../stores/user'
   import { useLangStore } from '../stores/language'
-  import { useRoute } from 'vue-router';
+  import { useRoute } from 'vue-router'
   import { useProviderStore } from '../stores/provider'
   import Header from '../components/layout/Header.vue'
   import Megamenu from '../components/layout/Megamenu.vue'
@@ -113,47 +113,6 @@
 
 <style scoped lang="scss">
   @import '../../styles/main.scss';
-
-  .user-options {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: transparent;
-    z-index: 2;
-    min-width: 16rem;
-    text-align: right;
-    transition: translate 350ms ease;
-    translate: 0 -110%;
-
-    &[open="true"] {
-      transition: translate 350ms ease;
-      translate: 0 0;
-    }
-    &__list {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      background: $color-white;
-      border-radius: 1rem;
-      padding: 2rem 1.6rem;
-      box-shadow: .5rem .5rem 2rem rgba($color: $color-primary-2, $alpha: .14);
-
-      li {
-        padding: 0 0 1.6rem 0;
-        margin: 0;
-        
-        a {
-          @include fontRegular(1.6rem, 0rem, 2rem, $color-primary-2);
-          text-decoration: none;
-          padding-bottom: .6rem;
-          cursor: pointer;
-        }
-      }
-      li:last-child {
-        padding-bottom: 0;
-      }
-    }
-  }
   .main-content {
     overflow: hidden;
     position: relative;

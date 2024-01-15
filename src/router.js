@@ -3,6 +3,7 @@ import { useUserStore } from './stores/user'
 import Home from './views/Home.vue'
 import LoginRegister from './views/LoginRegister.vue'
 import CategoriesFiltered from './views/CategoriesFiltered.vue'
+import Account from './views/Account.vue'
 
 const requireAuth = async (to, from, next) => {
   const userStore = useUserStore()
@@ -17,7 +18,8 @@ const requireAuthAndInitialization = async (to, from, next) => {
 const routes = [
   { path: '/', component: Home, beforeEnter: requireAuth },
   { path: '/login-register', component: LoginRegister },
-  { path: '/categories/:category', component: CategoriesFiltered, beforeEnter: requireAuthAndInitialization }
+  { path: '/categories/:category', component: CategoriesFiltered, beforeEnter: requireAuthAndInitialization },
+  { path: '/account/:id', component: Account, beforeEnter: requireAuthAndInitialization }
 ]
 
 const router = createRouter({
