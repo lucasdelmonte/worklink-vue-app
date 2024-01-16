@@ -1803,6 +1803,11 @@
   dependencies:
     "@vue/devtools-api" "^6.5.0"
 
+"vue-session@^1.0.0":
+  "integrity" "sha512-Ep9lRKGgCZdcGV3In3R3zoSp5Wr+hlcIc8WJ9BG+QKzibwaFZnnvp9HBVdd+dU8d6HGLSi5sWywDmd5MkrkfoQ=="
+  "resolved" "https://registry.npmjs.org/vue-session/-/vue-session-1.0.0.tgz"
+  "version" "1.0.0"
+
 "vue-template-compiler@^2.7.14":
   "integrity" "sha512-zyA5Y3ArvVG0NacJDkkzJuPQDF8RFeRlzV2vLeSnhSpieO6LK2OVbdLPi5MPPs09Ii+gMO8nY4S3iKQxBxDmWQ=="
   "resolved" "https://registry.npmjs.org/vue-template-compiler/-/vue-template-compiler-2.7.14.tgz"
