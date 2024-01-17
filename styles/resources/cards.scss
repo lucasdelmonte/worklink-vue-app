@@ -63,86 +63,18 @@
   &__rating {
     margin: .6rem 0;
     text-align: right;
-    @include display-flex(row, flex-end, center, nowrap, 0);
+    @include display-flex(row, flex-end, center, nowrap, 0 .4rem);
 
     svg {
-      max-width: 1.6rem;
+      width: 1.8rem;
+      height: 1.8rem;
     }
     span {
+      top: .1rem;
       position: relative;
-      height: 1.6rem;
-      width: 1.6rem;
+      width: fit-content;
       @include display-flex(row, center, center, nowrap, 0);
-    }
-    &.rating--1 {
-      .star--2,
-      .star--3,
-      .star--4,
-      .star--5 {
-        &::after {
-          content: "";
-          position: absolute;
-          top: 0;
-          right: 0;
-          display: block;
-          width: 100%;
-          height: 100%;
-          z-index: 1;
-          background: white;
-          opacity: .8;   
-        } 
-      }
-    }
-    &.rating--2 {
-      .star--3,
-      .star--4,
-      .star--5 {
-        &::after {
-          content: "";
-          position: absolute;
-          top: 0;
-          right: 0;
-          display: block;
-          width: 100%;
-          height: 100%;
-          z-index: 1;
-          background: white;
-          opacity: .8;   
-        } 
-      }
-    }
-    &.rating--3 {
-      .star--4,
-      .star--5 {
-        &::after {
-          content: "";
-          position: absolute;
-          top: 0;
-          right: 0;
-          display: block;
-          width: 100%;
-          height: 100%;
-          z-index: 1;
-          background: white;
-          opacity: .8;   
-        } 
-      }
-    }
-    &.rating--4 {
-      .star--5 {
-        &::after {
-          content: "";
-          position: absolute;
-          top: 0;
-          right: 0;
-          display: block;
-          width: 100%;
-          height: 100%;
-          z-index: 1;
-          background: white;
-          opacity: .8;   
-        } 
-      }
+      @include fontRegular(1.6rem, 0, 2rem, $color-black);  
     }
   }
   &__title {

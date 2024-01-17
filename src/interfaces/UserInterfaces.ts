@@ -1,12 +1,12 @@
 export interface IUser {
-  _id: string,
-  firebaseUid: string,
-  rol: string,
-  email: string,
-  nombre_apellido: string,
-  telefono: string,
-  puntuacion: number,
-  isActive: boolean,
-  __v: number
+  _id: string | undefined,
+  firebaseUid: string | undefined,
+  rol: string | undefined,
+  email: string | undefined,
+  nombre_apellido: string | undefined,
+  telefono: string | undefined,
+  puntuacion: number | undefined,
+  isActive: boolean | undefined,
+  __v: number | undefined
 }
 
