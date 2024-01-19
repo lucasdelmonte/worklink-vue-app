@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import router from '@/router'
 import { useLangStore } from './language'
 import type { IUser } from '../interfaces/UserInterfaces'
+import { useCookies } from 'vue3-cookies'
 
 const toastAction = ref(false)
 const toastTitle = ref('')
@@ -51,6 +52,26 @@ export const useUserStore = defineStore('user', {
       toastAction.value = result.includes('-ok') ? true : false
       toastAlertStore.updateToast(toastAction, toastTitle, toastMessage)
     },
+    setCookies() {
+      const cookies = useCookies()
+      cookies.cookies.set('userId', `${ this.userData._id }`)
+      cookies.cookies.set('userRol', `${ this.userData.rol }`)
+      cookies.cookies.set('userNombreApellido', `${ this.userData.nombre_apellido }`)
+      cookies.cookies.set('userPuntuacion', `${ this.userData.puntuacion }`)
+      cookies.cookies.set('userTelefono', `${ this.userData.telefono }`)
+      cookies.cookies.set('userIsActive', `${ this.userData.isActive }`)
+      cookies.cookies.set('userEmail', `${ this.userData.email }`)
+    },
+    removeCookies() {
+      const cookies = useCookies()
+      cookies.cookies.remove('userId')
+      cookies.cookies.remove('userRol')
+      cookies.cookies.remove('userNombreApellido')
+      cookies.cookies.remove('userPuntuacion')
+      cookies.cookies.remove('userTelefono')
+      cookies.cookies.remove('userIsActive')
+      cookies.cookies.remove('userEmail')
+    },
     async registerUser(role: string, email: string, password: string, full_name: string, phone: string) {
       const URL = 'http://localhost:4000/users'
       const langStore = useLangStore()
@@ -78,10 +99,13 @@ export const useUserStore = defineStore('user', {
 
         this.userData = responseData.data as IUser
 
+        this.setCookies()
+
         router.push('/')
         this.setToast(langStore.lang.register.ok.result)
       } catch (error) {
         console.error(error)
+        this.removeCookies()
         this.setToast(langStore.lang.register.error.result)
       } finally {
         this.loadingUser = false
@@ -110,10 +134,13 @@ export const useUserStore = defineStore('user', {
 
         this.userData = responseData.data as IUser
 
+        this.setCookies()
+  
         router.push('/')
         this.setToast(langStore.lang.login.ok.result)
       } catch (error) {
         console.error(error)
+        this.removeCookies()
         this.setToast(langStore.lang.login.error.result)
       } finally {
         this.loadingUser = false
@@ -123,6 +150,7 @@ export const useUserStore = defineStore('user', {
       const langStore = useLangStore()
       try {
         this.userData = {} as IUser
+        this.removeCookies()
         router.push('/login-register')
         this.setToast(langStore.lang.logout.ok.result)
       } catch (e) {

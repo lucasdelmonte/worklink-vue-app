@@ -5,14 +5,14 @@
     <Megamenu @toggleMenu="toggleMenu" :menuState="menuState"></Megamenu>
     <div class="user-options" :open="userOptionsState">
       <ul class="user-options__list">
-        <li><RouterLink class="hover-underline hover-underline--right" :to="`/account/${userStore.userData._id}`">{{ langStore.lang.header.user.view_profile }}</RouterLink></li>
+        <li><RouterLink class="hover-underline hover-underline--right" :to="`/account/${ userStore.userData._id }`">{{ langStore.lang.header.user.view_profile }}</RouterLink></li>
         <li><RouterLink class="hover-underline hover-underline--right" @click="userStore.logoutUser" :to="'/login-register'">{{ langStore.lang.header.user.logout }}</RouterLink></li>
       </ul>
     </div>
-    <div class="account" v-if="userStore.userData.rol === 'CLIENTE'">
+    <div class="account" v-if="userRol === 'CLIENTE'">
       <ClientAccount />
     </div>
-    <div class="account" v-else-if="userStore.userData.rol === 'PROVEEDOR'">
+    <div class="account" v-else-if="userRol === 'PROVEEDOR'">
       <ProviderAccount />
     </div>
   </div>
@@ -23,20 +23,29 @@
   import { useLangStore } from '../stores/language'
   import { ref } from 'vue'
   import type { Ref } from 'vue'
-  import { useRoute } from 'vue-router'
+  import router from '@/router'
   import Header from '../components/layout/Header.vue'
   import Megamenu from '../components/layout/Megamenu.vue'
   import ProviderAccount from './ProviderAccount.vue'
   import ClientAccount from './ClientAccount.vue'
+  import { useRoute } from 'vue-router'
+  import { useCookies } from 'vue3-cookies'
 
   const userStore = useUserStore()
-  const route = useRoute()
   const langStore = useLangStore()
+  const route = useRoute()
   const menuState: Ref<boolean> = ref(false)
   const userOptionsState: Ref<boolean> = ref(false)
 
-  console.log(route.params.id)
-  console.log(userStore.userData.rol);
+  const cookies = useCookies()
+  const userId = cookies.cookies.get('userId') as '' | undefined
+  const userRol = cookies.cookies.get('userRol') as 'CLIENTE' | 'PROVEEDOR' | undefined
+
+  if (route.params.id != userId && userId != undefined) {
+    router.push(`/account/${ userId }`)
+  } else if (!userId) {
+    router.push('/login-user')
+  }
 
   const toggleMenu = () => menuState.value = !menuState.value
   const toggleUserOptions = () => userOptionsState.value = !userOptionsState.value

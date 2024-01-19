@@ -13,32 +13,17 @@
   <div class="account__main">
     <header class="account__heading">
       <h1 class="account__title">{{ userStore.userData.nombre_apellido }}</h1>
-      <div class="card__rating" :class="`rating--${ Math.round(userStore.userData.puntuacion) }`">
-        <span class="star--1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#F9CB52" aria-hidden="true" class="w-4 h-4 text-green-500">
-            <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd"></path>
-          </svg>
-        </span>
-        <span class="star--2">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#F9CB52" aria-hidden="true" class="w-4 h-4 text-green-500">
-            <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd"></path>
-          </svg>
-        </span>
-        <span class="star--3">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#F9CB52" aria-hidden="true" class="w-4 h-4 text-green-500">
-            <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd"></path>
-          </svg>
-        </span>
-        <span class="star--4">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#F9CB52" aria-hidden="true" class="w-4 h-4 text-green-500">
-            <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd"></path>
-          </svg>
-        </span>
-        <span class="star--5">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#F9CB52" aria-hidden="true" class="w-4 h-4 text-green-500">
-            <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd"></path>
-          </svg>
-        </span>
+      <div class="card__rating">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <clipPath id="star">
+              <path d="M12 16.743L17.562 20.1L16.086 13.773L21 9.516L14.529 8.967L12 3L9.471 8.967L3 9.516L7.914 13.773L6.438 20.1L12 16.743Z" fill="black"></path>
+            </clipPath>
+          </defs>
+          <rect x="0" y="0" fill="black" width="100%" height="100%" clip-path="url(#star)"></rect>
+          <rect x="100" y="0" fill="#DDDDDD" width="100%" height="100%" clip-path="url(#star)"></rect>
+        </svg>
+        <span>{{ userStore.userData.puntuacion }}</span>
       </div>
     </header>
     <div class="account__content">
@@ -50,32 +35,17 @@
               <img class="card__media" src="https://cdn.shopify.com/s/files/1/0618/8115/5826/files/user.jpg?v=1701717572" alt="Provider" lazyload>
             </div>
             <div class="card__information">
-              <div class="card__rating" :class="`rating--5`">
-                <span class="star--1">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#F9CB52" aria-hidden="true" class="w-4 h-4 text-green-500">
-                    <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd"></path>
-                  </svg>
-                </span>
-                <span class="star--2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#F9CB52" aria-hidden="true" class="w-4 h-4 text-green-500">
-                    <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd"></path>
-                  </svg>
-                </span>
-                <span class="star--3">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#F9CB52" aria-hidden="true" class="w-4 h-4 text-green-500">
-                    <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd"></path>
-                  </svg>
-                </span>
-                <span class="star--4">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#F9CB52" aria-hidden="true" class="w-4 h-4 text-green-500">
-                    <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd"></path>
-                  </svg>
-                </span>
-                <span class="star--5">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#F9CB52" aria-hidden="true" class="w-4 h-4 text-green-500">
-                    <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd"></path>
-                  </svg>
-                </span>
+              <div class="card__rating">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <clipPath id="star">
+                      <path d="M12 16.743L17.562 20.1L16.086 13.773L21 9.516L14.529 8.967L12 3L9.471 8.967L3 9.516L7.914 13.773L6.438 20.1L12 16.743Z" fill="black"></path>
+                    </clipPath>
+                  </defs>
+                  <rect x="0" y="0" fill="black" width="100%" height="100%" clip-path="url(#star)"></rect>
+                  <rect x="100" y="0" fill="#DDDDDD" width="100%" height="100%" clip-path="url(#star)"></rect>
+                </svg>
+                <span>4.5</span>
               </div>
               <h4 class="card__title">{{ businessItem.nombre }}</h4>
               <p class="card__description">{{ businessItem.descripcion }}</p>
@@ -96,23 +66,30 @@
   import { useUserStore } from '../stores/user'
   import { ref, onMounted } from 'vue'
   import type { Ref } from 'vue'
-  import type { IBusiness } from '../interfaces/BusinessInterfaces';
+  import type { IBusiness } from '../interfaces/BusinessInterfaces'
+  import { useCookies } from 'vue3-cookies'
+  import router from '@/router'
   
-
   const userStore = useUserStore()
   const isLoading: Ref<boolean> = ref(false)
   const business: Ref<[]> = ref([])
+  const cookies = useCookies()
+  const userId = cookies.cookies.get('userId') as '' | undefined
+  const userRol = cookies.cookies.get('userRol') as 'CLIENTE' | 'PROVEEDOR' | undefined
+
+  if (!userId || userId === '' || !userRol || userRol === 'CLIENTE') router.push('/login-register')
 
   const getBusiness = async () => { 
     isLoading.value = true
     try {
-      const URL = `http://localhost:4000/negocios?proveedor=${ userStore.userData._id }`
+      const URL = `http://localhost:4000/negocios?proveedor=${ userId }`
       const response = await fetch(URL)
 
       if (!response.ok) throw new Error('Request error')
 
       const dataRes = await response.json()
       const data = dataRes.data
+
       business.value = data
     } catch (error) {
       console.log(error); 
