@@ -1,16 +1,16 @@
 <template>
   <main>
     <router-view></router-view>
-    <ModalProviderDetails />
-    <DrawerProviderRequest />
+    <ModalBusinessDetails />
+    <DrawerRequest />
     <ToastAlertCustom />
   </main>
 </template>
 
 <script setup lang="ts">
   import ToastAlertCustom from './components/notificationPopUp/ToastAlertCustom.vue'
-  import ModalProviderDetails from './components/modals/ModalProviderDetails.vue'
-  import DrawerProviderRequest from './components/drawers/DrawerProviderRequest.vue'
+  import ModalBusinessDetails from './components/modals/ModalBusinessDetails.vue'
+  import DrawerRequest from './components/drawers/DrawerRequest.vue'
   import { onMounted } from 'vue'
   import { useCookies } from 'vue3-cookies'
   import { useUserStore } from './stores/user';

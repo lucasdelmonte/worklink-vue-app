@@ -3,8 +3,9 @@ import { useToastAlertStore } from './toastAlert'
 import { ref } from 'vue'
 import router from '@/router'
 import { useLangStore } from './language'
-import type { IUser } from '../interfaces/UserInterfaces'
 import { useCookies } from 'vue3-cookies'
+import type { IUser } from '../interfaces/UserInterfaces'
+import type { IServiceRequest } from '../interfaces/ServiceRequestInterfaces';
 
 const toastAction = ref(false)
 const toastTitle = ref('')
@@ -156,6 +157,22 @@ export const useUserStore = defineStore('user', {
       } catch (e) {
         console.log(e)
         this.setToast(langStore.lang.logout.error.result)
+      }
+    },
+    async getServicesRequest() {
+      const URL = 'http://localhost:4000/solicitudes_servicio'
+      try {
+        const response = await fetch(URL)
+
+        if (!response.ok) throw new Error('Request error')
+        
+        const dataRes = await response.json()
+        const data = dataRes.data as IServiceRequest[]
+        console.log(data);
+
+        return data
+      } catch (error) {
+        console.log(error)
       }
     }
   },

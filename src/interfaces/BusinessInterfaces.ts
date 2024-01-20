@@ -1,6 +1,6 @@
 export interface IBusiness {
   _id: string,
-  proveedor: IProvider,
+  proveedor: IProvider | undefined,
   categoria: string,
   nombre: string,
   descripcion: string,
@@ -8,13 +8,14 @@ export interface IBusiness {
   imagenes: string[],
   fechaCreacion: string,
   isActive: boolean,
+  puntuacion: number | undefined,
   __v: number
 }
 
 export interface IBusinessFiltered {
   id: string,
   name: string,
-  rating: number,
+  rating: number | undefined,
   category: string,
   description: string,
   is_active: boolean,
@@ -23,7 +24,7 @@ export interface IBusinessFiltered {
     full_name: string,
     email: string,
     phone: string,
-    rating: number,
+    rating: number | undefined,
     is_active: boolean
   }
 }

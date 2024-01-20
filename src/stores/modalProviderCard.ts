@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const useModalProviderCardStore = defineStore('providerCard', {
+export const useModalBusinessStore = defineStore('modalBusiness', {
   state: () => ({
     state: false,
     provider_id: '',

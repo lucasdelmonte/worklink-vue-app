@@ -2,9 +2,9 @@ export const esLang = {
   "header": {
     "megamenu": {
       "provider_categories": { 
-        "title": "Categorias",
+        "title": "Negocios",
         "categories": {
-          "a_c": "A/A",
+          "a_c": "A-A",
           "construction_worker": "Construcción",
           "architect": "Arquitecto",
           "cars": "Automóviles",

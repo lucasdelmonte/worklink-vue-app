@@ -1,15 +1,22 @@
 <template>
   <div class="megamenu" :open="menuState">
     <!-- User type client -->
-    <nav class="megamenu__nav" v-if="ROLE === 'CLIENT'">
-      <ul class="megamenu__list-first-level">
-        <li><a>{{ langStore.lang.header.megamenu.provider_categories.title }}</a></li>
-      </ul>
-      <div>
-        <ul class="megamenu__list-second-level">
-          <li v-for="category in CategoriasType">
-            <RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" :to="`/categories/${category}`">{{ category }}</RouterLink>
-          </li>
+    <nav class="megamenu__nav" v-if="userRol === 'CLIENTE'">
+      <div class="megamenu__nav-first-level">
+        <ul class="megamenu__list-first-level">
+          <li><a>Negocios</a></li>
+        </ul>
+        <div>
+          <ul class="megamenu__list-second-level">
+            <li v-for="category in CategoriasType">
+              <RouterLink @click="$emit('toggleMenu')" class="hover-underline hover-underline--right" :to="`/business/${category}`">{{ category }}</RouterLink>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="megamenu__nav-first-level">
+        <ul class="megamenu__list-first-level">
+          <li><RouterLink :to="`/services-request`">Solicitudes</RouterLink></li>
         </ul>
       </div>
     </nav>
@@ -27,9 +34,13 @@
   import { useLangStore } from '../../stores/language'
   import { onMounted } from 'vue'
   import { CategoriasType } from '../../interfaces/CategoriesInterfaces'
+  import { useCookies } from 'vue3-cookies'
+
+  const cookies = useCookies()
+
+  const userRol = cookies.cookies.get('userRol') as 'CLIENTE' | 'PROVEEDOR' | undefined
 
   const langStore = useLangStore()
-  const ROLE = 'CLIENT' // Dinamic role
 
   defineProps({
     menuState: Boolean
