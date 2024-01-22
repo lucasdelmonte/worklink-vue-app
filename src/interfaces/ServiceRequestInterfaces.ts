@@ -7,7 +7,7 @@ export interface IServiceRequestPost {
   titulo: string,
   descripcion: string,
   imagenes: string[],
-  negocio: IBusiness | undefined
+  negocio: string
 }
 
 export interface IServiceRequestUpdate {

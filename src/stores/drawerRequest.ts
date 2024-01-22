@@ -42,7 +42,6 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
         this.state = false
         this.resetAttributes()
       } catch (error) {
-        console.log(error)
         toastAction.value = false
         toastTitle.value = 'Ocurrió un error al crear la solicitud'
         toastMessage.value = `${ error }`
@@ -52,7 +51,7 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
       }
     },
     async editRequest(data: IServiceRequestUpdate) {
-      const URL = `http://localhost:4000/solicitudes_servicio/${this.requestData._id}`
+      const URL = `http://localhost:4000/solicitudes_servicio/${ this.requestData._id }`
       const toastAlertStore = useToastAlertStore()
       try {
         this.isLoading = true
@@ -75,7 +74,6 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
         toastMessage.value = 'Solicitud editada con éxito'
         this.resetAttributes()
       } catch (error) {
-        console.log(error)
         toastAction.value = false
         toastTitle.value = 'Ocurrió un error al editar la solicitud'
         toastMessage.value = `${ error }`
@@ -92,7 +90,7 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
       }
       try {
         const response = await fetch(URL, {
-          method: 'POST',
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -100,7 +98,6 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
         })
 
         const responseData = await response.json()
-
         if (!response.ok && responseData.error) throw new Error(responseData.message)
 
         toastAction.value = true

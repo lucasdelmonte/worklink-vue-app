@@ -70,6 +70,7 @@
     modalBusiness.state = !modalBusiness.state
     modalBusiness.provider_id = business.provider.id
     modalBusiness.provider_name = business.provider.full_name
+    modalBusiness.provider_business_id = business.id
     modalBusiness.provider_business_description = business.description
     modalBusiness.provider_business_category = business.category
     modalBusiness.provider_business_rating = business.rating ? business.rating : 0

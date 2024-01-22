@@ -250,7 +250,10 @@
     transition: transform 350ms ease;
     &__title {
       margin: 0 0 .4rem 0;
-      @include fontBold(1.8rem, 0, 2rem, $color-black);
+      max-height: 2.6rem;
+      display: flex;
+      align-items: center;
+      @include fontBold(1.8rem, 0, 3rem, $color-black);
     }
     &__category {
       margin: 0 0 1.4rem 0;

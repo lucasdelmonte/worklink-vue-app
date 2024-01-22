@@ -90,7 +90,7 @@
       titulo: title.value as string,
       descripcion: description.value as string,
       imagenes: images.value as string[],
-      negocio: undefined
+      negocio: modalBusiness.provider_business_id as string
     }
     drawerRequest.createRequest(data)
   }
