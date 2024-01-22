@@ -161,12 +161,32 @@
   @import '../../styles/main.scss';
   .main-content {
     overflow: hidden;
+    overflow-y: auto;
     position: relative;
     background: $color-white;
     border-radius: 1rem;
     padding: 1.6rem;
     box-shadow: .5rem .5rem 2rem rgba($color: $color-primary-2, $alpha: .14);
     height: 100%;
+    &::-webkit-scrollbar {
+      width: .4rem;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      border-top-right-radius: 1rem;
+      border-bottom-right-radius: 1rem;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $color-grey-15;
+      border-top-right-radius: .5rem;
+      border-bottom-right-radius: .5rem;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: $color-grey-50;
+    }
 
     .filter {
       @include display-flex(row, flex-end, center, wrap, 0 1.6rem);

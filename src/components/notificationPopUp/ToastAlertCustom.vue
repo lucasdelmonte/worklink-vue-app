@@ -49,6 +49,7 @@
     border-radius: 1rem;
     transition: translate 350ms ease;
     translate: 0;
+    z-index: 3;
     &--hidden {
       translate: 0 200%;
     }

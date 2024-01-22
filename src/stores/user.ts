@@ -5,7 +5,7 @@ import router from '@/router'
 import { useLangStore } from './language'
 import { useCookies } from 'vue3-cookies'
 import type { IUser } from '../interfaces/UserInterfaces'
-import type { IServiceRequest } from '../interfaces/ServiceRequestInterfaces';
+import type { IServiceRequestGet } from '../interfaces/ServiceRequestInterfaces';
 
 const toastAction = ref(false)
 const toastTitle = ref('')
@@ -15,7 +15,7 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     userData: {} as IUser,
     loadingUser: false,
-    servicesRequest: [] as IServiceRequest[]
+    servicesRequest: [] as IServiceRequestGet[]
   }),
   actions: {
     setToast(result: string): void {
@@ -169,7 +169,7 @@ export const useUserStore = defineStore('user', {
         if (!response.ok) throw new Error('Request error')
         
         const dataRes = await response.json()
-        const data = dataRes.data as IServiceRequest[]
+        const data = dataRes.data as IServiceRequestGet[]
         const userServicesRequest = data.filter(serviceRequest => serviceRequest.cliente?._id == this.userData._id)
         this.servicesRequest = userServicesRequest
         return userServicesRequest
