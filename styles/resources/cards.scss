@@ -79,6 +79,11 @@
   }
   &__title {
     margin: 0 0 .8rem 0;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    min-height: 1.8rem;
     @include fontBold(1.6rem, 0, 2rem, $color-black);
   }
   &__description {
@@ -137,10 +142,79 @@
   }
 }
 
-.card--services {
-  .card {
-    background-color: red;
+.card-service {
+  width: 100%;
+  height: 100%;
+  border-radius: 1.6rem;
+  overflow: hidden;
+  background-color: $color-white;
+  display: flex;
+  flex-direction: column;
+  padding: 1.2rem 1.6rem;
+  box-shadow: .5rem .5rem 2rem rgba(0, 0, 0, 0.14);
+  box-sizing: border-box;
+  &:hover {
+    .card__view-details {
+      svg {
+        transform: translateX(.4rem);
+      }
+    }
   }
+  header {
+    margin: 0 0 2rem 0;
+    @include display-flex(row, space-between, center, wrap, .8rem 0);
+
+    span {
+      margin: 0;
+      padding: 0;
+      @include fontRegular(1.4rem, 0, 1.8rem, $color-black);
+    }
+  }
+  &__title {
+    margin: 0 0 .2rem 0;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    min-height: 1.8rem;
+    @include fontBold(1.6rem, 0, 2rem, $color-black);
+  }
+  &__category {
+    margin: 0 0 1.6rem 0;
+    @include fontBold(1.4rem, 0, 1.8rem, $color-black);
+  }
+  &__description {
+    margin: 0;
+    height: 100%;
+    @include fontRegular(1.2rem, 0, 2rem, $color-black);
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+  }
+  &__buttons {
+    margin: 3rem 0 0 0;
+    background-color: $color-white;
+    width: 100%;
+    text-align: right;
+    padding: 0;
+    margin-left: auto;
+    cursor: pointer;
+    @include fontRegular(1.2rem, 0, 1.8rem, $color-black);
+    @include display-flex(row, space-between, center, nowrap, 0 .4rem);
+
+    button {
+      padding: 0 .8rem;
+      min-height: 4rem;
+      width: fit-content;
+      min-width: 4rem;
+      font-size: 1.2rem;
+    }
+    svg {
+      transition: all 350ms ease;
+    }
+  }
+  
 }
 
 .modal-card {

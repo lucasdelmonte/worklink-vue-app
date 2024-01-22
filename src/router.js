@@ -30,6 +30,7 @@ const routes = [
   { path: '/', component: Home, beforeEnter: requireAuth },
   { path: '/login-register', component: LoginRegister },
   { path: '/business/:category', component: Business, beforeEnter: requireBusinessAuth },
+  { path: '/services-request/:category', name: "services-request", component: ServicesRequest, beforeEnter: requireServicesRequestAuth },
   { path: '/services-request', component: ServicesRequest, beforeEnter: requireServicesRequestAuth },
   { path: '/account/:id', component: Account, beforeEnter: requireAccountAuth }
 ]

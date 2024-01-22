@@ -44,6 +44,7 @@
   }
   const toggleRequest = () => {
     drawerRequest.state = !drawerRequest.state
+    drawerRequest.requestAction = 'CREATE'
     modalBusiness.state = !modalBusiness.state
   }
 </script>

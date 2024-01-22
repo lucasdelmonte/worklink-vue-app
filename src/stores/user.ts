@@ -14,7 +14,8 @@ const toastMessage = ref('')
 export const useUserStore = defineStore('user', {
   state: () => ({
     userData: {} as IUser,
-    loadingUser: false
+    loadingUser: false,
+    servicesRequest: [] as IServiceRequest[]
   }),
   actions: {
     setToast(result: string): void {
@@ -151,6 +152,7 @@ export const useUserStore = defineStore('user', {
       const langStore = useLangStore()
       try {
         this.userData = {} as IUser
+        this.servicesRequest = []
         this.removeCookies()
         router.push('/login-register')
         this.setToast(langStore.lang.logout.ok.result)
@@ -168,9 +170,9 @@ export const useUserStore = defineStore('user', {
         
         const dataRes = await response.json()
         const data = dataRes.data as IServiceRequest[]
-        console.log(data);
-
-        return data
+        const userServicesRequest = data.filter(serviceRequest => serviceRequest.cliente?._id == this.userData._id)
+        this.servicesRequest = userServicesRequest
+        return userServicesRequest
       } catch (error) {
         console.log(error)
       }

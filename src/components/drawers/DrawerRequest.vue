@@ -2,45 +2,48 @@
   <div class="drawer" :class="{ 'drawer--open': drawerRequest.state }">
     <div class="drawer__content">
       <div class="drawer__information">
-        <h4 class="drawer__title">{{ modalBusiness.provider_name }}</h4>
-        <h5 class="drawer__category">Category {{ modalBusiness.provider_business_category }}</h5>
+        <h4 class="drawer__title">{{ modalBusiness.provider_name || drawerRequest.requestData.negocio?.proveedor?.nombre_apellido }}</h4>
+        <h5 class="drawer__category">Categoría {{ modalBusiness.provider_business_category || drawerRequest.requestData.categoria }}</h5>
       </div>
-      <form @submit.prevent="handleSubmit" class="form">
+      <form class="form">
         <div>
-          <h2 class="form__title form__title--left">Request</h2>
+          <h2 class="form__title form__title--left" :class="{ 'form__title--with-subtitle': drawerRequest.requestState }">Solicitud</h2>
+          <h4 class="form__subtitle form__title--left" v-if="drawerRequest.requestState">{{ drawerRequest.requestState }}</h4>
           <div class="field">
-            <input v-model="date" class="field__input" id="date" type="date" />
-            <label class="field__label" for="date">Date</label>
+            <input v-model="date" class="field__input" id="date" type="date" :disabled="validateEdit" />
+            <label class="field__label" for="date">Fecha</label>
           </div>
           <div class="field">
-            <input v-model="title" class="field__input" id="title" type="text" />
-            <label class="field__label" for="title">Title</label>
+            <input v-model="title" class="field__input" id="title" type="text" :disabled="validateEdit" />
+            <label class="field__label" for="title">Título</label>
           </div>
           <div class="field field--text-area">
-            <textarea v-model="description" rows="10" id="description" class="field__input field__input--text-area" name="description"></textarea>
-            <label class="field__label" for="description">Description</label>
+            <textarea v-model="description" rows="10" id="description" class="field__input field__input--text-area" name="description" :disabled="validateEdit"></textarea>
+            <label class="field__label" for="description">Descripción</label>
           </div>
           <div class="field field--file">
-            <input @change="(evt) => loadImages(evt)" class="field__input field__input--file hidden" type="file" id="images" name="awsfiles" accept=".jpg,.jpeg,.png" multiple>
-            <label class="field__label field__label--file" for="images">Select images</label>
+            <input @change="(evt) => loadImages(evt)" class="field__input field__input--file hidden" type="file" id="images" name="awsfiles" accept=".jpg,.jpeg,.png" multiple :disabled="validateEdit">
+            <label class="field__label field__label--file" for="images">Seleccionar imagenes</label>
           </div>
         </div>
-        <button class="drawer__create-request button button--primary-black">Create Request</button>
+
+        <button class="drawer__create-request button button--primary-black" v-if="drawerRequest.requestAction === 'CREATE'" @click.prevent="createRequest">Crear solicitud</button>
+        <button class="drawer__create-request button button--primary-black" v-else-if="drawerRequest.requestAction === 'EDIT'" @click.prevent="editRequest">Actualizar solicitud</button>
       </form>
       <div class="drawer__buttons">
-        <button @click="toggleDrawer" class="drawer__back button button--primary-white">Close</button>
+        <button @click="toggleDrawer" class="drawer__back button button--primary-white">Cerrar</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, onMounted, watch, computed } from 'vue'
   import type { Ref } from 'vue'
   import { useModalBusinessStore } from '../../stores/modalProviderCard'
   import { useDrawerRequestStore } from '../../stores/drawerRequest'
   import { useUserStore } from '@/stores/user'
-  import type { IServiceRequest } from '../../interfaces/ServiceRequestInterfaces'
+  import type { IServiceRequestPost, IServiceRequestUpdate } from '../../interfaces/ServiceRequestInterfaces'
 
   const userStore = useUserStore()
   const modalBusiness = useModalBusinessStore()
@@ -49,7 +52,7 @@
   const date = ref('') as Ref<string>
   const title = ref('') as Ref<string>
   const description = ref('') as Ref<string>
-  const images = ref([]) as Ref<[]>
+  const images = ref([]) as Ref<string[]>
 
   const loadImages = (evt: Event) => {
     const target: HTMLInputElement = evt.target as HTMLInputElement || null
@@ -61,17 +64,28 @@
     })
     images.value = array as []
   }
+
+  const validateEdit = computed(() => {
+    return drawerRequest.requestAction === 'SEE'
+  })
+
+  const closeDrawer = (evt: KeyboardEvent) => {
+    if(evt.key === 'Escape') {
+      drawerRequest.state = false
+      drawerRequest.resetAttributes()
+    }
+  }
+
   const toggleDrawer = () => {
     drawerRequest.state = !drawerRequest.state
     drawerRequest.resetAttributes()
   }
 
-  const handleSubmit = () => {
+  const createRequest = () => {
     if(!date.value || !title.value || !description.value || !images.value) return
-    const data: IServiceRequest = {
+    const data: IServiceRequestPost = {
       cliente: userStore.userData._id as string,
       categoria: modalBusiness.provider_business_category as string,
-      fechaCreacion: undefined,
       fechaLimite: date.value as string,
       titulo: title.value as string,
       descripcion: description.value as string,
@@ -80,6 +94,48 @@
     }
     drawerRequest.createRequest(data)
   }
+
+  const editRequest = () => {
+    if(!date.value || !title.value || !description.value || !images.value) return
+    const data: IServiceRequestUpdate = {
+      fechaLimite: date.value as string,
+      titulo: title.value as string,
+      descripcion: description.value as string,
+      imagenes: images.value as string[]
+    }
+    drawerRequest.editRequest(data)
+  }
+
+  const parseDate = (dateString: string) => {
+    const date = new Date(dateString)
+    const [year, month, day] = date.toISOString().split('T')[0].split('-')
+
+    return `${year}-${month}-${day}`
+  }
+
+  watch(() => drawerRequest.requestData, (newValue, oldValue) => {
+    if(!newValue || Object.keys(newValue).length === 0 || drawerRequest.requestAction === 'CREATE') {
+      if (date.value !== '' || title.value !== '' || description.value !== '' || images.value.length !== 0) {
+        date.value = ''
+        title.value = ''
+        description.value = ''
+        images.value = []
+        drawerRequest.resetAttributes()
+      }
+      return
+    }
+
+    if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+      date.value = parseDate(newValue.fechaLimite as string) as string
+      title.value = newValue.titulo as string
+      description.value = newValue.descripcion as string
+      images.value = newValue.imagenes
+    }
+  })
+
+  onMounted(() => {
+    window.addEventListener('keydown', closeDrawer)
+  })
 </script>
 
 <style scoped lang="scss">

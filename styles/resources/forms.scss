@@ -10,6 +10,13 @@
     &--right {
       text-align: right;
     }
+    &--with-subtitle {
+      margin-bottom: 0;
+    }
+  }
+  &__subtitle {
+    margin-top: 0;
+    @include fontRegular(1.4rem, 0, 2rem, $color-black);
   }
   &__social {
     margin-bottom: 1.6rem;
@@ -112,9 +119,14 @@
     padding: 0;
     height: 3.2rem;
     border: none;
-    border-bottom: .1rem solid $color-grey-50;
+    border-bottom: .1rem solid $color-grey-30;
     @include fontRegular(1.4rem, 0, 2rem, $color-black);
 
+    &:disabled {
+      background-color: $color-white;
+      color: $color-black;
+      pointer-events: none;
+    }
     &:focus-visible {
       outline: none;
     }
