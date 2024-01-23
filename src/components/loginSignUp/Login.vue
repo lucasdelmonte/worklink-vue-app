@@ -32,14 +32,14 @@
   import IconSpinner from '@/components/icons/IconSpinner.vue'
   import { useLangStore } from '../../stores/language'
 
-  // const userData = ref({
-  //   email: 'matescarabino@gmail.com',
-  //   password: '12345'
-  // })
   const userData = ref({
-    email: 'delmontelucas678@gmail.com',
-    password: 'WorkLink2k23'
+    email: 'matescarabino@gmail.com',
+    password: '12345'
   })
+  // const userData = ref({
+  //   email: 'delmontelucas678@gmail.com',
+  //   password: 'WorkLink2k23'
+  // })
   const userStore = useUserStore()
 
   const langStore = useLangStore()
@@ -50,11 +50,9 @@
 
   const handleSubmitFacebook = (): void => {
     // Facebook login
-    console.log('Login using facebook')
   }
   const handleSubmitGoogle = (): void => {
     // Google login
-    console.log('Login using google')
   }
 
   const handleSubmit = async(): Promise<void> => {

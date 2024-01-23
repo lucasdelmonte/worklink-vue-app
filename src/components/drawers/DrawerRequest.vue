@@ -27,8 +27,14 @@
           </div>
         </div>
 
-        <button class="drawer__create-request button button--primary-black" v-if="drawerRequest.requestAction === 'CREATE'" @click.prevent="createRequest">Crear solicitud</button>
-        <button class="drawer__create-request button button--primary-black" v-else-if="drawerRequest.requestAction === 'EDIT'" @click.prevent="editRequest">Actualizar solicitud</button>
+        <div>
+          <button class="drawer__create-request button button--primary-black" v-if="drawerRequest.requestAction === 'CREATE' && cookies.cookies.get('userRol') === 'CLIENTE'" @click.prevent="createRequest">Crear solicitud</button>
+          <button class="drawer__create-request button button--primary-black" v-else-if="drawerRequest.requestAction === 'EDIT' && cookies.cookies.get('userRol') === 'CLIENTE'" @click.prevent="editRequest">Actualizar solicitud</button>
+          <template v-if="drawerRequest.requestAction === 'EDIT' && cookies.cookies.get('userRol') === 'PROVEEDOR'">
+            <button class="drawer__create-request button button--primary-black" @click="updateState(drawerRequest.requestData._id, 'CANCELADA')">Aceptar solicitud</button>
+          </template>
+        </div>
+
       </form>
       <div class="drawer__buttons">
         <button @click="toggleDrawer" class="drawer__back button button--primary-white">Cerrar</button>
@@ -44,6 +50,9 @@
   import { useDrawerRequestStore } from '../../stores/drawerRequest'
   import { useUserStore } from '@/stores/user'
   import type { IServiceRequestPost, IServiceRequestUpdate } from '../../interfaces/ServiceRequestInterfaces'
+  import { useCookies } from 'vue3-cookies'
+
+  const cookies = useCookies()
 
   const userStore = useUserStore()
   const modalBusiness = useModalBusinessStore()
@@ -65,8 +74,14 @@
     images.value = array as []
   }
 
+  const updateState = async (id: string | undefined, state: string) => {
+    if(!id) return
+    await drawerRequest.updateState(id, state)
+    toggleDrawer()
+  }
+
   const validateEdit = computed(() => {
-    return drawerRequest.requestAction === 'SEE'
+    return drawerRequest.requestAction === 'SEE' || cookies.cookies.get('userRol') === 'PROVEEDOR'
   })
 
   const closeDrawer = (evt: KeyboardEvent) => {

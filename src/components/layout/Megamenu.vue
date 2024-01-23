@@ -22,9 +22,11 @@
     </nav>
     <!-- User type provider -->
     <nav class="megamenu__nav" v-else>
-      <ul class="megamenu__list-first-level">
-        <li></li>
-      </ul>
+      <div class="megamenu__nav-first-level">
+        <ul class="megamenu__list-first-level">
+          <li><RouterLink :to="`/services-request`">Solicitudes</RouterLink></li>
+        </ul>
+      </div>
     </nav>
   </div>
 </template>

@@ -5,7 +5,8 @@ import router from '@/router'
 import { useLangStore } from './language'
 import { useCookies } from 'vue3-cookies'
 import type { IUser } from '../interfaces/UserInterfaces'
-import type { IServiceRequestGet } from '../interfaces/ServiceRequestInterfaces';
+import type { IServiceRequestGet } from '../interfaces/ServiceRequestInterfaces'
+import type { IBusiness } from '../interfaces/BusinessInterfaces'
 
 const toastAction = ref(false)
 const toastTitle = ref('')
@@ -157,7 +158,6 @@ export const useUserStore = defineStore('user', {
         router.push('/login-register')
         this.setToast(langStore.lang.logout.ok.result)
       } catch (e) {
-        console.log(e)
         this.setToast(langStore.lang.logout.error.result)
       }
     },
@@ -170,9 +170,27 @@ export const useUserStore = defineStore('user', {
         
         const dataRes = await response.json()
         const data = dataRes.data as IServiceRequestGet[]
-        const userServicesRequest = data.filter(serviceRequest => serviceRequest.cliente?._id == this.userData._id)
+
+        let userServicesRequest = [] as IServiceRequestGet[]
+
+        const responseBusiness = await fetch('http://localhost:4000/negocios')
+
+        if (!responseBusiness.ok) throw new Error('Request error')
+
+        const dataBusiness = await responseBusiness.json()
+        const business = dataBusiness.data as IBusiness[]
+
+        const userBusinesses = business.filter(business => business.proveedor && business.proveedor._id === this.userData._id);
+        
+        if (this.userData.rol === 'PROVEEDOR') {
+          userServicesRequest = data.filter(serviceRequest => 
+            userBusinesses.some(business => business?._id === serviceRequest.negocio._id)
+          )
+          this.servicesRequest = userServicesRequest
+          return userServicesRequest
+        }
         this.servicesRequest = userServicesRequest
-        return userServicesRequest
+        return userServicesRequest = data.filter(serviceRequest => serviceRequest.cliente?._id == this.userData._id)
       } catch (error) {
         console.log(error)
       }

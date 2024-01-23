@@ -29,6 +29,9 @@ export interface IServiceRequestGet {
   titulo: string,
   descripcion: string,
   imagenes: string[],
-  negocio: IBusiness | undefined
+  negocio: {
+    _id: string,
+    nombre: string
+  },
   estado: string | undefined
 }
