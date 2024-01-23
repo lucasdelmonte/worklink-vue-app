@@ -27,13 +27,16 @@
           </div>
         </div>
 
-        <div>
-          <button class="drawer__create-request button button--primary-black" v-if="drawerRequest.requestAction === 'CREATE' && cookies.cookies.get('userRol') === 'CLIENTE'" @click.prevent="createRequest">Crear solicitud</button>
-          <button class="drawer__create-request button button--primary-black" v-else-if="drawerRequest.requestAction === 'EDIT' && cookies.cookies.get('userRol') === 'CLIENTE'" @click.prevent="editRequest">Actualizar solicitud</button>
+        <div v-if="cookies.cookies.get('userRol') === 'CLIENTE'">
+          <button class="drawer__create-request button button--primary-black" v-if="drawerRequest.requestAction === 'CREATE'" @click.prevent="createRequest">Crear solicitud</button>
+          <button class="drawer__create-request button button--primary-black" v-else-if="drawerRequest.requestAction === 'EDIT'" @click.prevent="editRequest">Actualizar solicitud</button>
           <template v-if="drawerRequest.requestAction === 'EDIT' && cookies.cookies.get('userRol') === 'PROVEEDOR'">
-            <button class="drawer__create-request button button--primary-black" @click="updateState(drawerRequest.requestData._id, 'CANCELADA')">Aceptar solicitud</button>
           </template>
         </div>
+        <div v-else>
+          <button class="drawer__create-request button button--primary-black" v-if="drawerRequest.requestAction === 'EDIT'" @click="updateState(drawerRequest.requestData._id, 'ACEPTADA')">Aceptar solicitud</button>
+        </div>
+
 
       </form>
       <div class="drawer__buttons">
@@ -77,7 +80,6 @@
   const updateState = async (id: string | undefined, state: string) => {
     if(!id) return
     await drawerRequest.updateState(id, state)
-    toggleDrawer()
   }
 
   const validateEdit = computed(() => {
@@ -218,4 +220,4 @@
       text-align: center;
     }
   }
-</style>../../stores/drawerRequest
+</style>

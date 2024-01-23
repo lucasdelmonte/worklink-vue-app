@@ -3,6 +3,7 @@
     <router-view></router-view>
     <ModalBusinessDetails />
     <DrawerRequest />
+    <ModalChat />
     <ToastAlertCustom />
   </main>
 </template>
@@ -10,10 +11,11 @@
 <script setup lang="ts">
   import ToastAlertCustom from './components/notificationPopUp/ToastAlertCustom.vue'
   import ModalBusinessDetails from './components/modals/ModalBusinessDetails.vue'
+  import ModalChat from './components/modals/ModalChat.vue'
   import DrawerRequest from './components/drawers/DrawerRequest.vue'
   import { onMounted } from 'vue'
   import { useCookies } from 'vue3-cookies'
-  import { useUserStore } from './stores/user';
+  import { useUserStore } from './stores/user'
 
   const userStore = useUserStore()
 

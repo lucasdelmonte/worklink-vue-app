@@ -54,6 +54,7 @@
               <button @click="toggleDrawer(service.estado, service)" class="button button--primary-black button--right">Ver detalles</button>
             </template>
             <template v-else-if="service.estado === 'ACEPTADA'">
+              <button class="button button--primary-white" @click="toggleChat(service)">Chat</button>
               <button @click="toggleDrawer(service.estado, service)" class="button button--primary-black button--right">Ver detalles</button>
             </template>
             <template v-else-if="service.estado === 'FINALIZADA'">
@@ -78,7 +79,9 @@
   import { CategoriasType } from '../interfaces/CategoriesInterfaces'
   import { useRoute, useRouter } from 'vue-router'
   import { useDrawerRequestStore } from '../stores/drawerRequest'
+  import { useModalChatStore } from '../stores/modalChat'
 
+  const modalChat = useModalChatStore()
   const drawerRequest = useDrawerRequestStore()
 
   const route = useRoute()
@@ -113,6 +116,12 @@
       default:
         break;
     }
+  }
+
+  const toggleChat = (service: IServiceRequestGet) => {
+    console.log('Open chat component')
+    console.log(service)
+    modalChat.toggleModal()
   }
 
   const setFilterState = (evt: Event) => {
