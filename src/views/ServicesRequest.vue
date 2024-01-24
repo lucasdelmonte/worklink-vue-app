@@ -69,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted, watch } from 'vue';
+  import { ref, onMounted, watch } from 'vue'
   import type { Ref } from 'vue'
   import { useUserStore } from '../stores/user'
   import { useLangStore } from '../stores/language'
@@ -80,6 +80,7 @@
   import { useRoute, useRouter } from 'vue-router'
   import { useDrawerRequestStore } from '../stores/drawerRequest'
   import { useModalChatStore } from '../stores/modalChat'
+  import type { IChat } from '../interfaces/ChatInterfaces'
 
   const modalChat = useModalChatStore()
   const drawerRequest = useDrawerRequestStore()
@@ -119,9 +120,10 @@
   }
 
   const toggleChat = (service: IServiceRequestGet) => {
-    console.log('Open chat component')
-    console.log(service)
+    modalChat.serviceRequest = service
+    modalChat.chat = [] as IChat[]
     modalChat.toggleModal()
+    modalChat.startUpdatingChats()
   }
 
   const setFilterState = (evt: Event) => {

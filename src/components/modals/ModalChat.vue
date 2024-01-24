@@ -2,37 +2,15 @@
   <div class="modal-chat" :class="{ 'modal-chat--open': modalChat.state }">
     <div class="modal-chat__content">
       <div class="modal-chat__chats">
-        <div class="message message--left">
-          <p>Hola! Como estás?</p>
-        </div>
-        <div class="message message--right">
-          <p>Bien bien, y vos?</p>
-        </div>
-        <div class="message message--right">
-          <p>En que puedo ayudarte?</p>
-        </div>
-        <div class="message message--left">
-          <p>Mira, estoy complicadisimo con la mochila del inodoro, se rompio la el botón para tirar la cadena así que ultimamente vengo tirando la cadena a mano pero bueno</p>
-        </div>
-        <div class="message message--left">
-          <p>Como comprenderás no es la idea hacer eso jajaja</p>
-        </div>
-        <div class="message message--left">
-          <p>Podrías hacerme un presupuesto?</p>
-        </div>
-        <div class="message message--right">
-          <p>Claro que si, aguantame un rato. Apenas lo tenga lo cargo en la solicitud para que esté a tu alcance más comodamente</p>
-        </div>
-        <div class="message message--left">
-          <p>Perfecto! Gracias</p>
-        </div>
-        <div class="message message--right">
-          <p>No hay de que! 🙌🏼</p>
-        </div>
+        <template v-for="message in modalChat.chat">
+          <div class="message" :class="message.id_autor === userId ? 'message--right' : 'message--left'">
+            <p>{{ message.mensaje }}</p>
+          </div>
+        </template>
       </div>
       <form @submit.prevent="submit" class="form">
         <div class="field">
-          <input @v-model="message" class="field__input" type="text" name="text" placeholder="Mensaje..." />
+          <input v-model="message" class="field__input" type="text" name="text" placeholder="Mensaje..." />
         </div>
         <button class="button button--primary-black"><img src="../../assets/Icons/icons8-enviado-50.png" /></button>
       </form>
@@ -42,25 +20,50 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, watch } from 'vue';
   import { useModalChatStore } from '../../stores/modalChat'
+  import { useToastAlertStore } from '@/stores/toastAlert'
+  import { useCookies } from 'vue3-cookies'
 
+  const toastAlertStore = useToastAlertStore()
   const modalChat = useModalChatStore()
+  const cookies = useCookies()
+
+  const userId = cookies.cookies.get('userId')
 
   const message = ref('')
+  const toastAction = ref(false)
+  const toastTitle = ref('')
+  const toastMessage = ref('')
 
   const closeModal = (evt: KeyboardEvent) => {
     if(evt?.key === 'Escape') {
       modalChat.state = false
+      modalChat.stopUpdatingChats()
     }
   }
   const closeClickModal = () => {
     modalChat.state = false
+    modalChat.stopUpdatingChats()
   }
 
-  const submit = () => { 
-    console.log('Submit' + message.value)
+  const submit = async () => { 
+    if(message.value.trim() == '') {
+      toastAction.value = false
+      toastTitle.value = 'Error al enviar'
+      toastMessage.value = 'No puedes enviar un mensaje vacío'
+      toastAlertStore.updateToast(toastAction, toastTitle, toastMessage)
+      return
+    }
+    const res: boolean | undefined = await  modalChat.sendChat(message.value)
+    if(res) message.value = ''
   }
+
+  watch(() => modalChat.state, (newVal, oldVal) => {
+    if(newVal != oldVal && newVal == true) {
+      modalChat.updateChats()
+    }
+  })
 
   onMounted(() => {
     window.addEventListener('keydown', closeModal)
@@ -109,6 +112,7 @@
       box-sizing: border-box;
       background-color: $color-grey-15;
       padding: 1.6rem 1.6rem 0 1.6rem;
+      scroll-behavior: smooth;
 
       &::-webkit-scrollbar {
         width: 0;
