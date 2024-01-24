@@ -120,6 +120,8 @@
     height: 3.2rem;
     border: none;
     border-bottom: .1rem solid $color-grey-30;
+    box-sizing: border-box;
+    width: 100%;
     @include fontRegular(1.4rem, 0, 2rem, $color-black);
 
     &:disabled {
@@ -142,14 +144,19 @@
     &--text-area {
       height: 16rem;
       resize: none;
-      width: calc(100% - 2rem);
+      width: 100%;
       border-radius: 1.6rem;
       padding: .8rem 1rem;
       border: .1rem solid $color-grey-50;
     }
     &--file {
+      width: 100%;
       border: 0;
       height: 4rem;
     }
   }
+}
+
+.hidden {
+  display: none;
 }

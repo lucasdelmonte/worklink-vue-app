@@ -112,6 +112,38 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
         toastAlertStore.updateToast(toastAction, toastTitle, toastMessage)
       }
     },
+    async createBudget(id: string, amount: number) {
+      console.log(id, amount)
+      return
+      if(!id || !amount) return
+      const URL = `http://localhost:4000/presupuestos`
+      const data = {
+        "solicitud_servicio": id,
+        "monto": amount
+      }
+
+      try {
+        const response = await fetch(URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        })
+
+        const responseData = await response.json()
+        if (!response.ok && responseData.error) throw new Error(responseData.message)
+
+        toastAction.value = true
+        toastTitle.value = 'Operación éxitosa'
+        toastMessage.value = 'Presupuesto creado con éxito'
+      } catch (error) {
+        console.error(error)
+        toastAction.value = false
+        toastTitle.value = 'Ocurrió un error al crear el presupuesto'
+        toastMessage.value = `${ error }`
+      }
+    },
     resetAttributes() {
       this.state = false as boolean
       this.requestAction = '' as 'CREATE' | 'EDIT' | 'SEE' | '',

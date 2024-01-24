@@ -28,7 +28,7 @@ export const useProviderStore = defineStore('provider', {
             rating: 0,
             is_active: false
           }
-        
+
           if (business.proveedor) {
             provider = {
               id: business.proveedor._id,
@@ -50,6 +50,7 @@ export const useProviderStore = defineStore('provider', {
             provider
           })
         })
+
         return businessFiltered
       } catch (error) {
         console.log(error)

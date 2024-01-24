@@ -48,18 +48,18 @@
           <div class="card-service__buttons">
             <template v-if="service.estado === 'PENDIENTE'">
               <button @click="updateState(service._id, 'CANCELADA')" class="button button--primary-white">Cancelar</button>
-              <button @click="toggleDrawer(service.estado, service)" class="button button--primary-black">Ver detalles</button>
+              <button @click="toggleDrawer(service.estado, service)" class="button button--primary-black">Detalles</button>
             </template>
             <template v-else-if="service.estado === 'CANCELADA'">
-              <button @click="toggleDrawer(service.estado, service)" class="button button--primary-black button--right">Ver detalles</button>
+              <button @click="toggleDrawer(service.estado, service)" class="button button--primary-black button--right">Detalles</button>
             </template>
             <template v-else-if="service.estado === 'ACEPTADA'">
               <button class="button button--primary-white" @click="toggleChat(service)">Chat</button>
-              <button @click="toggleDrawer(service.estado, service)" class="button button--primary-black button--right">Ver detalles</button>
+              <button @click="toggleDrawer(service.estado, service)" class="button button--primary-black button--right">Detalles</button>
             </template>
             <template v-else-if="service.estado === 'FINALIZADA'">
               <button class="button button--primary-white">Pagar</button>
-              <button @click="toggleDrawer(service.estado, service)" class="button button--primary-black">Ver detalles</button>
+              <button @click="toggleDrawer(service.estado, service)" class="button button--primary-black">Detalles</button>
             </template>
           </div>
         </div>

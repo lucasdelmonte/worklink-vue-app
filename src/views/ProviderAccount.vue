@@ -45,7 +45,7 @@
                   <rect x="0" y="0" fill="black" width="100%" height="100%" clip-path="url(#star)"></rect>
                   <rect x="100" y="0" fill="#DDDDDD" width="100%" height="100%" clip-path="url(#star)"></rect>
                 </svg>
-                <span>4.5</span>
+                <span>{{ businessItem.puntuacion }}</span>
               </div>
               <h4 class="card__title">{{ businessItem.nombre }}</h4>
               <p class="card__description">{{ businessItem.descripcion }}</p>
