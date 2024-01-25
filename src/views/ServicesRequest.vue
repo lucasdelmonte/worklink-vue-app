@@ -158,7 +158,7 @@
     }
   })
 
-  watch(() => drawerRequest.requestData, async (newValue, oldValue) => {
+  watch(() => userStore.servicesRequest, async (newValue, oldValue) => {
     if(newValue !== oldValue) {
       servicesRequest.value = await userStore.getServicesRequest() as IServiceRequestGet[]
     }

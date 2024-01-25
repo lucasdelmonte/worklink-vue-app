@@ -189,7 +189,8 @@ export const useUserStore = defineStore('user', {
           this.servicesRequest = userServicesRequest
           return userServicesRequest
         }
-        this.servicesRequest = userServicesRequest
+        this.servicesRequest = data.filter(serviceRequest => serviceRequest.cliente?._id == this.userData._id)
+        console.log(this.servicesRequest)
         return userServicesRequest = data.filter(serviceRequest => serviceRequest.cliente?._id == this.userData._id)
       } catch (error) {
         console.log(error)

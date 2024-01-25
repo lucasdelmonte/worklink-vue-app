@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import type { IServiceRequestPost, IServiceRequestGet, IServiceRequestUpdate } from '../interfaces/ServiceRequestInterfaces'
 import { useToastAlertStore } from './toastAlert'
 import { ref } from 'vue'
+import { useUserStore } from './user'
+
 
 const toastAction = ref(false)
 const toastTitle = ref('')
@@ -21,6 +23,7 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
     async createRequest(data: IServiceRequestPost) {
       const URL = 'http://localhost:4000/solicitudes_servicio'
       const toastAlertStore = useToastAlertStore()
+      const userStore = useUserStore()
 
       try {
         this.isLoading = true
@@ -35,6 +38,8 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
         const responseData = await response.json()
 
         if (!response.ok && responseData.error) throw new Error(responseData.message)
+
+        await userStore.getServicesRequest()
 
         toastAction.value = true
         toastTitle.value = 'Operación éxitosa'
@@ -53,6 +58,7 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
     async editRequest(data: IServiceRequestUpdate) {
       const URL = `http://localhost:4000/solicitudes_servicio/${ this.requestData._id }`
       const toastAlertStore = useToastAlertStore()
+      const userStore = useUserStore()
       try {
         this.isLoading = true
         const response = await fetch(URL, {
@@ -68,6 +74,8 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
         if (!response.ok && responseData.error) throw new Error(responseData.message)
 
         this.state = false
+
+        await userStore.getServicesRequest()
 
         toastAction.value = true
         toastTitle.value = 'Operación éxitosa'
@@ -85,6 +93,7 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
     async updateState(id: string, state: string) {
       const URL = `http://localhost:4000/solicitudes_servicio/${ id }`
       const toastAlertStore = useToastAlertStore()
+      const userStore = useUserStore()
       const data = {
         "estado": state
       }
@@ -100,14 +109,20 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
         const responseData = await response.json()
         if (!response.ok && responseData.error) throw new Error(responseData.message)
 
+        this.requestData = responseData.data as IServiceRequestGet
+        await userStore.getServicesRequest()
+
         toastAction.value = true
         toastTitle.value = 'Operación éxitosa'
         toastMessage.value = 'Estado de la solicitud actualizado'
+
+        return true
       } catch (error) {
         console.error(error)
         toastAction.value = false
         toastTitle.value = 'Ocurrió un error actualizar el estado de la solicitud'
         toastMessage.value = `${ error }`
+        return false
       } finally {
         toastAlertStore.updateToast(toastAction, toastTitle, toastMessage)
       }

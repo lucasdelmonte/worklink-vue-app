@@ -109,7 +109,9 @@
 
   const updateState = async (id: string | undefined, state: string) => {
     if(!id) return
-    await drawerRequest.updateState(id, state)
+    const result = await drawerRequest.updateState(id, state)
+
+    if(result) drawerRequest.requestAction = 'SEE'
   }
 
   const validateEdit = computed(() => {
