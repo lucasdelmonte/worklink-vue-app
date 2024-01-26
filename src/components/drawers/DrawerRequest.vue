@@ -24,32 +24,17 @@
           </div>
           <div class="field field--file" :class="{ 'hidden': validateEdit }">
             <input @change="(evt) => loadImages(evt)" class="field__input field__input--file" type="file" id="images" name="awsfiles" accept=".jpg,.jpeg,.png" multiple :disabled="validateEdit">
-            <label class="field__label field__label--file" for="images">Seleccionar imagenes</label>
-          </div>
-        </div>
-
-        <div v-if="cookies.cookies.get('userRol') === 'CLIENTE'">
-          <button class="drawer__create-request button button--primary-black" v-if="drawerRequest.requestAction === 'CREATE'" @click.prevent="createRequest">Crear solicitud</button>
-          <button class="drawer__create-request button button--primary-black" v-else-if="drawerRequest.requestAction === 'EDIT'" @click.prevent="editRequest">Actualizar solicitud</button>
-        </div>
-        <div class="drawer__create-budget" :class="{ 'drawer__create-budget--open': creatingBudget }">
-          <h2 class="form__title form__title--left">Presupuesto</h2>
-          <div class="field">
-            <input v-model="budget" class="field__input" id="budget" type="number" />
-            <label class="field__label" for="budget">Presupuesto</label>
           </div>
         </div>
       </form>
       <div class="drawer__buttons">
-        <template v-if="cookies.cookies.get('userRol') === 'PROVEEDOR'"> 
-          <button class="drawer__create-request button button--primary-black" v-if="drawerRequest.requestAction === 'EDIT'" @click="updateState(drawerRequest.requestData._id, 'ACEPTADA')">Aceptar solicitud</button>
-          <template v-if="!creatingBudget">
-            <button class="drawer__create-request button button--primary-black" v-if="drawerRequest.requestAction === 'SEE' && drawerRequest.requestData.estado === 'ACEPTADA'" @click="toggleBudget()">Crear presupuesto</button>
-          </template>
-          <template v-else>
-            <button class="drawer__create-request button button--primary-black" v-if="drawerRequest.requestAction === 'SEE'" @click="createBudget(drawerRequest.requestData._id)">Crear</button>
-            <button class="drawer__create-request button button--primary-black" v-if="drawerRequest.requestAction === 'SEE'" @click="toggleBudget()">Volver</button>
-          </template>
+        <template v-if="userRol === 'CLIENTE'">
+          <button class="drawer__create-request button button--primary-black" v-if="drawerRequest.requestAction === 'CREATE'" @click.prevent="createRequest">Crear solicitud</button>
+          <button class="drawer__create-request button button--primary-black" v-if="drawerRequest.requestAction === 'EDIT'" @click.prevent="editRequest">Actualizar solicitud</button>
+          <ClientOptions :drawerRequest="drawerRequest" />
+        </template>
+        <template v-else>
+          <ProviderOptions :drawerRequest="drawerRequest" />
         </template>
         <button @click="toggleDrawer" class="drawer__back button button--primary-white">Cerrar</button>
       </div>
@@ -61,13 +46,16 @@
 <script setup lang="ts">
   import { ref, onMounted, watch, computed } from 'vue'
   import type { Ref } from 'vue'
+  import type { IServiceRequestPost, IServiceRequestUpdate } from '../../interfaces/ServiceRequestInterfaces'
   import { useModalBusinessStore } from '../../stores/modalProviderCard'
   import { useDrawerRequestStore } from '../../stores/drawerRequest'
   import { useUserStore } from '@/stores/user'
-  import type { IServiceRequestPost, IServiceRequestUpdate } from '../../interfaces/ServiceRequestInterfaces'
   import { useCookies } from 'vue3-cookies'
+  import ProviderOptions from '../UsersOptions/ProviderOptions.vue'
+  import ClientOptions from '../UsersOptions/ClientOptions.vue'
 
   const cookies = useCookies()
+  const userRol = cookies.cookies.get('userRol')
 
   const userStore = useUserStore()
   const modalBusiness = useModalBusinessStore()
@@ -77,12 +65,6 @@
   const title = ref('') as Ref<string>
   const description = ref('') as Ref<string>
   const images = ref([]) as Ref<string[]>
-  const budget = ref(0) as Ref<number>
-  const creatingBudget = ref(false) as Ref<boolean>
-
-  const toggleBudget = () => { 
-    creatingBudget.value = !creatingBudget.value
-   }
 
   const loadImages = (evt: Event) => {
     const target: HTMLInputElement = evt.target as HTMLInputElement || null
@@ -95,23 +77,9 @@
     images.value = array as []
   }
 
-  const createBudget = async (id: string | undefined) => { 
-    console.log(id, budget.value)
-    if(!drawerRequest.requestData) return
-    // await drawerRequest.createBudget(id, budget.value)
-  }
-
-   const closeClickModal = () => {
+  const closeClickModal = () => {
     drawerRequest.state = false
-    creatingBudget.value = false
     drawerRequest.resetAttributes()
-  }
-
-  const updateState = async (id: string | undefined, state: string) => {
-    if(!id) return
-    const result = await drawerRequest.updateState(id, state)
-
-    if(result) drawerRequest.requestAction = 'SEE'
   }
 
   const validateEdit = computed(() => {
@@ -121,14 +89,12 @@
   const closeDrawer = (evt: KeyboardEvent) => {
     if(evt.key === 'Escape') {
       drawerRequest.state = false
-      creatingBudget.value = false
       drawerRequest.resetAttributes()
     }
   }
 
   const toggleDrawer = () => {
     drawerRequest.state = !drawerRequest.state
-    creatingBudget.value = false
     drawerRequest.resetAttributes()
   }
 
@@ -175,7 +141,6 @@
       }
       return
     }
-    budget.value = 0
     if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
       date.value = parseDate(newValue.fechaLimite as string) as string
       title.value = newValue.titulo as string
@@ -185,7 +150,6 @@
   })
 
   onMounted(() => {
-    budget.value = 0
     window.addEventListener('keydown', closeDrawer)
   })
 </script>
@@ -250,6 +214,50 @@
       .field__input[type=number]::-webkit-inner-spin-button, 
       .field__input[type=number]::-webkit-outer-spin-button { 
         -webkit-appearance: none;
+      }
+    }
+    &__show-budget {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      background: $color-white;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(+150%);
+      transition: transform 400ms ease;
+      overflow-y: auto;
+      max-height: calc(100% - 2rem);
+      box-sizing: border-box;
+
+      .field-divider:last-of-type {
+        display: none;
+      }
+
+      &::-webkit-scrollbar {
+        width: .4rem;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+        border-top-right-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: $color-grey-15;
+        border-top-right-radius: .5rem;
+        border-bottom-right-radius: .5rem;
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background: $color-grey-50;
+      }
+
+      &--open {
+        transform: translateX(0%);
       }
     }
     &__content {
