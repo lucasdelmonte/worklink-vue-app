@@ -144,9 +144,17 @@
       description.value = newValue.descripcion as string
       images.value = newValue.imagenes
     }
+    userRol.value = cookies.cookies.get('userRol') as string
   })
 
+    watch(() => drawerRequest.state, (newState, oldState) => {
+      if (newState === true && oldState === false) {
+        userRol.value = cookies.cookies.get('userRol') as string
+      }
+    })
+
   onMounted(() => {
+    userRol.value = cookies.cookies.get('userRol') as string
     window.addEventListener('keydown', closeDrawer)
   })
 </script>
@@ -190,27 +198,6 @@
     .form {
       position: relative;
       @include display-flex(column, space-between, stretch, nowrap, 0);
-    }
-    &__create-budget {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      background: $color-white;
-      display: flex;
-      flex-direction: column;
-      transform: translateX(+150%);
-      transition: transform 400ms ease;
-
-      &--open {
-        transform: translateX(0%);
-      }
-      .field__input[type=number]::-webkit-inner-spin-button, 
-      .field__input[type=number]::-webkit-outer-spin-button { 
-        -webkit-appearance: none;
-      }
     }
     &__content {
       box-sizing: border-box;

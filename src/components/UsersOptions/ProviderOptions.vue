@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div v-if="drawerRequest.requestData.estado != 'CANCELADA' && drawerRequest.requestData.estado != 'FINALIZADA'" class="drawer__create-budget drawer__create-budget--provider" :class="{ 'drawer__create-budget--open': creatingBudget }">
+  <div v-if="creatingBudget && drawerRequest.requestData.estado == 'PENDIENTE'" class="drawer__create-budget drawer__create-budget--provider" :class="{ 'drawer__create-budget--open': creatingBudget }">
+    <div class="scroll-budgets">
       <h2 class="form__title form__title--left">Presupuesto</h2>
       <div class="field">
         <input v-model="budgetDate" class="field__input" id="budget-date" type="date" />
@@ -11,20 +11,20 @@
         <label class="field__label" for="budget-amount">Presupuesto*</label>
       </div>
     </div>
-    <template v-if="drawerRequest.requestData.estado === 'PENDIENTE'"> 
-      <template v-if="!creatingBudget">
-        <button class="drawer__create-request button button--primary-black" @click="toggleBudget()">Crear presupuesto</button>
-      </template>
-      <template v-else>
-        <button class="drawer__create-request button button--primary-black" @click="createBudget(drawerRequest.requestData._id)">Crear</button>
-        <button class="drawer__create-request button button--primary-black" @click="toggleBudget()">Volver</button>
-      </template>
+    <template v-if="creatingBudget">
+      <div class="drawer__create-buttons">
+        <button class="drawer__create-request button button--primary-black" @click.prevent="createBudget(drawerRequest.requestData._id)">Crear</button>
+        <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudget">Volver</button>
+      </div>
     </template>
   </div>
+  <template v-if="!creatingBudget && drawerRequest.requestData.estado === 'PENDIENTE'">
+    <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudget()">Crear presupuesto</button>
+  </template>
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted, watch, computed } from 'vue'
+  import { ref } from 'vue'
   import type { Ref } from 'vue'
   import { useDrawerRequestStore } from '../../stores/drawerRequest'
 
@@ -42,10 +42,70 @@
     if(!drawerRequest.requestData || !id) return
     await drawerRequest.createBudget(id, budgetAmount.value, budgetDate.value)
   }
-
-  console.log(drawerRequest)
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  @import '../../../styles/main.scss';
 
+  .drawer {
+    .form {
+      padding-top: .8rem;
+      position: relative;
+      @include display-flex(column, space-between, stretch, nowrap, 0);
+    }
+    &__create-buttons {
+      @include display-flex(column, center, center, nowrap, .8rem);
+    }
+    &__create-budget {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      background: $color-white;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(+150%);
+      transition: transform 400ms ease;
+
+      &--open {
+        transform: translateX(0%);
+      }
+      .field__input[type=number]::-webkit-inner-spin-button, 
+      .field__input[type=number]::-webkit-outer-spin-button { 
+        -webkit-appearance: none;
+      }
+    }
+    .scroll-budgets {
+      max-height: 100%;
+      box-sizing: border-box;
+      overflow-y: auto;
+      height: 100%;
+
+      &::-webkit-scrollbar {
+        width: .4rem;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+        border-top-right-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: $color-grey-15;
+        border-top-right-radius: .5rem;
+        border-bottom-right-radius: .5rem;
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background: $color-grey-50;
+      }
+    }
+    .button {
+      min-height: 4rem;
+      margin: 0;
+    }
+  }
 </style>

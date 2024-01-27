@@ -1,43 +1,43 @@
 <template>
   <div v-if="showingBudget && drawerRequest.requestAction != 'CREATE'" class="drawer__show-budget drawer__show-budget--client" :class="{ 'drawer__show-budget--open': showingBudget }">
     <div class="scroll-budgets">
-    <h2 class="form__title form__title--left">Presupuestos</h2>
-    <template v-if="responseBudgets" v-for="(budget, index) in responseBudgets">
-      <div class="budget">
-        <div class="field">
-          <input v-model="budget.date" class="field__input" :id="`budget-date-${ index }`" type="date" disabled />
-          <label class="field__label" :for="`budget-date-${ index }`">Fecha de realización</label>
+      <h2 class="form__title form__title--left">Presupuestos</h2>
+      <template v-if="responseBudgets" v-for="(budget, index) in responseBudgets">
+        <div class="budget">
+          <div class="field">
+            <input v-model="budget.date" class="field__input" :id="`budget-date-${ index }`" type="date" disabled />
+            <label class="field__label" :for="`budget-date-${ index }`">Fecha de realización</label>
+          </div>
+          <div class="field">
+            <input v-model="budget.amount" class="field__input" :id="`budget-amount-${ index }`" type="amount" disabled />
+            <label class="field__label" :for="`budget-amount-${ index }`">Monto</label>
+          </div>
+          <div class="field">
+            <input v-model="budget.state" class="field__input" :id="`budget-state-${ index }`" type="state" disabled />
+            <label class="field__label" :for="`budget-state-${ index }`">Monto</label>
+          </div>
+          <div class="budget__buttons">
+            <button @click.prevent="updateBudgetState('CANCELAR')" class="button button--tertiary-black hover-underline hover-underline--right">
+              Rechazar
+            </button>
+            <button @click.prevent="updateBudgetState('ACEPTAR')" class="button button--tertiary-black hover-underline hover-underline--right">
+              Aceptar
+            </button>
+          </div>
         </div>
-        <div class="field">
-          <input v-model="budget.amount" class="field__input" :id="`budget-amount-${ index }`" type="amount" disabled />
-          <label class="field__label" :for="`budget-amount-${ index }`">Monto</label>
+        <div class="field-divider">
+          <div class="line"></div>
+          <div class="circle"></div>
+          <div class="line"></div>
         </div>
-        <div class="field">
-          <input v-model="budget.state" class="field__input" :id="`budget-state-${ index }`" type="state" disabled />
-          <label class="field__label" :for="`budget-state-${ index }`">Monto</label>
-        </div>
-        <div class="budget__buttons">
-          <button @click.prevent="updateBudgetState('CANCELAR')" class="button button--tertiary-black hover-underline hover-underline--right">
-            Rechazar
-          </button>
-          <button @click.prevent="updateBudgetState('ACEPTAR')" class="button button--tertiary-black hover-underline hover-underline--right">
-            Aceptar
-          </button>
-        </div>
-      </div>
-      <div class="field-divider">
-        <div class="line"></div>
-        <div class="circle"></div>
-        <div class="line"></div>
-      </div>
+      </template>
+      <template v-else>
+        <p class="budget-void">No hay presupuestos</p>
+      </template>
+    </div>
+    <template v-if="showingBudget">
+      <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudgets">Volver</button>
     </template>
-    <template v-else>
-      <p class="budget-void">No hay presupuestos</p>
-    </template>
-  </div>
-  <template v-if="showingBudget">
-    <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudgets">Volver</button>
-  </template>
   </div>
   <template v-if="drawerRequest.requestAction === 'CREATE'">
     <button class="button button--primary-black" @click.prevent="$emit('createRequest')">Crear solicitud</button>
@@ -181,6 +181,7 @@
     }
     .button {
       min-height: 4rem;
+      margin: 0;
     }
   }
 </style>
