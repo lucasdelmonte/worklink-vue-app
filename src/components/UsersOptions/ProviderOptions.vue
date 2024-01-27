@@ -25,6 +25,7 @@
 
 <script setup lang="ts">
   import { ref, onMounted, watch, computed } from 'vue'
+  import type { Ref } from 'vue'
   import { useDrawerRequestStore } from '../../stores/drawerRequest'
 
   const drawerRequest = useDrawerRequestStore()
@@ -39,7 +40,6 @@
   const createBudget = async (id: string | undefined) => { 
     console.log(id, budgetAmount.value, budgetDate.value)
     if(!drawerRequest.requestData || !id) return
-    return
     await drawerRequest.createBudget(id, budgetAmount.value, budgetDate.value)
   }
 

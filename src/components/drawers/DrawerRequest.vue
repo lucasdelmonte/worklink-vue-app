@@ -8,7 +8,7 @@
       <form class="form">
         <div>
           <h2 class="form__title form__title--left" :class="{ 'form__title--with-subtitle': drawerRequest.requestState }">Solicitud</h2>
-          <h4 class="form__subtitle form__title--left" v-if="drawerRequest.requestState">{{ drawerRequest.requestState }}</h4>
+          <h4 class="form__subtitle form__title--left" v-if="drawerRequest.requestState">{{ drawerRequest.requestData.estado }}</h4>
           <h4 class="form__subtitle form__title--left" v-if=" drawerRequest.requestData.estado === 'ACEPTADA'">Cotización: $23499</h4>
           <div class="field">
             <input v-model="date" class="field__input" id="date" type="date" :disabled="validateEdit" />
@@ -26,18 +26,15 @@
             <input @change="(evt) => loadImages(evt)" class="field__input field__input--file" type="file" id="images" name="awsfiles" accept=".jpg,.jpeg,.png" multiple :disabled="validateEdit">
           </div>
         </div>
+        <div class="drawer__buttons">
+          <template v-if="userRol === 'CLIENTE'">
+            <ClientOptions @createRequest="createRequest" @editRequest="editRequest" />
+          </template>
+          <template v-else>
+            <ProviderOptions />
+          </template>
+        </div>
       </form>
-      <div class="drawer__buttons">
-        <template v-if="userRol === 'CLIENTE'">
-          <button class="drawer__create-request button button--primary-black" v-if="drawerRequest.requestAction === 'CREATE'" @click.prevent="createRequest">Crear solicitud</button>
-          <button class="drawer__create-request button button--primary-black" v-if="drawerRequest.requestAction === 'EDIT'" @click.prevent="editRequest">Actualizar solicitud</button>
-          <ClientOptions :drawerRequest="drawerRequest" />
-        </template>
-        <template v-else>
-          <ProviderOptions :drawerRequest="drawerRequest" />
-        </template>
-        <button @click="toggleDrawer" class="drawer__back button button--primary-white">Cerrar</button>
-      </div>
     </div>
     <div class="drawer__close" @click="closeClickModal"></div>
   </div>
@@ -55,7 +52,7 @@
   import ClientOptions from '../UsersOptions/ClientOptions.vue'
 
   const cookies = useCookies()
-  const userRol = cookies.cookies.get('userRol')
+  const userRol = ref(cookies.cookies.get('userRol')) as Ref<string>
 
   const userStore = useUserStore()
   const modalBusiness = useModalBusinessStore()
@@ -83,7 +80,7 @@
   }
 
   const validateEdit = computed(() => {
-    return drawerRequest.requestAction === 'SEE' || cookies.cookies.get('userRol') === 'PROVEEDOR'
+    return drawerRequest.requestAction === 'SEE' || userRol.value === 'PROVEEDOR'
   })
 
   const closeDrawer = (evt: KeyboardEvent) => {
@@ -191,7 +188,6 @@
       }
     }
     .form {
-      padding-bottom: .8rem;
       position: relative;
       @include display-flex(column, space-between, stretch, nowrap, 0);
     }
@@ -214,50 +210,6 @@
       .field__input[type=number]::-webkit-inner-spin-button, 
       .field__input[type=number]::-webkit-outer-spin-button { 
         -webkit-appearance: none;
-      }
-    }
-    &__show-budget {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      background: $color-white;
-      display: flex;
-      flex-direction: column;
-      transform: translateX(+150%);
-      transition: transform 400ms ease;
-      overflow-y: auto;
-      max-height: calc(100% - 2rem);
-      box-sizing: border-box;
-
-      .field-divider:last-of-type {
-        display: none;
-      }
-
-      &::-webkit-scrollbar {
-        width: .4rem;
-      }
-
-      &::-webkit-scrollbar-track {
-        background: transparent;
-        border-top-right-radius: 1rem;
-        border-bottom-right-radius: 1rem;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background: $color-grey-15;
-        border-top-right-radius: .5rem;
-        border-bottom-right-radius: .5rem;
-      }
-
-      &::-webkit-scrollbar-thumb:hover {
-        background: $color-grey-50;
-      }
-
-      &--open {
-        transform: translateX(0%);
       }
     }
     &__content {
@@ -289,10 +241,10 @@
     }
     &__buttons {
       display: grid;
-      grid-template-rows: 4rem;
       gap: .8rem 0;
       .button {
         min-height: 4rem;
+        margin: 0;
       }
     }
     &__create-request {

@@ -132,6 +132,7 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
       console.log(id, amount, date)
       if(!id || !amount || !date) return
       const URL = `http://localhost:4000/presupuestos`
+      const toastAlertStore = useToastAlertStore()
       const data = {
         "solicitud_servicio": id,
         "fecha": date,
@@ -158,11 +159,14 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
         toastAction.value = false
         toastTitle.value = 'Ocurrió un error al crear el presupuesto'
         toastMessage.value = `${ error }`
+      } finally {
+        toastAlertStore.updateToast(toastAction, toastTitle, toastMessage)
       }
     },
     async getBudgets(id: string | undefined) {
       if(!id) return
       const URL = `http://localhost:4000/presupuestos/${ id }`
+      const toastAlertStore = useToastAlertStore()
       try {
         const response = await fetch(URL, {
           method: 'GET',
@@ -174,7 +178,7 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
         const responseData = await response.json()
         if (!response.ok && responseData.error) throw new Error(responseData.message)
         console.log(responseData)
-        return
+
         return responseData.data as IBudget[]
       } catch (error) {
         console.error(error)
@@ -182,6 +186,8 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
         toastTitle.value = 'Ocurrió un error al obtener los presupuestos'
         toastMessage.value = `${ error }`
         return undefined
+      } finally {
+        toastAlertStore.updateToast(toastAction, toastTitle, toastMessage)
       }
     },
     resetAttributes() {
