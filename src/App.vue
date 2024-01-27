@@ -38,6 +38,8 @@
     userStore.userData.telefono = !userTelefono ? '' : `${ userTelefono }`
     userStore.userData.isActive = !userIsActive ? false : userIsActive
     userStore.userData.email = !userEmail ? '' : userEmail
+
+    userStore.startUpdatingNotifications()
   })
 </script>
 

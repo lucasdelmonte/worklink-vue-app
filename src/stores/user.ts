@@ -7,16 +7,20 @@ import { useCookies } from 'vue3-cookies'
 import type { IUser } from '../interfaces/UserInterfaces'
 import type { IServiceRequestGet } from '../interfaces/ServiceRequestInterfaces'
 import type { IBusiness } from '../interfaces/BusinessInterfaces'
+import type { INotifications } from '../interfaces/NotificationInterfaces'
 
 const toastAction = ref(false)
 const toastTitle = ref('')
 const toastMessage = ref('')
 
+let updateNotifications: number | null = null;
+
 export const useUserStore = defineStore('user', {
   state: () => ({
     userData: {} as IUser,
     loadingUser: false,
-    servicesRequest: [] as IServiceRequestGet[]
+    servicesRequest: [] as IServiceRequestGet[],
+    notifications: [] as INotifications[]
   }),
   actions: {
     setToast(result: string): void {
@@ -138,12 +142,14 @@ export const useUserStore = defineStore('user', {
         this.userData = responseData.data as IUser
 
         this.setCookies()
+        this.startUpdatingNotifications()
   
         router.push('/')
         this.setToast(langStore.lang.login.ok.result)
       } catch (error) {
         console.error(error)
         this.removeCookies()
+        this.stopUpdatingNotifications()
         this.setToast(langStore.lang.login.error.result)
       } finally {
         this.loadingUser = false
@@ -155,8 +161,9 @@ export const useUserStore = defineStore('user', {
         this.userData = {} as IUser
         this.servicesRequest = []
         this.removeCookies()
-        router.push('/login-register')
+        this.stopUpdatingNotifications()
         this.setToast(langStore.lang.logout.ok.result)
+        router.push('/login-register')
       } catch (e) {
         this.setToast(langStore.lang.logout.error.result)
       }
@@ -191,6 +198,55 @@ export const useUserStore = defineStore('user', {
         }
         this.servicesRequest = data.filter(serviceRequest => serviceRequest.cliente?._id == this.userData._id)
         return userServicesRequest = data.filter(serviceRequest => serviceRequest.cliente?._id == this.userData._id)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async updateNotifications() {
+      if(this.userData._id === undefined) return
+      const URL = `http://localhost:4000/notificaciones/${ this.userData._id }`
+      try {
+        const response = await fetch(URL)
+        
+        if (!response.ok) throw new Error('Request error')
+
+        const dataRes = await response.json()
+        const data = dataRes.data as INotifications[]
+
+        if(data.length === 0) return
+
+        this.notifications = data
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    startUpdatingNotifications() {
+      updateNotifications = setInterval(() => {
+        this.updateNotifications()
+      }, 1000);
+    },
+    stopUpdatingNotifications() {
+      if (updateNotifications !== null) {
+        clearInterval(updateNotifications)
+        updateNotifications = null
+      }
+    },
+    async deleteNotification(id: string) {
+      const URL = `http://localhost:4000/notificaciones/delete/${ id }`
+      try {
+        const response = await fetch(URL, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+
+        if (!response.ok) throw new Error('Request error')
+
+        const dataRes = await response.json()
+        const data = dataRes.data as INotifications[]
+
+        this.notifications = data
       } catch (error) {
         console.log(error)
       }
