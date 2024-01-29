@@ -164,9 +164,10 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
       }
     },
     async getBudgets(id: string | undefined) {
+      console.log(id)
       if(!id) return
-      const URL = `http://localhost:4000/presupuestos/${ id }`
-      const toastAlertStore = useToastAlertStore()
+      const URL = `http://localhost:4000/presupuestos/solicitud/${ id }`
+
       try {
         const response = await fetch(URL, {
           method: 'GET',
@@ -182,10 +183,39 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
         return responseData.data as IBudget[]
       } catch (error) {
         console.error(error)
-        toastAction.value = false
-        toastTitle.value = 'Ocurrió un error al obtener los presupuestos'
-        toastMessage.value = `${ error }`
         return undefined
+      }
+    },
+    async updateBudget(id: string, state: string) {
+      const URL = `http://localhost:4000/presupuestos/${ id }`
+      const toastAlertStore = useToastAlertStore()
+      const data = {
+        "estado": state
+      }
+
+      try {
+        const response = await fetch(URL, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        })
+
+        const responseData = await response.json()
+        if (!response.ok && responseData.error) throw new Error(responseData.message)
+
+        toastAction.value = true
+        toastTitle.value = 'Operación éxitosa'
+        toastMessage.value = 'Estado del presupuesto actualizado'
+
+        return true
+      } catch (error) {
+        console.error(error)
+        toastAction.value = false
+        toastTitle.value = 'Ocurrió un error actualizar el estado del presupuesto'
+        toastMessage.value = `${ error }`
+        return false
       } finally {
         toastAlertStore.updateToast(toastAction, toastTitle, toastMessage)
       }

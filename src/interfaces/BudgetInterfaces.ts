@@ -1,8 +1,8 @@
 export interface IBudget {
   _id: string
-  service_request: string
-  amount: number
-  date: string
-  state: string
+  solicitud_servicio: string
+  monto: number
+  fecha: string
+  estado: string
   __v: number
 }

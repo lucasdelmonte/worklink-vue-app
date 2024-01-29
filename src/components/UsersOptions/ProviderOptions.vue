@@ -18,20 +18,58 @@
       </div>
     </template>
   </div>
+  <div v-if="showingBudget && drawerRequest.requestAction != 'CREATE'" class="drawer__show-budget drawer__show-budget--provider" :class="{ 'drawer__show-budget--open': showingBudget }">
+    <div class="scroll-budgets">
+      <h2 class="form__title form__title--left">Presupuestos</h2>
+      <template v-if="responseBudgets" v-for="(budget, index) in responseBudgets">
+        <div class="budget">
+          <div class="field">
+            <input :value="parseDate(budget.fecha)" class="field__input" :id="`budget-date-${ index }`" type="date" disabled />
+            <label class="field__label" :for="`budget-date-${ index }`">Fecha de realización</label>
+          </div>
+          <div class="field">
+            <input :value="`$${ budget.monto }`" class="field__input" :id="`budget-amount-${ index }`" type="amount" disabled />
+            <label class="field__label" :for="`budget-amount-${ index }`">Monto</label>
+          </div>
+          <div class="field">
+            <input v-model="budget.estado" class="field__input" :id="`budget-state-${ index }`" type="state" disabled />
+            <label class="field__label" :for="`budget-state-${ index }`">Estado</label>
+          </div>
+        </div>
+        <div class="field-divider">
+          <div class="line"></div>
+          <div class="circle"></div>
+          <div class="line"></div>
+        </div>
+      </template>
+      <template v-else>
+        <p class="budget-void">No hay presupuestos</p>
+      </template>
+    </div>
+    <template v-if="showingBudget">
+      <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudgets">Volver</button>
+    </template>
+  </div>
   <template v-if="!creatingBudget && drawerRequest.requestData.estado === 'PENDIENTE'">
     <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudget()">Crear presupuesto</button>
+  </template>
+  <template v-if="!showingBudget && drawerRequest.requestAction != 'CREATE'">
+    <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudgets">Ver presupuestos</button>
   </template>
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, watch } from 'vue'
   import type { Ref } from 'vue'
   import { useDrawerRequestStore } from '../../stores/drawerRequest'
+  import type { IBudget } from '../../interfaces/BudgetInterfaces'
 
   const drawerRequest = useDrawerRequestStore()
   const creatingBudget = ref(false) as Ref<boolean>
   const budgetAmount = ref(0) as Ref<number>
   const budgetDate = ref('') as Ref<string>
+  const responseBudgets = ref([]) as Ref<IBudget[]> | undefined
+  const showingBudget = ref(false) as Ref<boolean>
 
   const toggleBudget = () => { 
     creatingBudget.value = !creatingBudget.value
@@ -42,6 +80,30 @@
     if(!drawerRequest.requestData || !id) return
     await drawerRequest.createBudget(id, budgetAmount.value, budgetDate.value)
   }
+
+  const toggleBudgets = async () => { 
+    showingBudget.value = !showingBudget.value
+    if(!responseBudgets) return
+    responseBudgets.value = await drawerRequest.getBudgets(drawerRequest.requestData._id) as IBudget[]
+  }
+
+  const getBudgets = async () => { 
+    if(!responseBudgets) return
+    responseBudgets.value = await drawerRequest.getBudgets(drawerRequest.requestData._id) as IBudget[]
+  }
+
+  const parseDate = (dateString: string) => {
+    const date = new Date(dateString)
+    const [year, month, day] = date.toISOString().split('T')[0].split('-')
+
+    return `${year}-${month}-${day}`
+  }
+
+  watch(() => drawerRequest.requestData, async (newValue, oldValue) => {
+    if(newValue != oldValue) {
+      await getBudgets()
+    }
+  })
 </script>
 
 <style scoped lang="scss">
@@ -52,6 +114,12 @@
       padding-top: .8rem;
       position: relative;
       @include display-flex(column, space-between, stretch, nowrap, 0);
+    }
+    .budget-void {
+      width: 100%;
+      text-align: center;
+      margin: 0;
+      @include fontRegular(1.6rem, 0, 2rem, $color-black);
     }
     &__create-buttons {
       @include display-flex(column, center, center, nowrap, .8rem);
@@ -75,6 +143,31 @@
       .field__input[type=number]::-webkit-inner-spin-button, 
       .field__input[type=number]::-webkit-outer-spin-button { 
         -webkit-appearance: none;
+      }
+    }
+    &__show-budget {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      background: $color-white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transform: translateX(+150%);
+      transition: transform 400ms ease;
+      overflow-y: auto;
+      max-height: 100%;
+      box-sizing: border-box;
+
+      .field-divider:last-of-type {
+        display: none;
+      }
+
+      &--open {
+        transform: translateX(0%);
       }
     }
     .scroll-budgets {

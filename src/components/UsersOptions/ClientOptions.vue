@@ -5,22 +5,22 @@
       <template v-if="responseBudgets" v-for="(budget, index) in responseBudgets">
         <div class="budget">
           <div class="field">
-            <input v-model="budget.date" class="field__input" :id="`budget-date-${ index }`" type="date" disabled />
+            <input :value="parseDate(budget.fecha)" class="field__input" :id="`budget-date-${ index }`" type="date" disabled />
             <label class="field__label" :for="`budget-date-${ index }`">Fecha de realización</label>
           </div>
           <div class="field">
-            <input v-model="budget.amount" class="field__input" :id="`budget-amount-${ index }`" type="amount" disabled />
+            <input :value="`$${ budget.monto }`" class="field__input" :id="`budget-amount-${ index }`" type="amount" disabled />
             <label class="field__label" :for="`budget-amount-${ index }`">Monto</label>
           </div>
           <div class="field">
-            <input v-model="budget.state" class="field__input" :id="`budget-state-${ index }`" type="state" disabled />
-            <label class="field__label" :for="`budget-state-${ index }`">Monto</label>
+            <input v-model="budget.estado" class="field__input" :id="`budget-state-${ index }`" type="state" disabled />
+            <label class="field__label" :for="`budget-state-${ index }`">Estado</label>
           </div>
           <div class="budget__buttons">
-            <button @click.prevent="updateBudgetState('CANCELAR')" class="button button--tertiary-black hover-underline hover-underline--right">
+            <button @click.prevent="updateBudgetState(budget._id, 'CANCELADO')" class="button button--tertiary-black hover-underline hover-underline--right">
               Rechazar
             </button>
-            <button @click.prevent="updateBudgetState('ACEPTAR')" class="button button--tertiary-black hover-underline hover-underline--right">
+            <button @click.prevent="updateBudgetState(budget._id, 'ACEPTADO')" class="button button--tertiary-black hover-underline hover-underline--right">
               Aceptar
             </button>
           </div>
@@ -63,18 +63,35 @@
   const showingBudget = ref(false) as Ref<boolean>
 
   const getBudgets = async () => { 
-    if(responseBudgets) {
-      responseBudgets.value = await drawerRequest.getBudgets(drawerRequest.requestData._id) as IBudget[]
-    }
+    if(!responseBudgets) return
+    responseBudgets.value = await drawerRequest.getBudgets(drawerRequest.requestData._id) as IBudget[]
   }
 
-  const toggleBudgets = () => { 
+  const toggleBudgets = async () => { 
     showingBudget.value = !showingBudget.value
+    if(!responseBudgets) return
+    responseBudgets.value = await drawerRequest.getBudgets(drawerRequest.requestData._id) as IBudget[]
+    console.log(responseBudgets.value);
   }
 
-  const updateBudgetState = (state: string) => { 
-    console.log(drawerRequest.requestData._id)
-    console.log(state)
+  const updateBudgetState = async(id: string, state: string) => {
+    console.log(id, state);
+    console.log(drawerRequest.requestData._id);
+    /*
+      PENDIENTE = "PENDIENTE",
+      ACEPTADO = "ACEPTADO",
+      RECHAZADO = "RECHAZADO",
+      CANCELADO = "CANCELADO",
+    */
+    if(!id) return
+    await drawerRequest.updateBudget(id, state)
+  }
+
+  const parseDate = (dateString: string) => {
+    const date = new Date(dateString)
+    const [year, month, day] = date.toISOString().split('T')[0].split('-')
+
+    return `${year}-${month}-${day}`
   }
 
   const updateState = async (id: string | undefined, state: string) => {
@@ -84,8 +101,8 @@
     if(result) drawerRequest.requestAction = 'SEE'
   }
 
-  watch(() => drawerRequest.requestAction, async (newValue, oldValue) => {
-    if(newValue === 'SEE') {
+  watch(() => drawerRequest.requestData, async (newValue, oldValue) => {
+    if(newValue != oldValue) {
       await getBudgets()
     }
   })

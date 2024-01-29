@@ -16,9 +16,10 @@
       <h2 class="notifications__title">Notificaciones</h2>
       <div class="notifications__items" v-if="userStore.notifications.length > 0">
         <template v-for="notification in (userStore.notifications as INotifications[]) ">
-          <div class="notification-item" v-if="notification.isActive">
+          <div class="notification-item" v-if="notification.isActive" @click.prevent="requestDrawer(notification.solicitud as string)" :id="notification.solicitud">
             <h3 class="notification-item__type">{{ notification.notificacionType }}</h3>
             <p class="notification-item__description">{{ notification.mensaje }}</p>
+            <span>{{ notification.solicitud }}</span>
             <button class="notification-item__delete" @click="deleteNotification(notification._id)">Eliminar</button>
           </div>
         </template>
@@ -35,6 +36,9 @@
   import type { Ref } from 'vue'
   import type { INotifications } from '../../interfaces/NotificationInterfaces'
   import { useUserStore } from '@/stores/user'
+  import { useDrawerRequestStore } from '../../stores/drawerRequest'
+
+  const drawerRequest = useDrawerRequestStore()
 
   const userStore = useUserStore()
 
@@ -54,6 +58,13 @@
     if(evt.key === 'Escape') {
       showNotifications.value = false
     }
+  }
+
+  const requestDrawer = async (id: string) => {
+    console.log(id)
+    return
+    if(!id) return
+    await userStore.getServicesRequestById(id)
   }
 
   const deleteNotification = async(id: string) => {

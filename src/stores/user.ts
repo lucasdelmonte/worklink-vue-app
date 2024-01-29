@@ -8,6 +8,7 @@ import type { IUser } from '../interfaces/UserInterfaces'
 import type { IServiceRequestGet } from '../interfaces/ServiceRequestInterfaces'
 import type { IBusiness } from '../interfaces/BusinessInterfaces'
 import type { INotifications } from '../interfaces/NotificationInterfaces'
+import { useDrawerRequestStore } from './drawerRequest'
 
 const toastAction = ref(false)
 const toastTitle = ref('')
@@ -202,9 +203,28 @@ export const useUserStore = defineStore('user', {
         console.log(error)
       }
     },
+    async getServicesRequestById(id: string) {
+      if(!id) return
+      const drawerRequest = useDrawerRequestStore()
+      const URL = `http://localhost:4000/solicitudes_servicio/${ id }`
+      try {
+        const response = await fetch(URL)
+
+        if (!response.ok) throw new Error('Request error')
+        
+        const dataRes = await response.json()
+        const data = dataRes.data as IServiceRequestGet
+
+        drawerRequest.requestData = data
+        drawerRequest.requestState = data.estado as string       
+      } catch (error) {
+        console.log(error)
+      }
+    },
     async updateNotifications() {
       if(this.userData._id === undefined) return
       const URL = `http://localhost:4000/notificaciones/${ this.userData._id }`
+      return
       try {
         const response = await fetch(URL)
         
