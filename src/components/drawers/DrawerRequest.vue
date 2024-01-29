@@ -1,0 +1,241 @@
+<template>
+  <div class="drawer" :class="{ 'drawer--open': drawerRequest.state }">
+    <div class="drawer__content">
+      <div class="drawer__information">
+        <h4 class="drawer__title">{{ modalBusiness.provider_name || drawerRequest.requestData.negocio?.nombre }}</h4>
+        <h5 class="drawer__category">Categoría {{ modalBusiness.provider_business_category || drawerRequest.requestData.categoria }}</h5>
+      </div>
+      <form class="form">
+        <div>
+          <h2 class="form__title form__title--left" :class="{ 'form__title--with-subtitle': drawerRequest.requestState }">Solicitud</h2>
+          <h4 class="form__subtitle form__title--left" v-if="drawerRequest.requestState">{{ drawerRequest.requestData.estado }}</h4>
+          <h4 class="form__subtitle form__title--left" v-if=" drawerRequest.requestData.estado === 'ACEPTADA'">Cotización: $23499</h4>
+          <div class="field">
+            <input v-model="date" class="field__input" id="date" type="date" :disabled="validateEdit" />
+            <label class="field__label" for="date">Fecha</label>
+          </div>
+          <div class="field">
+            <input v-model="title" class="field__input" id="title" type="text" :disabled="validateEdit" />
+            <label class="field__label" for="title">Título</label>
+          </div>
+          <div class="field field--text-area">
+            <textarea v-model="description" rows="10" id="description" class="field__input field__input--text-area" name="description" :disabled="validateEdit"></textarea>
+            <label class="field__label" for="description">Descripción</label>
+          </div>
+          <div class="field field--file" :class="{ 'hidden': validateEdit }">
+            <input @change="(evt) => loadImages(evt)" class="field__input field__input--file" type="file" id="images" name="awsfiles" accept=".jpg,.jpeg,.png" multiple :disabled="validateEdit">
+          </div>
+        </div>
+        <div class="drawer__buttons">
+          <template v-if="userRol === 'CLIENTE'">
+            <ClientOptions @createRequest="createRequest" @editRequest="editRequest" />
+          </template>
+          <template v-else>
+            <ProviderOptions />
+          </template>
+        </div>
+      </form>
+    </div>
+    <div class="drawer__close" @click="closeClickModal"></div>
+  </div>
+</template>
+
+<script setup lang="ts">
+  import { ref, onMounted, watch, computed } from 'vue'
+  import type { Ref } from 'vue'
+  import type { IServiceRequestPost, IServiceRequestUpdate } from '../../interfaces/ServiceRequestInterfaces'
+  import { useModalBusinessStore } from '../../stores/modalProviderCard'
+  import { useDrawerRequestStore } from '../../stores/drawerRequest'
+  import { useUserStore } from '@/stores/user'
+  import { useCookies } from 'vue3-cookies'
+  import ProviderOptions from '../UsersOptions/ProviderOptions.vue'
+  import ClientOptions from '../UsersOptions/ClientOptions.vue'
+
+  const cookies = useCookies()
+  const userRol = ref(cookies.cookies.get('userRol')) as Ref<string>
+
+  const userStore = useUserStore()
+  const modalBusiness = useModalBusinessStore()
+  const drawerRequest = useDrawerRequestStore()
+
+  const date = ref('') as Ref<string>
+  const title = ref('') as Ref<string>
+  const description = ref('') as Ref<string>
+  const images = ref([]) as Ref<string[]>
+
+  const loadImages = (evt: Event) => {
+    const target: HTMLInputElement = evt.target as HTMLInputElement || null
+    images.value = []
+    const files = target.files;
+    if(!files) return
+    const array = [...files].map((file) => {
+      return file.name
+    })
+    images.value = array as []
+  }
+
+  const closeClickModal = () => {
+    drawerRequest.state = false
+    drawerRequest.resetAttributes()
+  }
+
+  const validateEdit = computed(() => {
+    return drawerRequest.requestAction === 'SEE' || userRol.value === 'PROVEEDOR'
+  })
+
+  const closeDrawer = (evt: KeyboardEvent) => {
+    if(evt.key === 'Escape') {
+      drawerRequest.state = false
+      drawerRequest.resetAttributes()
+    }
+  }
+
+  const toggleDrawer = () => {
+    drawerRequest.state = !drawerRequest.state
+    drawerRequest.resetAttributes()
+  }
+
+  const createRequest = () => {
+    if(!date.value || !title.value || !description.value || !images.value) return
+    const data: IServiceRequestPost = {
+      cliente: userStore.userData._id as string,
+      categoria: modalBusiness.provider_business_category as string,
+      fechaLimite: date.value as string,
+      titulo: title.value as string,
+      descripcion: description.value as string,
+      imagenes: images.value as string[],
+      negocio: modalBusiness.provider_business_id as string
+    }
+    drawerRequest.createRequest(data)
+  }
+
+  const editRequest = () => {
+    if(!date.value || !title.value || !description.value || !images.value) return
+    const data: IServiceRequestUpdate = {
+      fechaLimite: date.value as string,
+      titulo: title.value as string,
+      descripcion: description.value as string,
+      imagenes: images.value as string[]
+    }
+    drawerRequest.editRequest(data)
+  }
+
+  const parseDate = (dateString: string) => {
+    const date = new Date(dateString)
+    const [year, month, day] = date.toISOString().split('T')[0].split('-')
+
+    return `${year}-${month}-${day}`
+  }
+
+  watch(() => drawerRequest.requestData, (newValue, oldValue) => {
+    if(!newValue || Object.keys(newValue).length === 0 || drawerRequest.requestAction === 'CREATE') {
+      if (date.value !== '' || title.value !== '' || description.value !== '' || images.value.length !== 0) {
+        date.value = ''
+        title.value = ''
+        description.value = ''
+        images.value = []
+        drawerRequest.resetAttributes()
+      }
+      return
+    }
+    if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+      date.value = parseDate(newValue.fechaLimite as string) as string
+      title.value = newValue.titulo as string
+      description.value = newValue.descripcion as string
+      images.value = newValue.imagenes
+    }
+    userRol.value = cookies.cookies.get('userRol') as string
+  })
+
+    watch(() => drawerRequest.state, (newState, oldState) => {
+      if (newState === true && oldState === false) {
+        userRol.value = cookies.cookies.get('userRol') as string
+      }
+    })
+
+  onMounted(() => {
+    userRol.value = cookies.cookies.get('userRol') as string
+    window.addEventListener('keydown', closeDrawer)
+  })
+</script>
+
+<style scoped lang="scss">
+  @import '../../../styles/main.scss';
+
+  .drawer {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: -1;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, .4);
+    @include display-flex(row, flex-end, center, nowrap, 0);
+
+    &__close {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      cursor: url('../../assets/Icons/icons8-cancelar-50.png'), auto;
+    }
+    &--open {
+      z-index: 3;
+      opacity: 1;
+
+      .drawer__content {
+        transform: translateX(0%);
+      }
+    }
+    &:not(.drawer--open) {
+      .drawer__content {
+        transform: translateX(+150%);
+      }
+    }
+    .form {
+      position: relative;
+      @include display-flex(column, space-between, stretch, nowrap, 0);
+    }
+    &__content {
+      box-sizing: border-box;
+      transition: transform 400ms ease;
+      width: calc(100% - 3.2rem);
+      height: calc(100% - 3.2rem);
+      border-bottom-left-radius: 1.6rem;
+      border-top-left-radius: 1.6rem;
+      box-shadow: .5rem .5rem 2rem rgba(0, 0, 0, 0.14);
+      max-width: 45rem;
+      background-color: $color-white;
+      padding: 1.6rem 1.6rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr auto;
+    }
+    &__information {
+      margin-bottom: 1.6rem;
+      border-bottom: .1rem solid $color-grey-15;
+    }
+    &__title {
+      margin: 0 0 .4rem 0;
+      @include fontBold(1.8rem, 0, 2rem, $color-black);
+    }
+    &__category {
+      margin: 0 0 1.4rem 0;
+      @include fontRegular(1.4rem, 0, 2rem, $color-black);
+    }
+    &__buttons {
+      display: grid;
+      gap: .8rem 0;
+      .button {
+        min-height: 4rem;
+        margin: 0;
+      }
+    }
+    &__create-request {
+      text-align: center;
+    }
+  }
+</style>

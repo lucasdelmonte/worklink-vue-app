@@ -1,19 +1,21 @@
 <template>
   <main>
     <router-view></router-view>
-    <ModalProviderDetails />
-    <DrawerProviderRequest />
+    <ModalBusinessDetails />
+    <DrawerRequest />
+    <ModalChat />
     <ToastAlertCustom />
   </main>
 </template>
 
 <script setup lang="ts">
   import ToastAlertCustom from './components/notificationPopUp/ToastAlertCustom.vue'
-  import ModalProviderDetails from './components/modals/ModalProviderDetails.vue'
-  import DrawerProviderRequest from './components/drawers/DrawerProviderRequest.vue'
+  import ModalBusinessDetails from './components/modals/ModalBusinessDetails.vue'
+  import ModalChat from './components/modals/ModalChat.vue'
+  import DrawerRequest from './components/drawers/DrawerRequest.vue'
   import { onMounted } from 'vue'
   import { useCookies } from 'vue3-cookies'
-  import { useUserStore } from './stores/user';
+  import { useUserStore } from './stores/user'
 
   const userStore = useUserStore()
 
@@ -36,6 +38,8 @@
     userStore.userData.telefono = !userTelefono ? '' : `${ userTelefono }`
     userStore.userData.isActive = !userIsActive ? false : userIsActive
     userStore.userData.email = !userEmail ? '' : userEmail
+
+    userStore.startUpdatingNotifications()
   })
 </script>
 

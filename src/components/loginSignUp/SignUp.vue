@@ -72,11 +72,9 @@
 
   const handleSubmitFacebook = (): void => {
     // Facebook register
-    console.log('Register using facebook')
   }
   const handleSubmitGoogle = (): void => {
     // Google register
-    console.log('Register using google')
   }
 
   const handleSubmit = async (): Promise<void> => {

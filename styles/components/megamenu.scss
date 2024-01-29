@@ -15,10 +15,21 @@
     translate: 0 0;
   }
   &__nav {
-    background: $color-white;
     border-radius: 1rem;
     padding: 2rem 1.6rem;
     box-shadow: .5rem .5rem 2rem rgba($color: $color-primary-2, $alpha: .14);
+    background: $color-white;
+
+    .megamenu__nav-first-level {
+      border-bottom: .1rem solid $color-grey-15;
+      padding: 0 0 1.6rem 0;
+    }
+    .megamenu__nav-first-level:last-child {
+      border-bottom: 0;
+      padding: 1.6rem 0 0 0;
+    }
+  }
+  &__nav-first-level {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 3rem auto;
@@ -59,11 +70,12 @@
     }
     li {
       padding: 0 0 1.6rem 0;
-      @include fontRegular(1.6rem, 0, 2rem, $color-black);
-
-      a {
+      
+      * {
+        text-decoration: none;
         cursor: pointer;
         padding-bottom: .4rem;
+        @include fontRegular(1.6rem, 0, 2rem, $color-black);
       }
     }
     li:last-child {
@@ -81,7 +93,7 @@
     }
 
     li {
-      padding: 0 0 1.6rem 0;
+      padding: 0;
       min-width: 14rem;
       a {
         @include fontRegular(1.4rem, 0, 2rem, $color-black);

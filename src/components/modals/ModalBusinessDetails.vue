@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-card" :class="{ 'modal-card--open' : providerCard.state }">
+  <div class="modal-card" :class="{ 'modal-card--open' : modalBusiness.state }">
     <div class="card">
       <div class="card__content" style="background-image: url('https://cdn.shopify.com/s/files/1/0618/8115/5826/files/white-black-digital-art-monochrome-abstract-reflection-206803-wallhere.com.jpg?v=1701723919');">
         <img class="card__media" src="https://cdn.shopify.com/s/files/1/0618/8115/5826/files/user.jpg?v=1701717572" alt="Provider" lazyload>
@@ -15,11 +15,11 @@
             <rect x="0" y="0" fill="black" width="100%" height="100%" clip-path="url(#star)"></rect>
             <rect x="100" y="0" fill="#DDDDDD" width="100%" height="100%" clip-path="url(#star)"></rect>
           </svg>
-          <span>{{ providerCard.provider_business_rating }}</span>
+          <span>{{ modalBusiness.provider_business_rating }}</span>
         </div>
-        <h4 class="card__title">{{ providerCard.provider_name }}</h4>
-        <h5 class="card__category">{{ providerCard.provider_business_category }}</h5>
-        <p class="card__description">{{ providerCard.provider_business_description }}</p>
+        <h4 class="card__title">{{ modalBusiness.provider_name }}</h4>
+        <h5 class="card__category">{{ modalBusiness.provider_business_category }}</h5>
+        <p class="card__description">{{ modalBusiness.provider_business_description }}</p>
       </div>
       <div class="card__buttons">
         <button @click="toggleModal" class="card__create-request button button--primary-white">Close</button>
@@ -32,22 +32,23 @@
 
 <script setup lang="ts">
   import IconArrowRight from '@/components/icons/IconArrowRight.vue'
-  import { useModalProviderCardStore } from '../../stores/modalProviderCard'
-  import { useDrawerProviderRequestStore } from '../../stores/drawerProviderRequest'
+  import { useModalBusinessStore } from '../../stores/modalProviderCard'
+  import { useDrawerRequestStore } from '../../stores/drawerRequest'
 
-  const providerCard = useModalProviderCardStore()
-  const providerRequest = useDrawerProviderRequestStore()
+  const modalBusiness = useModalBusinessStore()
+  const drawerRequest = useDrawerRequestStore()
 
   const toggleModal = () => {
-    providerCard.state = !providerCard.state
-    providerCard.resetAttributes()
+    modalBusiness.state = !modalBusiness.state
+    modalBusiness.resetAttributes()
   }
   const toggleRequest = () => {
-    providerRequest.state = !providerRequest.state
-    providerCard.state = !providerCard.state
+    drawerRequest.state = !drawerRequest.state
+    drawerRequest.requestAction = 'CREATE'
+    modalBusiness.state = !modalBusiness.state
   }
 </script>
 
 <style scoped lang="scss">
   @import '../../../styles/main.scss';
-</style>
+</style>../../stores/drawerRequest

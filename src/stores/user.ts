@@ -3,17 +3,25 @@ import { useToastAlertStore } from './toastAlert'
 import { ref } from 'vue'
 import router from '@/router'
 import { useLangStore } from './language'
-import type { IUser } from '../interfaces/UserInterfaces'
 import { useCookies } from 'vue3-cookies'
+import type { IUser } from '../interfaces/UserInterfaces'
+import type { IServiceRequestGet } from '../interfaces/ServiceRequestInterfaces'
+import type { IBusiness } from '../interfaces/BusinessInterfaces'
+import type { INotifications } from '../interfaces/NotificationInterfaces'
+import { useDrawerRequestStore } from './drawerRequest'
 
 const toastAction = ref(false)
 const toastTitle = ref('')
 const toastMessage = ref('')
 
+let updateNotifications: number | null = null;
+
 export const useUserStore = defineStore('user', {
   state: () => ({
     userData: {} as IUser,
-    loadingUser: false
+    loadingUser: false,
+    servicesRequest: [] as IServiceRequestGet[],
+    notifications: [] as INotifications[]
   }),
   actions: {
     setToast(result: string): void {
@@ -135,12 +143,14 @@ export const useUserStore = defineStore('user', {
         this.userData = responseData.data as IUser
 
         this.setCookies()
+        this.startUpdatingNotifications()
   
         router.push('/')
         this.setToast(langStore.lang.login.ok.result)
       } catch (error) {
         console.error(error)
         this.removeCookies()
+        this.stopUpdatingNotifications()
         this.setToast(langStore.lang.login.error.result)
       } finally {
         this.loadingUser = false
@@ -150,12 +160,115 @@ export const useUserStore = defineStore('user', {
       const langStore = useLangStore()
       try {
         this.userData = {} as IUser
+        this.servicesRequest = []
         this.removeCookies()
-        router.push('/login-register')
+        this.stopUpdatingNotifications()
         this.setToast(langStore.lang.logout.ok.result)
+        router.push('/login-register')
       } catch (e) {
-        console.log(e)
         this.setToast(langStore.lang.logout.error.result)
+      }
+    },
+    async getServicesRequest() {
+      const URL = 'http://localhost:4000/solicitudes_servicio'
+      try {
+        const response = await fetch(URL)
+
+        if (!response.ok) throw new Error('Request error')
+        
+        const dataRes = await response.json()
+        const data = dataRes.data as IServiceRequestGet[]
+
+        let userServicesRequest = [] as IServiceRequestGet[]
+
+        const responseBusiness = await fetch('http://localhost:4000/negocios')
+
+        if (!responseBusiness.ok) throw new Error('Request error')
+
+        const dataBusiness = await responseBusiness.json()
+        const business = dataBusiness.data as IBusiness[]
+
+        const userBusinesses = business.filter(business => business.proveedor && business.proveedor._id === this.userData._id);
+        
+        if (this.userData.rol === 'PROVEEDOR') {
+          userServicesRequest = data.filter(serviceRequest => 
+            userBusinesses.some(business => business?._id === serviceRequest.negocio._id)
+          )
+          this.servicesRequest = userServicesRequest
+          return userServicesRequest
+        }
+        this.servicesRequest = data.filter(serviceRequest => serviceRequest.cliente?._id == this.userData._id)
+        return userServicesRequest = data.filter(serviceRequest => serviceRequest.cliente?._id == this.userData._id)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async getServicesRequestById(id: string) {
+      if(!id) return
+      const drawerRequest = useDrawerRequestStore()
+      const URL = `http://localhost:4000/solicitudes_servicio/${ id }`
+      try {
+        const response = await fetch(URL)
+
+        if (!response.ok) throw new Error('Request error')
+        
+        const dataRes = await response.json()
+        const data = dataRes.data as IServiceRequestGet
+
+        drawerRequest.requestData = data
+        drawerRequest.requestState = data.estado as string       
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async updateNotifications() {
+      if(this.userData._id === undefined) return
+      const URL = `http://localhost:4000/notificaciones/${ this.userData._id }`
+      return
+      try {
+        const response = await fetch(URL)
+        
+        if (!response.ok) throw new Error('Request error')
+
+        const dataRes = await response.json()
+        const data = dataRes.data as INotifications[]
+
+        if(data.length === 0) return
+
+        this.notifications = data
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    startUpdatingNotifications() {
+      updateNotifications = setInterval(() => {
+        this.updateNotifications()
+      }, 1000);
+    },
+    stopUpdatingNotifications() {
+      if (updateNotifications !== null) {
+        clearInterval(updateNotifications)
+        updateNotifications = null
+      }
+    },
+    async deleteNotification(id: string) {
+      const URL = `http://localhost:4000/notificaciones/delete/${ id }`
+      try {
+        const response = await fetch(URL, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+
+        if (!response.ok) throw new Error('Request error')
+
+        const dataRes = await response.json()
+        const data = dataRes.data as INotifications[]
+
+        this.notifications = data
+      } catch (error) {
+        console.log(error)
       }
     }
   },

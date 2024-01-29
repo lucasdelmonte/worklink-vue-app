@@ -10,9 +10,12 @@
         <li><RouterLink class="hover-underline hover-underline--right" @click="userStore.logoutUser" :to="'/login-register'">{{ langStore.lang.header.user.logout }}</RouterLink></li>
       </ul>
     </div>
+    
+    <h2 class="main-content__title">Negocios del tipo: {{ category }}</h2>
+
     <div class="grid grid--desktop-4 grid--tablet-3 grid--mobile-1">
       <template v-if="!providerStore.isLoading" v-for="business in (businessFiltered as IBusinessFiltered[])">
-        <div class="card">
+        <div class="card" v-if="business.is_active">
           <div class="card__content" style="background-image: url('https://cdn.shopify.com/s/files/1/0618/8115/5826/files/white-black-digital-art-monochrome-abstract-reflection-206803-wallhere.com.jpg?v=1701723919');">
             <div class="card__wishlist">
               <IconWishlist :width="17" :height="16" />
@@ -56,20 +59,21 @@
   import Header from '../components/layout/Header.vue'
   import Megamenu from '../components/layout/Megamenu.vue'
   import IconArrowRight from '@/components/icons/IconArrowRight.vue'
-  import { useModalProviderCardStore } from '@/stores/modalProviderCard'
+  import { useModalBusinessStore } from '@/stores/modalProviderCard'
   import IconWishlist from '@/components/icons/IconWishlist.vue'
   import type { IBusinessFiltered } from '@/interfaces/BusinessInterfaces'
   import IconSpinner from '@/components/icons/IconSpinner.vue'
 
-  const providerCard = useModalProviderCardStore()
+  const modalBusiness = useModalBusinessStore()
 
   const toggleModal = (business: IBusinessFiltered) => {
-    providerCard.state = !providerCard.state
-    providerCard.provider_id = business.provider.id
-    providerCard.provider_name = business.provider.full_name
-    providerCard.provider_business_description = business.description
-    providerCard.provider_business_category = business.category
-    providerCard.provider_business_rating = business.rating
+    modalBusiness.state = !modalBusiness.state
+    modalBusiness.provider_id = business.provider.id
+    modalBusiness.provider_name = business.provider.full_name
+    modalBusiness.provider_business_id = business.id
+    modalBusiness.provider_business_description = business.description
+    modalBusiness.provider_business_category = business.category
+    modalBusiness.provider_business_rating = business.rating ? business.rating : 0
   }
 
   const userStore = useUserStore()
@@ -89,7 +93,7 @@
 
   watch(() => route.params.category, async (newCategory) => {
     category.value = newCategory as string;
-    businessFiltered.value = await providerStore.getBusinessFiltered(newCategory as string);
+    businessFiltered.value = await providerStore.getBusinessFiltered(newCategory as string)
   });
 
   const toggleMenu = () => menuState.value = !menuState.value
@@ -107,9 +111,9 @@
     box-shadow: .5rem .5rem 2rem rgba($color: $color-primary-2, $alpha: .14);
     height: 100%;
 
-    h2 {
-      margin: 0 0 2rem 0;
-      @include fontRegular(2.8rem, 0, 3.6rem, $color-black);
+    &__title {
+      margin: 0 0 4rem 0;
+      @include fontBold(3.4rem, 0, 4rem, $color-black);
     }
     .grid {
       position: relative;
