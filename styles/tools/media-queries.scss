@@ -33,6 +33,11 @@
       @content;
   }
 }
+@mixin container-up {
+  @media (min-width: $breakpoint-container) {
+      @content;
+  }
+}
 @mixin desktop-bottom {
   @media (max-width: calc($breakpoint-desktop - 1)) {
       @content;
