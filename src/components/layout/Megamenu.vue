@@ -19,12 +19,22 @@
           <li><RouterLink :to="`/services-request`">Solicitudes</RouterLink></li>
         </ul>
       </div>
+      <div class="megamenu__nav-first-level">
+        <ul class="megamenu__list-first-level">
+          <li><RouterLink :to="`/calendar`">Calendario</RouterLink></li>
+        </ul>
+      </div>
     </nav>
     <!-- User type provider -->
     <nav class="megamenu__nav" v-else>
       <div class="megamenu__nav-first-level">
         <ul class="megamenu__list-first-level">
           <li><RouterLink :to="`/services-request`">Solicitudes</RouterLink></li>
+        </ul>
+      </div>
+      <div class="megamenu__nav-first-level">
+        <ul class="megamenu__list-first-level">
+          <li><RouterLink :to="`/calendar`">Calendario</RouterLink></li>
         </ul>
       </div>
     </nav>

@@ -108,6 +108,7 @@ export const useUserStore = defineStore('user', {
         this.userData = responseData.data as IUser
 
         this.setCookies()
+        this.getServicesRequest()
 
         router.push('/')
         this.setToast(langStore.lang.register.ok.result)
@@ -144,7 +145,8 @@ export const useUserStore = defineStore('user', {
 
         this.setCookies()
         this.startUpdatingNotifications()
-  
+        this.getServicesRequest()
+
         router.push('/')
         this.setToast(langStore.lang.login.ok.result)
       } catch (error) {
@@ -216,7 +218,8 @@ export const useUserStore = defineStore('user', {
         const data = dataRes.data as IServiceRequestGet
 
         drawerRequest.requestData = data
-        drawerRequest.requestState = data.estado as string       
+        drawerRequest.requestState = data.estado as string
+        drawerRequest.state = true       
       } catch (error) {
         console.log(error)
       }
@@ -227,17 +230,15 @@ export const useUserStore = defineStore('user', {
       return
       try {
         const response = await fetch(URL)
-        
-        if (!response.ok) throw new Error('Request error')
 
         const dataRes = await response.json()
         const data = dataRes.data as INotifications[]
 
-        if(data.length === 0) return
+        if (dataRes.error || data.length === 0) return
 
         this.notifications = data
       } catch (error) {
-        console.log(error)
+
       }
     },
     startUpdatingNotifications() {
