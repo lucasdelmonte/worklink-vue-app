@@ -119,7 +119,7 @@
     &__content {
       box-sizing: border-box;
       transition: transform 400ms ease;
-      width: calc(100% - 3.2rem);
+      width: calc(100% - 1.6rem);
       height: calc(100% - 3.2rem);
       border-bottom-left-radius: 1.6rem;
       border-top-left-radius: 1.6rem;
@@ -222,12 +222,12 @@
       }
     }
     &__user {
-      cursor: pointer;
       text-align: right;
       @include display-flex(row, flex-end, center, nowrap, 0 1.6rem);
 
       a,
       button {
+        cursor: pointer;
         border: 0;
         padding: 0;
         background-color: transparent;
@@ -237,7 +237,6 @@
       button {
         max-width: 2.2rem;
         display: flex;
-        cursor: pointer;
         img {
           width: 100%;
         }

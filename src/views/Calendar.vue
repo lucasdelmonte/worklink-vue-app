@@ -1,7 +1,7 @@
 <template>
   <Header @toggleMenu="toggleMenu" @toggleUserOptions="toggleUserOptions" :menuState="menuState"></Header>
 
-  <div class="main-content main-content--accounts">
+  <div class="main-content main-content--calendar">
     <Megamenu @toggleMenu="toggleMenu" :menuState="menuState"></Megamenu>
     <div class="user-options" :open="userOptionsState">
       <ul class="user-options__list">
@@ -10,13 +10,12 @@
       </ul>
     </div>
     <h2 class="main-content__title">Calendario</h2>
-    <div class="main-content__grid calendar">
-      <Year @selected="changeYear" />
-      <Month @selected="changeMonth" />
+    <div class="main-content__grid">
+      <div class="calendar__heading">
+        <Year @selected="changeYear" />
+        <Month @selected="changeMonth" />
+      </div>
       <Dates :selectedValues="selectedValues" :selectedDate="selectedDateValue" @selected="changeDate" />
-    </div>
-    <div>
-      <p>Selected value: {{ selectedDateValue }}</p>
     </div>
   </div>
 </template>
@@ -44,9 +43,10 @@
   function changeMonth(v) {
       selectedDateValue.value = null
       selectedValues.month = v
+      console.log(selectedValues.month + 1);
   }
   function changeYear(v) {
-      selectedDateValue.value= null
+      selectedDateValue.value = null
       selectedValues.year = v
   }
   function changeDate(v){
@@ -71,7 +71,7 @@
 
 <style scoped lang="scss">
   @import '../../styles/main.scss';
-    .main-content {
+  .main-content {
     overflow: hidden;
     position: relative;
     background: $color-white;
@@ -80,13 +80,36 @@
     box-shadow: .5rem .5rem 2rem rgba($color: $color-primary-2, $alpha: .14);
     height: 100%;
 
+    &__grid {
+      height: 100%;
+      overflow-y: auto;
+      &::-webkit-scrollbar {
+        width: .4rem;
+      }
 
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: $color-grey-15;
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background: $color-grey-50;
+      }
+    }
     &__title {
       margin: 0;
+      display: none;
       @include fontBold(3.4rem, 0, 4rem, $color-black);
     }
     .calendar {
-      display: flex;
+      @include display-flex(column, center, center, nowrap, 2.4rem 0);
+
+      &__heading {
+        @include display-flex(row, center, center, wrap, 0 3rem);
+      }
     }
   }
 </style>

@@ -4,6 +4,7 @@
       <div class="drawer__information">
         <h4 class="drawer__title">{{ modalBusiness.provider_name || drawerRequest.requestData.negocio?.nombre }}</h4>
         <h5 class="drawer__category">Categoría {{ modalBusiness.provider_business_category || drawerRequest.requestData.categoria }}</h5>
+        <span @click="closeClickModal" class="drawer__mobile-close"><IconClose :width="16" :height="16" :fill="`#000000`" /></span>
       </div>
       <form class="form">
         <div>
@@ -50,6 +51,7 @@
   import { useCookies } from 'vue3-cookies'
   import ProviderOptions from '../UsersOptions/ProviderOptions.vue'
   import ClientOptions from '../UsersOptions/ClientOptions.vue'
+  import IconClose from '../icons/IconClose.vue'
 
   const cookies = useCookies()
   const userRol = ref(cookies.cookies.get('userRol')) as Ref<string>
@@ -182,6 +184,16 @@
       z-index: -1;
       cursor: url('../../assets/Icons/icons8-cancelar-50.png'), auto;
     }
+    &__mobile-close {
+      position: absolute;
+      top: 1.6rem;
+      right: 1.6rem;
+      z-index: 1;
+      @include display-flex(row, center, center, nowrap, 0);
+      @include desktop-up {
+        display: none;
+      }
+    }
     &--open {
       z-index: 3;
       opacity: 1;
@@ -202,7 +214,7 @@
     &__content {
       box-sizing: border-box;
       transition: transform 400ms ease;
-      width: calc(100% - 3.2rem);
+      width: calc(100% - 1.6rem);
       height: calc(100% - 3.2rem);
       border-bottom-left-radius: 1.6rem;
       border-top-left-radius: 1.6rem;
@@ -219,6 +231,7 @@
       border-bottom: .1rem solid $color-grey-15;
     }
     &__title {
+      max-width: calc(100% - 3.2rem);
       margin: 0 0 .4rem 0;
       @include fontBold(1.8rem, 0, 2rem, $color-black);
     }
