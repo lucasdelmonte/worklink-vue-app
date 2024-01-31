@@ -2,7 +2,7 @@
   <div v-if="showingBudget && drawerRequest.requestAction != 'CREATE'" class="drawer__show-budget drawer__show-budget--client" :class="{ 'drawer__show-budget--open': showingBudget }">
     <div class="scroll-budgets">
       <h2 class="form__title form__title--left">Presupuestos</h2>
-      <template v-if="responseBudgets" v-for="(budget, index) in responseBudgets">
+      <template v-if="responseBudgets?.length > 0" v-for="(budget, index) in responseBudgets">
         <div class="budget">
           <div class="field">
             <input :value="parseDate(budget.fecha)" class="field__input" :id="`budget-date-${ index }`" type="date" disabled />
@@ -16,7 +16,7 @@
             <input v-model="budget.estado" class="field__input" :id="`budget-state-${ index }`" type="state" disabled />
             <label class="field__label" :for="`budget-state-${ index }`">Estado</label>
           </div>
-          <div class="budget__buttons">
+          <div class="budget__buttons" v-if="budget.estado === 'PENDIENTE'">
             <button @click.prevent="updateBudgetState(budget._id, 'CANCELADO')" class="button button--tertiary-black hover-underline hover-underline--right">
               Rechazar
             </button>
@@ -40,14 +40,17 @@
     </template>
   </div>
   <template v-if="drawerRequest.requestAction === 'CREATE'">
-    <button class="button button--primary-black" @click.prevent="$emit('createRequest')">Crear solicitud</button>
+    <button class="button button--primary-black" @click.prevent="emit('createRequest')">Crear solicitud</button>
   </template>
   <template v-else-if="drawerRequest.requestAction === 'EDIT'">
-    <button class="button button--primary-black" @click.prevent="$emit('editRequest')">Actualizar solicitud</button>
+    <button class="button button--primary-black" @click.prevent="emit('editRequest')">Actualizar solicitud</button>
     <button class="button button--primary-black" @click.prevent="updateState(drawerRequest.requestData._id, 'ACEPTADA')">Aceptar solicitud</button>
   </template>
   <template v-if="!showingBudget && drawerRequest.requestAction != 'CREATE'">
     <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudgets">Ver presupuestos</button>
+  </template>
+  <template v-if="!showingBudget && (drawerRequest.requestData.estado === 'ACEPTADA' || drawerRequest.requestData.estado === 'PENDIENTE')">
+    <button class="button button--primary-black" @click.prevent="toggleChat(drawerRequest.requestData)">Chat</button>
   </template>
 </template>
 
@@ -56,8 +59,14 @@
   import type { Ref } from 'vue'
   import { useDrawerRequestStore } from '../../stores/drawerRequest'
   import type { IBudget } from '../../interfaces/BudgetInterfaces'
+  import { useModalChatStore } from '../../stores/modalChat'
+  import type { IChat } from '../../interfaces/ChatInterfaces'
+  import type { IServiceRequestGet } from '../../interfaces/ServiceRequestInterfaces'
 
+  const modalChat = useModalChatStore()
   const drawerRequest = useDrawerRequestStore()
+
+  const emit = defineEmits(['createRequest', 'editRequest'])
 
   const responseBudgets = ref([]) as Ref<IBudget[]> | undefined
   const showingBudget = ref(false) as Ref<boolean>
@@ -67,11 +76,17 @@
     responseBudgets.value = await drawerRequest.getBudgets(drawerRequest.requestData._id) as IBudget[]
   }
 
+  const toggleChat = (service: IServiceRequestGet) => {
+    modalChat.serviceRequest = service
+    modalChat.chat = [] as IChat[]
+    modalChat.toggleModal()
+    modalChat.startUpdatingChats()
+  }
+
   const toggleBudgets = async () => { 
     showingBudget.value = !showingBudget.value
     if(!responseBudgets) return
     responseBudgets.value = await drawerRequest.getBudgets(drawerRequest.requestData._id) as IBudget[]
-    console.log(responseBudgets.value);
   }
 
   const updateBudgetState = async(id: string, state: string) => {

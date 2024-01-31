@@ -56,6 +56,9 @@
   <template v-if="!showingBudget && drawerRequest.requestAction != 'CREATE'">
     <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudgets">Ver presupuestos</button>
   </template>
+  <template v-if="!showingBudget && (drawerRequest.requestData.estado === 'ACEPTADA' || drawerRequest.requestData.estado === 'PENDIENTE')">
+    <button class="button button--primary-black" @click.prevent="toggleChat(drawerRequest.requestData)">Chat</button>
+  </template>
 </template>
 
 <script setup lang="ts">
@@ -63,7 +66,11 @@
   import type { Ref } from 'vue'
   import { useDrawerRequestStore } from '../../stores/drawerRequest'
   import type { IBudget } from '../../interfaces/BudgetInterfaces'
+  import { useModalChatStore } from '../../stores/modalChat'
+  import type { IChat } from '../../interfaces/ChatInterfaces'
+  import type { IServiceRequestGet } from '../../interfaces/ServiceRequestInterfaces'
 
+  const modalChat = useModalChatStore()
   const drawerRequest = useDrawerRequestStore()
   const creatingBudget = ref(false) as Ref<boolean>
   const budgetAmount = ref(0) as Ref<number>
@@ -79,6 +86,13 @@
     console.log(id, budgetAmount.value, budgetDate.value)
     if(!drawerRequest.requestData || !id) return
     await drawerRequest.createBudget(id, budgetAmount.value, budgetDate.value)
+  }
+
+  const toggleChat = (service: IServiceRequestGet) => {
+    modalChat.serviceRequest = service
+    modalChat.chat = [] as IChat[]
+    modalChat.toggleModal()
+    modalChat.startUpdatingChats()
   }
 
   const toggleBudgets = async () => { 

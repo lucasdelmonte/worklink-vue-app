@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <div @click="$emit('toggleMenu')" class="header__menu" :open="props.menuState">
+    <div @click="emit('toggleMenu')" class="header__menu" :open="props.menuState">
       <div></div>
       <div></div>
     </div>
@@ -8,7 +8,7 @@
     <div class="header__user">
       <button @click="toggleNotifications"><img src="../../assets/Icons/icons8-notifications.png" alt="Notificaciones"></button>
       <a href="/"><IconWishlist :width="17" :height="16" /></a>
-      <a @click="$emit('toggleUserOptions')"><IconUser :width="12" :height="18" /></a>
+      <a @click="emit('toggleUserOptions')"><IconUser :width="12" :height="18" /></a>
     </div>
   </header>
   <div class="notifications" :class="{ 'notifications--open': showNotifications }">
@@ -39,6 +39,8 @@
   import { useDrawerRequestStore } from '../../stores/drawerRequest'
 
   const drawerRequest = useDrawerRequestStore()
+
+  const emit = defineEmits(['toggleMenu', 'toggleUserOptions'])
 
   const userStore = useUserStore()
 

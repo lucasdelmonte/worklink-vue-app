@@ -1,81 +1,72 @@
 @import '../_config/variables';
 
 .megamenu {
-  position: absolute;
+  width: 100%;
+  height: 100%;
+  position: fixed;
   top: 0;
   left: 0;
-  background: transparent;
-  z-index: 1;
-  width: 100%;
-  transition: translate 350ms ease;
-  translate: 0 -140%;
+  z-index: -1;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, .4);
+  @include display-flex(row, flex-start, center, nowrap, 0);
 
   &[open="true"] {
     transition: translate 350ms ease;
     translate: 0 0;
   }
-  &__nav {
-    border-radius: 1rem;
-    padding: 2rem 1.6rem;
-    box-shadow: .5rem .5rem 2rem rgba($color: $color-primary-2, $alpha: .14);
-    background: $color-white;
+  &--open {
+    z-index: 3;
+    opacity: 1;
 
-    .megamenu__nav-first-level {
-      border-bottom: .1rem solid $color-grey-15;
-      padding: 0 0 1.6rem 0;
-    }
-    .megamenu__nav-first-level:last-child {
-      border-bottom: 0;
-      padding: 1.6rem 0 0 0;
+    .megamenu__content {
+      transform: translateX(0%);
     }
   }
-  &__nav-first-level {
+  &:not(.megamenu--open) {
+    .megamenu__content {
+      transform: translateX(-150%);
+    }
+  }
+  &__content {
+    box-sizing: border-box;
+    transition: transform 400ms ease;
+    width: calc(100% - 1.6rem);
+    height: calc(100% - 3.2rem);
+    border-bottom-right-radius: 1.6rem;
+    border-top-right-radius: 1.6rem;
+    box-shadow: .5rem .5rem 2rem rgba(0, 0, 0, 0.14);
+    max-width: 45rem;
+    background-color: $color-white;
+    padding: 1.6rem 1.6rem;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 3rem auto;
-    gap: 1.4rem 0;
-
-    @include desktop-up {
-      grid-template-columns: 22rem 1fr;
-      grid-template-rows: auto;
-      gap: 0;
-    }
+    grid-template-rows: auto 1fr auto;
+  }
+  &__close {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    cursor: url('../../assets/Icons/icons8-cancelar-50.png'), auto;
   }
   &__list-first-level {
     margin: 0;
-    padding: 0;
+    padding: 0 0 2.4rem;
     list-style: none;
     width: 100%;
-    position: relative;
-    @include desktop-up {
-      max-width: 25rem;
-    }
-
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      height: .1rem;
-      width: 100%;
-      background: $color-grey-15;
-      @include desktop-up {
-        top: 0;
-        right: 0;
-        bottom: unset;
-        left: unset;
-        height: 100%;
-        width: .1rem;
-      }
-    }
     li {
+      cursor: pointer;
       padding: 0 0 1.6rem 0;
+      @include display-flex(row, space-between, center, nowrap, 0);
       
       * {
         text-decoration: none;
         cursor: pointer;
         padding-bottom: .4rem;
-        @include fontRegular(1.6rem, 0, 2rem, $color-black);
+        @include fontBold(2.2rem, 0, 2.8rem, $color-black);
       }
     }
     li:last-child {
@@ -84,17 +75,14 @@
   }
   &__list-second-level {
     margin: 0;
-    padding: 0;
+    padding: 0 0 2.4rem 0;
     list-style: none;
     width: 100%;
     @include display-flex(row, flex-start, flex-start, wrap, 1.6rem);
-    @include desktop-up {
-      padding-left: 2rem;
-    }
 
     li {
       padding: 0;
-      min-width: 14rem;
+      min-width: 16rem;
       a {
         @include fontRegular(1.4rem, 0, 2rem, $color-black);
         cursor: pointer;

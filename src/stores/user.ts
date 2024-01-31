@@ -227,7 +227,7 @@ export const useUserStore = defineStore('user', {
     async updateNotifications() {
       if(this.userData._id === undefined) return
       const URL = `http://localhost:4000/notificaciones/${ this.userData._id }`
-      return
+
       try {
         const response = await fetch(URL)
 
@@ -238,13 +238,13 @@ export const useUserStore = defineStore('user', {
 
         this.notifications = data
       } catch (error) {
-
+        console.log(error)
       }
     },
     startUpdatingNotifications() {
       updateNotifications = setInterval(() => {
         this.updateNotifications()
-      }, 1000);
+      }, 100000);
     },
     stopUpdatingNotifications() {
       if (updateNotifications !== null) {

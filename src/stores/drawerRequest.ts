@@ -164,7 +164,6 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
       }
     },
     async getBudgets(id: string | undefined) {
-      console.log(id)
       if(!id) return
       const URL = `http://localhost:4000/presupuestos/solicitud/${ id }`
 
@@ -178,7 +177,6 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
 
         const responseData = await response.json()
         if (!response.ok && responseData.error) throw new Error(responseData.message)
-        console.log(responseData)
 
         return responseData.data as IBudget[]
       } catch (error) {
