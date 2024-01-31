@@ -56,7 +56,7 @@
   <template v-if="!showingBudget && drawerRequest.requestAction != 'CREATE'">
     <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudgets">Ver presupuestos</button>
   </template>
-  <template v-if="!showingBudget && (drawerRequest.requestData.estado === 'ACEPTADA' || drawerRequest.requestData.estado === 'PENDIENTE')">
+  <template v-if="!showingBudget && drawerRequest.requestData.estado === 'ACEPTADA'">
     <button class="button button--primary-black" @click.prevent="toggleChat(drawerRequest.requestData)">Chat</button>
   </template>
 </template>
