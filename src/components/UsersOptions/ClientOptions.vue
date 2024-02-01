@@ -2,7 +2,7 @@
   <div v-if="showingBudget && drawerRequest.requestAction != 'CREATE'" class="drawer__show-budget drawer__show-budget--client" :class="{ 'drawer__show-budget--open': showingBudget }">
     <div class="scroll-budgets">
       <h2 class="form__title form__title--left">Presupuestos</h2>
-      <template v-if="responseBudgets?.length > 0" v-for="(budget, index) in responseBudgets">
+      <template v-if="responseBudgets && responseBudgets.length > 0" v-for="(budget, index) in responseBudgets">
         <div class="budget">
           <div class="field">
             <input :value="parseDate(budget.fecha)" class="field__input" :id="`budget-date-${ index }`" type="date" disabled />
