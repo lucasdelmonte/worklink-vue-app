@@ -13,7 +13,7 @@
           <h4 class="form__subtitle form__title--left" v-if=" drawerRequest.requestData.estado === 'ACEPTADA'">Cotización: $23499</h4>
           <div class="field">
             <input v-model="date" class="field__input" id="date" type="date" :disabled="validateEdit" />
-            <label class="field__label" for="date">Fecha</label>
+            <label class="field__label" for="date">Fecha límite</label>
           </div>
           <div class="field">
             <input v-model="title" class="field__input" id="title" type="text" :disabled="validateEdit" />
@@ -182,7 +182,7 @@
       top: 0;
       left: 0;
       z-index: -1;
-      cursor: url('../../assets/Icons/icons8-cancelar-50.png'), auto;
+      cursor: url('../../assets/Icons/cursor-close.png'), auto;
     }
     &__mobile-close {
       position: absolute;

@@ -9,6 +9,10 @@
             <label class="field__label" :for="`budget-date-${ index }`">Fecha de realización</label>
           </div>
           <div class="field">
+            <input :value="parseTime(budget.fecha)" class="field__input" :id="`budget-time-${ index }`" type="time" disabled />
+            <label class="field__label" :for="`budget-time-${ index }`">Hora</label>
+          </div>
+          <div class="field">
             <input :value="`$${ budget.monto }`" class="field__input" :id="`budget-amount-${ index }`" type="amount" disabled />
             <label class="field__label" :for="`budget-amount-${ index }`">Monto</label>
           </div>
@@ -107,6 +111,13 @@
     const [year, month, day] = date.toISOString().split('T')[0].split('-')
 
     return `${year}-${month}-${day}`
+  }
+
+  const parseTime = (dateString: string) => {
+    const date = new Date(dateString)
+    const [hour, minute] = date.toISOString().split('T')[1].split(':')
+
+    return `${hour}:${minute}`
   }
 
   const updateState = async (id: string | undefined, state: string) => {

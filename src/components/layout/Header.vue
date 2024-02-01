@@ -19,7 +19,6 @@
           <div class="notification-item" v-if="notification.isActive" @click.prevent="requestDrawer(notification.solicitud as string)" :id="notification.solicitud">
             <h3 class="notification-item__type">{{ notification.notificacionType }}</h3>
             <p class="notification-item__description">{{ notification.mensaje }}</p>
-            <span>{{ notification.solicitud }}</span>
             <button class="notification-item__delete" @click="deleteNotification(notification._id)">Eliminar</button>
           </div>
         </template>
@@ -63,8 +62,7 @@
   }
 
   const requestDrawer = async (id: string) => {
-    console.log(id)
-    return
+    
     if(!id) return
     await userStore.getServicesRequestById(id)
   }
@@ -103,7 +101,7 @@
       top: 0;
       left: 0;
       z-index: -1;
-      cursor: url('../../assets/Icons/icons8-cancelar-50.png'), auto;
+      cursor: url('../../assets/Icons/cursor-close.png'), auto;
     }
     &--open {
       z-index: 3;

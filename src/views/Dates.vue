@@ -22,15 +22,16 @@
               'calendar__day--other-day': d.date != date
             }">
               <span class="calendar__number">
-                {{ `${d.date}` }}
+                {{ `${ d.date }` }}
               </span>
               <div class="calendar__services">
-                <template v-for="(service, index) in getServicesRequest(`${d.date}/${calendarStore.month}/${calendarStore.year}`)">
+                <template v-for="service in getServicesRequest(`${d.date}/${calendarStore.month}/${calendarStore.year}`)">
                   <div v-if="service" 
                     class="service-request" 
                     :class="`service-request--${service.state.toLocaleLowerCase()}`"
                     @click="getRequest(service.id)"
                   >
+                    <span>{{ service.hour }}</span>
                     <span>{{ service.title }}</span>
                   </div>
                 </template>
@@ -47,11 +48,9 @@
   import { watch, onMounted, ref } from 'vue'
   import { useCalendarStore } from '../stores/calendar'
   import { useUserStore } from '../stores/user'
-  
 
   const calendarStore = useCalendarStore()
   const userStore = useUserStore()
-  const showAllServices = ref(false)
 
   type SelectedValues = {
     year: number
@@ -74,12 +73,12 @@
 
   const dates = ref<Date[]>([])
 
-  onMounted(()=>{
+  onMounted(() => {
     userStore.getServicesRequest()
     generateDatesForThatMonth()
   })
 
-  watch(()=>dateProps.selectedValues, (v)=>{
+  watch(() => dateProps.selectedValues, (v) => {
     date.value = null
     generateDatesForThatMonth(v.month, v.year)
   }, {
@@ -96,32 +95,40 @@
     "Sábado"
   ]
 
-  // const testRequest = ref([]) as Ref<string[]>
-
   const getServicesRequest = (calendarDate: string) => {
-    // testRequest.value = []
     if(userStore.servicesRequest.length === 0) return
-
     const servicesRequest = userStore.servicesRequest.map(service => {
-      const createDate = service.fechaCreacion as string
-      const date = new Date(createDate)
-      const [year, month, day] = date.toISOString().split('T')[0].split('-')
+      const exist = service.presupuestos?.find(x => x.estado === 'ACEPTADO')
+
       
-      const parsedDate = `${ day }/${ month }/${ year }`
-      const id = service._id as string
-      const title = service.titulo as string
-      const state = service.estado as string
-      if(parsedDate === calendarDate) {
-        return {
-          id,
-          title,
-          state,
-          parsedDate
+      if(exist) {
+        const id = service._id as string
+        const title = service.titulo as string
+        const state = service.estado as string
+        const createDate = exist.fecha as string
+        const date = new Date(createDate)
+        const [year, month, rawDay] = date.toISOString().split('T')[0].split('-')
+        const hour = date.toISOString().split('T')[1].split(':').slice(0, 2).join(':')
+        const day = rawDay[0] === '0' ? rawDay.slice(1) : rawDay
+        const parsedDate = `${ day }/${ month }/${ year }`
+
+        if(parsedDate === calendarDate) {
+          return {
+            id,
+            title,
+            state,
+            parsedDate,
+            hour
+          }
         }
       }
     }).filter(service => service !== undefined)
 
-    return servicesRequest
+    if(servicesRequest.length === 0) return
+
+    const servicesRequestSorted = servicesRequest.sort((a, b) => a.hour.localeCompare(b.hour));
+
+    return servicesRequestSorted
   }
 
   const getRequest = async (id: string) => {
@@ -129,21 +136,19 @@
   }
 
 
-  function generateDatesForThatMonth(m = dayjs().month(), y = dayjs().year())
-  {
+  function generateDatesForThatMonth(m = dayjs().month(), y = dayjs().year()) {
     dates.value = []
     let d = dayjs().month(m).year(y)
     const daysInMonth = d.daysInMonth()
-    for( let i = 1; i <= daysInMonth; i++)
-    {
-        dates.value.push({
-            date: i,
-            day: d.date(i).day()
-        })
+    for( let i = 1; i <= daysInMonth; i++) {
+      dates.value.push({
+          date: i,
+          day: d.date(i).day()
+      })
     }
   }
 
-  function selected(d: number){
+  function selected(d: number) {
     date.value = d
     dateEmit('selected', d)
   }
@@ -188,11 +193,20 @@
       @include display-flex(column, flex-start, flex-start, nowrap, .4rem 0);
     }
     .service-request {
-      padding: .6rem .4rem .6rem .8rem;
+      padding: .3rem .3rem .3rem .3rem;
       border-radius: .5rem;
       scale: 1;
       cursor: pointer;
       transition: scale 300ms ease;
+      @include display-flex(row, flex-start, center, nowrap, 0 .6rem);
+
+      span:first-of-type {
+        min-width: 3.2rem;
+        background: $color-grey-15;
+        border-radius: .5rem;
+        text-align: center;
+        padding: 0.2rem 0.3rem;
+      }
       span {
         display: -webkit-box;
         -webkit-line-clamp: 1;

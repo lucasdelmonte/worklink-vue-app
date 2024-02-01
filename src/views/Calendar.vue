@@ -43,7 +43,6 @@
   function changeMonth(v) {
       selectedDateValue.value = null
       selectedValues.month = v
-      console.log(selectedValues.month + 1);
   }
   function changeYear(v) {
       selectedDateValue.value = null

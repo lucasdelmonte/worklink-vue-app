@@ -1,4 +1,4 @@
-import type { IBusiness } from "./BusinessInterfaces"
+import type { IBudget } from './BudgetInterfaces'
 
 export interface IServiceRequestPost {
   cliente: string | undefined,
@@ -19,6 +19,7 @@ export interface IServiceRequestUpdate {
 
 export interface IServiceRequestGet {
   _id: string | undefined,
+  presupuestos: IBudget[] | undefined, 
   cliente: {
     _id: string,
     nombre_apellido: string,

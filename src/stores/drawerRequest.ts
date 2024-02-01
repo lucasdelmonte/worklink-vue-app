@@ -129,7 +129,6 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
       }
     },
     async createBudget(id: string, amount: number, date: string) {
-      console.log(id, amount, date)
       if(!id || !amount || !date) return
       const URL = `http://localhost:4000/presupuestos`
       const toastAlertStore = useToastAlertStore()

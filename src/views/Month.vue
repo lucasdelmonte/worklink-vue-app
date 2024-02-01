@@ -12,6 +12,7 @@
 
 <script setup lang="ts">
   import dayjs from 'dayjs'
+  import 'dayjs/locale/es'
   import { ref, computed } from 'vue'
   import IconArrowRight from '@/components/icons/IconArrowRight.vue'
   import IconArrowLeft from '@/components/icons/IconArrowLeft.vue'
@@ -24,43 +25,45 @@
   const month = ref<number>(dayjs().month())
 
   const cMonth = computed(()=> {
-    const monthName = dayjs().month(month.value).format('MMMM')
+    dayjs.locale('es')
+    let monthName = dayjs().month(month.value).format('MMMM')
+    monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1)
 
     switch (monthName) {
-      case 'January':
+      case 'Enero':
         calendarStore.month = '01'
         break;
-      case 'February':
+      case 'Febrero':
         calendarStore.month = '02'
         break;
-      case 'March':
+      case 'Marzo':
         calendarStore.month = '03'
         break;
-      case 'April':
+      case 'Abril':
         calendarStore.month = '04'
         break;
-      case 'May':
+      case 'Mayo':
         calendarStore.month = '05'
         break;
-      case 'June':
+      case 'Junio':
         calendarStore.month = '06'
         break;
-      case 'July':
+      case 'Julio':
         calendarStore.month = '07'
         break;
-      case 'August':
+      case 'Agosto':
         calendarStore.month = '08'
         break;
-      case 'September':
+      case 'Septiembre':
         calendarStore.month = '09'
         break;
-      case 'October':
+      case 'Octubre':
         calendarStore.month = '10'
         break;
-      case 'November':
+      case 'Noviembre':
         calendarStore.month = '11'
         break;
-      case 'December':
+      case 'Diciembre':
         calendarStore.month = '12'
         break;
 
@@ -68,7 +71,7 @@
         break;
     }
 
-    return dayjs().month(month.value).format('MMMM')
+    return monthName
   }) 
 
 

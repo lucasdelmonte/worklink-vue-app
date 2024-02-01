@@ -7,6 +7,10 @@
         <label class="field__label" for="budget-date">Fecha de realización*</label>
       </div>
       <div class="field">
+        <input v-model="budgetTime" class="field__input" id="budget-time" type="time" />
+        <label for="budget-time"></label>
+      </div>
+      <div class="field">
         <input v-model="budgetAmount" class="field__input" id="budget-amount" type="number" />
         <label class="field__label" for="budget-amount">Presupuesto*</label>
       </div>
@@ -21,11 +25,15 @@
   <div v-if="showingBudget && drawerRequest.requestAction != 'CREATE'" class="drawer__show-budget drawer__show-budget--provider" :class="{ 'drawer__show-budget--open': showingBudget }">
     <div class="scroll-budgets">
       <h2 class="form__title form__title--left">Presupuestos</h2>
-      <template v-if="responseBudgets" v-for="(budget, index) in responseBudgets">
+      <template v-if="responseBudgets?.length > 0" v-for="(budget, index) in responseBudgets">
         <div class="budget">
           <div class="field">
             <input :value="parseDate(budget.fecha)" class="field__input" :id="`budget-date-${ index }`" type="date" disabled />
             <label class="field__label" :for="`budget-date-${ index }`">Fecha de realización</label>
+          </div>
+          <div class="field">
+            <input :value="parseTime(budget.fecha)" class="field__input" :id="`budget-time-${ index }`" type="time" disabled />
+            <label class="field__label" :for="`budget-time-${ index }`">Hora</label>
           </div>
           <div class="field">
             <input :value="`$${ budget.monto }`" class="field__input" :id="`budget-amount-${ index }`" type="amount" disabled />
@@ -75,6 +83,7 @@
   const creatingBudget = ref(false) as Ref<boolean>
   const budgetAmount = ref(0) as Ref<number>
   const budgetDate = ref('') as Ref<string>
+  const budgetTime = ref('') as Ref<string>
   const responseBudgets = ref([]) as Ref<IBudget[]> | undefined
   const showingBudget = ref(false) as Ref<boolean>
 
@@ -83,9 +92,8 @@
   }
 
   const createBudget = async (id: string | undefined) => { 
-    console.log(id, budgetAmount.value, budgetDate.value)
-    if(!drawerRequest.requestData || !id) return
-    await drawerRequest.createBudget(id, budgetAmount.value, budgetDate.value)
+    if(!drawerRequest.requestData || !id || !budgetDate.value || !budgetTime.value || !budgetAmount.value) return
+    await drawerRequest.createBudget(id, budgetAmount.value, `${ budgetDate.value }T${ budgetTime.value }:00.000Z`)
   }
 
   const toggleChat = (service: IServiceRequestGet) => {
@@ -111,6 +119,13 @@
     const [year, month, day] = date.toISOString().split('T')[0].split('-')
 
     return `${year}-${month}-${day}`
+  }
+
+  const parseTime = (dateString: string) => {
+    const date = new Date(dateString)
+    const [hour, minute] = date.toISOString().split('T')[1].split(':')
+
+    return `${hour}:${minute}`
   }
 
   watch(() => drawerRequest.requestData, async (newValue, oldValue) => {
