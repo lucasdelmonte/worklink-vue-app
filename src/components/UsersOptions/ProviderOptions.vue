@@ -1,5 +1,5 @@
 <template>
-  <div v-if="creatingBudget && drawerRequest.requestData.estado == 'PENDIENTE'" class="drawer__create-budget drawer__create-budget--provider" :class="{ 'drawer__create-budget--open': creatingBudget }">
+  <div v-if="creatingBudget && drawerRequest.requestData.estado == 'ACEPTADA'" class="drawer__create-budget drawer__create-budget--provider" :class="{ 'drawer__create-budget--open': creatingBudget }">
     <div class="scroll-budgets">
       <h2 class="form__title form__title--left">Presupuesto</h2>
       <div class="field">
@@ -22,7 +22,7 @@
       </div>
     </template>
   </div>
-  <div v-if="showingBudget && drawerRequest.requestAction != 'CREATE'" class="drawer__show-budget drawer__show-budget--provider" :class="{ 'drawer__show-budget--open': showingBudget }">
+  <div v-if="showingBudget && drawerRequest.requestAction != 'CREATE' && drawerRequest.requestData.estado == 'ACEPTADA'" class="drawer__show-budget drawer__show-budget--provider" :class="{ 'drawer__show-budget--open': showingBudget }">
     <div class="scroll-budgets">
       <h2 class="form__title form__title--left">Presupuestos</h2>
       <template v-if="responseBudgets && responseBudgets.length > 0" v-for="(budget, index) in responseBudgets">
@@ -58,14 +58,18 @@
       <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudgets">Volver</button>
     </template>
   </div>
-  <template v-if="!creatingBudget && drawerRequest.requestData.estado === 'PENDIENTE'">
+  <template v-if="!creatingBudget && drawerRequest.requestData.estado === 'ACEPTADA'">
     <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudget()">Crear presupuesto</button>
   </template>
-  <template v-if="!showingBudget && drawerRequest.requestAction != 'CREATE'">
+  <template v-if="!showingBudget && drawerRequest.requestAction != 'CREATE' && drawerRequest.requestData.estado === 'ACEPTADA'">
     <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudgets">Ver presupuestos</button>
   </template>
   <template v-if="!showingBudget && drawerRequest.requestData.estado === 'ACEPTADA'">
     <button class="button button--primary-black" @click.prevent="toggleChat(drawerRequest.requestData)">Chat</button>
+  </template>
+  <template v-if="!showingBudget && drawerRequest.requestAction === 'EDIT'">
+    <button class="button button--primary-black" @click.prevent="updateState(drawerRequest.requestData._id, 'ACEPTADA')">Aceptar solicitud</button>
+    <button class="button button--primary-black" @click.prevent="updateState(drawerRequest.requestData._id, 'RECHAZAR')">Cancelar solicitud</button>
   </template>
 </template>
 
@@ -112,6 +116,13 @@
   const getBudgets = async () => { 
     if(!responseBudgets) return
     responseBudgets.value = await drawerRequest.getBudgets(drawerRequest.requestData._id) as IBudget[]
+  }
+
+  const updateState = async (id: string | undefined, state: string) => {
+    if(!id) return
+    const result = await drawerRequest.updateState(id, state)
+
+    if(result) drawerRequest.requestAction = 'SEE'
   }
 
   const parseDate = (dateString: string) => {

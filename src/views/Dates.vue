@@ -220,13 +220,13 @@
         scale: 1.05;
       }
       &--aceptada {
-        background-color: aquamarine;
+        background-color: rgb(8, 184, 8);
       }
       &--cancelada {
-        background-color: coral;
+        background-color: rgb(255, 46, 46);
       }
       &--finalizada {
-        background-color: rgb(52, 255, 79);
+        background-color: rgb(250, 120, 73);
       }
       &--pendiente {
         background-color: rgb(68, 186, 254);

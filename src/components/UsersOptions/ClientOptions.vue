@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showingBudget && drawerRequest.requestAction != 'CREATE'" class="drawer__show-budget drawer__show-budget--client" :class="{ 'drawer__show-budget--open': showingBudget }">
+  <div v-if="showingBudget && drawerRequest.requestAction != 'CREATE' && drawerRequest.requestData.estado === 'ACEPTADA'" class="drawer__show-budget drawer__show-budget--client" :class="{ 'drawer__show-budget--open': showingBudget }">
     <div class="scroll-budgets">
       <h2 class="form__title form__title--left">Presupuestos</h2>
       <template v-if="responseBudgets && responseBudgets.length > 0" v-for="(budget, index) in responseBudgets">
@@ -48,9 +48,8 @@
   </template>
   <template v-else-if="drawerRequest.requestAction === 'EDIT'">
     <button class="button button--primary-black" @click.prevent="emit('editRequest')">Actualizar solicitud</button>
-    <button class="button button--primary-black" @click.prevent="updateState(drawerRequest.requestData._id, 'ACEPTADA')">Aceptar solicitud</button>
   </template>
-  <template v-if="!showingBudget && drawerRequest.requestAction != 'CREATE'">
+  <template v-if="!showingBudget && drawerRequest.requestAction != 'CREATE' && drawerRequest.requestData.estado === 'ACEPTADA'">
     <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudgets">Ver presupuestos</button>
   </template>
   <template v-if="!showingBudget && drawerRequest.requestData.estado === 'ACEPTADA'">
@@ -118,13 +117,6 @@
     const [hour, minute] = date.toISOString().split('T')[1].split(':')
 
     return `${hour}:${minute}`
-  }
-
-  const updateState = async (id: string | undefined, state: string) => {
-    if(!id) return
-    const result = await drawerRequest.updateState(id, state)
-
-    if(result) drawerRequest.requestAction = 'SEE'
   }
 
   watch(() => drawerRequest.requestData, async (newValue, oldValue) => {
