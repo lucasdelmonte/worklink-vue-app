@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <div @click="$emit('toggleMenu')" class="header__menu" :open="props.menuState">
+    <div @click="emit('toggleMenu')" class="header__menu" :open="props.menuState">
       <div></div>
       <div></div>
     </div>
@@ -8,7 +8,7 @@
     <div class="header__user">
       <button @click="toggleNotifications"><img src="../../assets/Icons/icons8-notifications.png" alt="Notificaciones"></button>
       <a href="/"><IconWishlist :width="17" :height="16" /></a>
-      <a @click="$emit('toggleUserOptions')"><IconUser :width="12" :height="18" /></a>
+      <a @click="emit('toggleUserOptions')"><IconUser :width="12" :height="18" /></a>
     </div>
   </header>
   <div class="notifications" :class="{ 'notifications--open': showNotifications }">
@@ -19,7 +19,6 @@
           <div class="notification-item" v-if="notification.isActive" @click.prevent="requestDrawer(notification.solicitud as string)" :id="notification.solicitud">
             <h3 class="notification-item__type">{{ notification.notificacionType }}</h3>
             <p class="notification-item__description">{{ notification.mensaje }}</p>
-            <span>{{ notification.solicitud }}</span>
             <button class="notification-item__delete" @click="deleteNotification(notification._id)">Eliminar</button>
           </div>
         </template>
@@ -39,6 +38,8 @@
   import { useDrawerRequestStore } from '../../stores/drawerRequest'
 
   const drawerRequest = useDrawerRequestStore()
+
+  const emit = defineEmits(['toggleMenu', 'toggleUserOptions'])
 
   const userStore = useUserStore()
 
@@ -61,8 +62,7 @@
   }
 
   const requestDrawer = async (id: string) => {
-    console.log(id)
-    return
+    
     if(!id) return
     await userStore.getServicesRequestById(id)
   }
@@ -101,7 +101,7 @@
       top: 0;
       left: 0;
       z-index: -1;
-      cursor: url('../../assets/Icons/icons8-cancelar-50.png'), auto;
+      cursor: url('../../assets/Icons/cursor-close.png'), auto;
     }
     &--open {
       z-index: 3;

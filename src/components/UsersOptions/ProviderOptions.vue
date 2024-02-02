@@ -1,10 +1,14 @@
 <template>
-  <div v-if="creatingBudget && drawerRequest.requestData.estado == 'PENDIENTE'" class="drawer__create-budget drawer__create-budget--provider" :class="{ 'drawer__create-budget--open': creatingBudget }">
+  <div v-if="creatingBudget && drawerRequest.requestData.estado == 'ACEPTADA'" class="drawer__create-budget drawer__create-budget--provider" :class="{ 'drawer__create-budget--open': creatingBudget }">
     <div class="scroll-budgets">
       <h2 class="form__title form__title--left">Presupuesto</h2>
       <div class="field">
         <input v-model="budgetDate" class="field__input" id="budget-date" type="date" />
         <label class="field__label" for="budget-date">Fecha de realización*</label>
+      </div>
+      <div class="field">
+        <input v-model="budgetTime" class="field__input" id="budget-time" type="time" />
+        <label for="budget-time"></label>
       </div>
       <div class="field">
         <input v-model="budgetAmount" class="field__input" id="budget-amount" type="number" />
@@ -18,14 +22,18 @@
       </div>
     </template>
   </div>
-  <div v-if="showingBudget && drawerRequest.requestAction != 'CREATE'" class="drawer__show-budget drawer__show-budget--provider" :class="{ 'drawer__show-budget--open': showingBudget }">
+  <div v-if="showingBudget && drawerRequest.requestAction != 'CREATE' && drawerRequest.requestData.estado == 'ACEPTADA'" class="drawer__show-budget drawer__show-budget--provider" :class="{ 'drawer__show-budget--open': showingBudget }">
     <div class="scroll-budgets">
       <h2 class="form__title form__title--left">Presupuestos</h2>
-      <template v-if="responseBudgets" v-for="(budget, index) in responseBudgets">
+      <template v-if="responseBudgets && responseBudgets.length > 0" v-for="(budget, index) in responseBudgets">
         <div class="budget">
           <div class="field">
             <input :value="parseDate(budget.fecha)" class="field__input" :id="`budget-date-${ index }`" type="date" disabled />
             <label class="field__label" :for="`budget-date-${ index }`">Fecha de realización</label>
+          </div>
+          <div class="field">
+            <input :value="parseTime(budget.fecha)" class="field__input" :id="`budget-time-${ index }`" type="time" disabled />
+            <label class="field__label" :for="`budget-time-${ index }`">Hora</label>
           </div>
           <div class="field">
             <input :value="`$${ budget.monto }`" class="field__input" :id="`budget-amount-${ index }`" type="amount" disabled />
@@ -50,11 +58,18 @@
       <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudgets">Volver</button>
     </template>
   </div>
-  <template v-if="!creatingBudget && drawerRequest.requestData.estado === 'PENDIENTE'">
+  <template v-if="!creatingBudget && drawerRequest.requestData.estado === 'ACEPTADA'">
     <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudget()">Crear presupuesto</button>
   </template>
-  <template v-if="!showingBudget && drawerRequest.requestAction != 'CREATE'">
+  <template v-if="!showingBudget && drawerRequest.requestAction != 'CREATE' && drawerRequest.requestData.estado === 'ACEPTADA'">
     <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudgets">Ver presupuestos</button>
+  </template>
+  <template v-if="!showingBudget && drawerRequest.requestData.estado === 'ACEPTADA'">
+    <button class="button button--primary-black" @click.prevent="toggleChat(drawerRequest.requestData)">Chat</button>
+  </template>
+  <template v-if="!showingBudget && drawerRequest.requestAction === 'EDIT'">
+    <button class="button button--primary-black" @click.prevent="updateState(drawerRequest.requestData._id, 'ACEPTADA')">Aceptar solicitud</button>
+    <button class="button button--primary-black" @click.prevent="updateState(drawerRequest.requestData._id, 'RECHAZAR')">Cancelar solicitud</button>
   </template>
 </template>
 
@@ -63,11 +78,16 @@
   import type { Ref } from 'vue'
   import { useDrawerRequestStore } from '../../stores/drawerRequest'
   import type { IBudget } from '../../interfaces/BudgetInterfaces'
+  import { useModalChatStore } from '../../stores/modalChat'
+  import type { IChat } from '../../interfaces/ChatInterfaces'
+  import type { IServiceRequestGet } from '../../interfaces/ServiceRequestInterfaces'
 
+  const modalChat = useModalChatStore()
   const drawerRequest = useDrawerRequestStore()
   const creatingBudget = ref(false) as Ref<boolean>
   const budgetAmount = ref(0) as Ref<number>
   const budgetDate = ref('') as Ref<string>
+  const budgetTime = ref('') as Ref<string>
   const responseBudgets = ref([]) as Ref<IBudget[]> | undefined
   const showingBudget = ref(false) as Ref<boolean>
 
@@ -76,9 +96,15 @@
   }
 
   const createBudget = async (id: string | undefined) => { 
-    console.log(id, budgetAmount.value, budgetDate.value)
-    if(!drawerRequest.requestData || !id) return
-    await drawerRequest.createBudget(id, budgetAmount.value, budgetDate.value)
+    if(!drawerRequest.requestData || !id || !budgetDate.value || !budgetTime.value || !budgetAmount.value) return
+    await drawerRequest.createBudget(id, budgetAmount.value, `${ budgetDate.value }T${ budgetTime.value }:00.000Z`)
+  }
+
+  const toggleChat = (service: IServiceRequestGet) => {
+    modalChat.serviceRequest = service
+    modalChat.chat = [] as IChat[]
+    modalChat.toggleModal()
+    modalChat.startUpdatingChats()
   }
 
   const toggleBudgets = async () => { 
@@ -92,11 +118,25 @@
     responseBudgets.value = await drawerRequest.getBudgets(drawerRequest.requestData._id) as IBudget[]
   }
 
+  const updateState = async (id: string | undefined, state: string) => {
+    if(!id) return
+    const result = await drawerRequest.updateState(id, state)
+
+    if(result) drawerRequest.requestAction = 'SEE'
+  }
+
   const parseDate = (dateString: string) => {
     const date = new Date(dateString)
     const [year, month, day] = date.toISOString().split('T')[0].split('-')
 
     return `${year}-${month}-${day}`
+  }
+
+  const parseTime = (dateString: string) => {
+    const date = new Date(dateString)
+    const [hour, minute] = date.toISOString().split('T')[1].split(':')
+
+    return `${hour}:${minute}`
   }
 
   watch(() => drawerRequest.requestData, async (newValue, oldValue) => {

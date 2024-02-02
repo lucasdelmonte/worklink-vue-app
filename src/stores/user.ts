@@ -191,7 +191,7 @@ export const useUserStore = defineStore('user', {
         const business = dataBusiness.data as IBusiness[]
 
         const userBusinesses = business.filter(business => business.proveedor && business.proveedor._id === this.userData._id);
-        
+
         if (this.userData.rol === 'PROVEEDOR') {
           userServicesRequest = data.filter(serviceRequest => 
             userBusinesses.some(business => business?._id === serviceRequest.negocio._id)
@@ -217,6 +217,9 @@ export const useUserStore = defineStore('user', {
         const dataRes = await response.json()
         const data = dataRes.data as IServiceRequestGet
 
+        if (data.estado === 'PENDIENTE') {
+          drawerRequest.requestAction = 'EDIT'
+        }
         drawerRequest.requestData = data
         drawerRequest.requestState = data.estado as string
         drawerRequest.state = true       
@@ -227,7 +230,7 @@ export const useUserStore = defineStore('user', {
     async updateNotifications() {
       if(this.userData._id === undefined) return
       const URL = `http://localhost:4000/notificaciones/${ this.userData._id }`
-      return
+
       try {
         const response = await fetch(URL)
 
@@ -238,13 +241,13 @@ export const useUserStore = defineStore('user', {
 
         this.notifications = data
       } catch (error) {
-
+        console.log(error)
       }
     },
     startUpdatingNotifications() {
       updateNotifications = setInterval(() => {
         this.updateNotifications()
-      }, 1000);
+      }, 10000);
     },
     stopUpdatingNotifications() {
       if (updateNotifications !== null) {

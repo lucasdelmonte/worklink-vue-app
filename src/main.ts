@@ -1,6 +1,7 @@
 import '../styles/main.scss'
 import '../src/misc/inputs.ts'
 import '../src/misc/chat.ts'
+import '../src/misc/megamenu.ts'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'

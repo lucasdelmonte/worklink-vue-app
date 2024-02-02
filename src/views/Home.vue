@@ -11,81 +11,83 @@
       </ul>
     </div>
     
-    <template v-if="userRol === 'CLIENTE'">
-      <h2 class="main-content__title">Categorías</h2>
-      <div class="main-content__categories">
-        <div class="category">
-          <img src="../assets/Icons/icons8-fontanero-50.png" alt="Categoria 1">
-          <p>Plomero</p>
-          <RouterLink class="category__anchor" :to="`/business/PLOMERO`"></RouterLink>
-        </div>
-        <div class="category">
-          <img src="../assets/Icons/icons8-aire-acondicionado-central-50.png" alt="Categoria 2">
-          <p>A-A</p>
-          <RouterLink class="category__anchor" :to="`/business/AIRE_ACONDICIONADO`"></RouterLink>
-        </div>
-        <div class="category">
-          <img src="../assets/Icons/icons8-compás-2-50.png" alt="Categoria 3">
-          <p>Albañil</p>
-          <RouterLink class="category__anchor" :to="`/business/ALBAÑIL`"></RouterLink>
-        </div>
-        <div class="category">
-          <img src="../assets/Icons/icons8-arquitecto-50.png" alt="Categoria 4">
-          <p>Arquitecto</p>
-          <RouterLink class="category__anchor" :to="`/business/ARQUITECTO`"></RouterLink>
-        </div>
-        <div class="category">
-          <img src="../assets/Icons/icons8-cepillo-barbero-50.png" alt="Categoria 5">
-          <p>Barbero</p>
-          <RouterLink class="category__anchor" :to="`/business/BARBERO`"></RouterLink>
-        </div>
-        <div class="category">
-          <img src="../assets/Icons/icons8-llavero-50.png" alt="Categoria 6">
-          <p>Cerrajero</p>
-          <RouterLink class="category__anchor" :to="`/business/CERRAJERO`"></RouterLink>
-        </div>
-        <div class="category">
-          <img src="../assets/Icons/icons8-carpintero-50.png" alt="Categoria 7">
-          <p>Carpintero</p>
-          <RouterLink class="category__anchor" :to="`/business/CARPINTERO`"></RouterLink>
-        </div>
-        <div class="category">
-          <img src="../assets/Icons/icons8-cuidado-del-césped-50.png" alt="Categoria 8">
-          <p>Jardinero</p>
-          <RouterLink class="category__anchor" :to="`/business/JARDINERO`"></RouterLink>
-        </div>
-        <div class="category">
-          <img src="../assets/Icons/icons8-cámara-privada-para-montaje-en-pared-50.png" alt="Categoria 9">
-          <p>Seguridad</p>
-          <RouterLink class="category__anchor" :to="`/business/SEGURIDAD`"></RouterLink>
-        </div>
-        <div class="category">
-          <img src="../assets/Icons/icons8-enchufe-50.png" alt="Categoria 10">
-          <p>Electricista</p>
-          <RouterLink class="category__anchor" :to="`/business/ELECTRICISTA`"></RouterLink>
-        </div>
-        <div class="category">
-          <img src="../assets/Icons/icons8-perro-caminando-50.png" alt="Categoria 11">
-          <p>Mascotas</p>
-          <RouterLink class="category__anchor" :to="`/business/MASCOTAS`"></RouterLink>
-        </div>
-        <div class="category">
-          <img src="../assets/Icons/icons8-servicio-de-coche-50.png" alt="Categoria 12">
-          <p>Vehiculos</p>
-          <RouterLink class="category__anchor" :to="`/business/PINTOR`"></RouterLink>
-        </div>
-        <div class="category">
-          <img src="../assets/Icons/icons8-rodillo-50.png" alt="Categoria 13">
-          <p>Pintor</p>
-          <RouterLink class="category__anchor" :to="`/business/VEHICULOS`"></RouterLink>
-        </div>
-        <div class="category">
-          <img src="../assets/Icons/icons8-mantenimiento-50.png" alt="Categoria 14">
-          <p>Tecnico</p>
-          <RouterLink class="category__anchor" :to="`/business/TECNICO`"></RouterLink>
-        </div>
+    <h2 class="main-content__title">Categorías</h2>
+    <div class="main-content__categories">
+      <div class="category">
+        <img src="../assets/Icons/icons8-fontanero-50.png" alt="Categoria 1">
+        <p>Plomero</p>
+        <RouterLink class="category__anchor" :class="{ 'category__anchor--hidden': userRol != 'CLIENTE' }" :to="`/business/PLOMERO`"></RouterLink>
       </div>
-    </template>
+      <div class="category">
+        <img src="../assets/Icons/icons8-aire-acondicionado-central-50.png" alt="Categoria 2">
+        <p>A-A</p>
+        <RouterLink class="category__anchor" :class="{ 'category__anchor--hidden': userRol != 'CLIENTE' }" :to="`/business/AIRE_ACONDICIONADO`"></RouterLink>
+      </div>
+      <div class="category">
+        <img src="../assets/Icons/icons8-compás-2-50.png" alt="Categoria 3">
+        <p>Albañil</p>
+        <RouterLink class="category__anchor" :class="{ 'category__anchor--hidden': userRol != 'CLIENTE' }" :to="`/business/ALBAÑIL`"></RouterLink>
+      </div>
+      <div class="category">
+        <img src="../assets/Icons/icons8-arquitecto-50.png" alt="Categoria 4">
+        <p>Arquitecto</p>
+        <RouterLink class="category__anchor" :class="{ 'category__anchor--hidden': userRol != 'CLIENTE' }" :to="`/business/ARQUITECTO`"></RouterLink>
+      </div>
+      <div class="category">
+        <img src="../assets/Icons/icons8-cepillo-barbero-50.png" alt="Categoria 5">
+        <p>Barbero</p>
+        <RouterLink class="category__anchor" :class="{ 'category__anchor--hidden': userRol != 'CLIENTE' }" :to="`/business/BARBERO`"></RouterLink>
+      </div>
+      <div class="category">
+        <img src="../assets/Icons/icons8-llavero-50.png" alt="Categoria 6">
+        <p>Cerrajero</p>
+        <RouterLink class="category__anchor" :class="{ 'category__anchor--hidden': userRol != 'CLIENTE' }" :to="`/business/CERRAJERO`"></RouterLink>
+      </div>
+      <div class="category">
+        <img src="../assets/Icons/icons8-carpintero-50.png" alt="Categoria 7">
+        <p>Carpintero</p>
+        <RouterLink class="category__anchor" :class="{ 'category__anchor--hidden': userRol != 'CLIENTE' }" :to="`/business/CARPINTERO`"></RouterLink>
+      </div>
+      <div class="category">
+        <img src="../assets/Icons/icons8-cuidado-del-césped-50.png" alt="Categoria 8">
+        <p>Jardinero</p>
+        <RouterLink class="category__anchor" :class="{ 'category__anchor--hidden': userRol != 'CLIENTE' }" :to="`/business/JARDINERO`"></RouterLink>
+      </div>
+      <div class="category">
+        <img src="../assets/Icons/icons8-cámara-privada-para-montaje-en-pared-50.png" alt="Categoria 9">
+        <p>Seguridad</p>
+        <RouterLink class="category__anchor" :class="{ 'category__anchor--hidden': userRol != 'CLIENTE' }" :to="`/business/SEGURIDAD`"></RouterLink>
+      </div>
+      <div class="category">
+        <img src="../assets/Icons/icons8-enchufe-50.png" alt="Categoria 10">
+        <p>Electricista</p>
+        <RouterLink class="category__anchor" :class="{ 'category__anchor--hidden': userRol != 'CLIENTE' }" :to="`/business/ELECTRICISTA`"></RouterLink>
+      </div>
+      <div class="category">
+        <img src="../assets/Icons/icons8-perro-caminando-50.png" alt="Categoria 11">
+        <p>Mascotas</p>
+        <RouterLink class="category__anchor" :class="{ 'category__anchor--hidden': userRol != 'CLIENTE' }" :to="`/business/MASCOTAS`"></RouterLink>
+      </div>
+      <div class="category">
+        <img src="../assets/Icons/icons8-servicio-de-coche-50.png" alt="Categoria 12">
+        <p>Vehiculos</p>
+        <RouterLink class="category__anchor" :class="{ 'category__anchor--hidden': userRol != 'CLIENTE' }" :to="`/business/PINTOR`"></RouterLink>
+      </div>
+      <div class="category">
+        <img src="../assets/Icons/icons8-rodillo-50.png" alt="Categoria 13">
+        <p>Pintor</p>
+        <RouterLink class="category__anchor" :class="{ 'category__anchor--hidden': userRol != 'CLIENTE' }" :to="`/business/VEHICULOS`"></RouterLink>
+      </div>
+      <div class="category">
+        <img src="../assets/Icons/icons8-mantenimiento-50.png" alt="Categoria 14">
+        <p>Tecnico</p>
+        <RouterLink class="category__anchor" :class="{ 'category__anchor--hidden': userRol != 'CLIENTE' }" :to="`/business/TECNICO`"></RouterLink>
+      </div>
+    </div>
+
+    <HowDoesWork />
+    
+    <Blogs />
   </div>
 </template>
 
@@ -97,6 +99,8 @@
   import Header from '../components/layout/Header.vue'
   import Megamenu from '../components/layout/Megamenu.vue'
   import { useCookies } from 'vue3-cookies'
+  import HowDoesWork from '../components/layout/HowDoesWork.vue'
+  import Blogs from '../components/layout/Blogs.vue'
 
   const cookies = useCookies()
 
@@ -119,13 +123,34 @@
 <style scoped lang="scss">
   @import '../../styles/main.scss';
   .main-content {
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
     background: $color-white;
     border-radius: 1rem;
     padding: 1.6rem;
     box-shadow: .5rem .5rem 2rem rgba($color: $color-primary-2, $alpha: .14);
     height: 100%;
+
+    &::-webkit-scrollbar {
+      width: .4rem;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      border-top-right-radius: 1rem;
+      border-bottom-right-radius: 1rem;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $color-grey-15;
+      border-top-right-radius: .5rem;
+      border-bottom-right-radius: .5rem;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: $color-grey-50;
+    }
 
     &__title {
       margin: 0 0 4rem 0;
@@ -152,6 +177,9 @@
           left: 0;
           width: 100%;
           height: 100%;
+          &--hidden {
+            display: none;
+          }
         }
       }
     }

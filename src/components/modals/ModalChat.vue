@@ -91,7 +91,7 @@
       top: 0;
       left: 0;
       z-index: -1;
-      cursor: url('../../assets/Icons/icons8-cancelar-50.png'), auto;
+      cursor: url('../../assets/Icons/cursor-close.png'), auto;
     }
     &--open {
       z-index: 3;

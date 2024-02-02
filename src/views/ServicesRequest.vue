@@ -47,8 +47,8 @@
 
           <div class="card-service__buttons">
             <template v-if="service.estado === 'PENDIENTE'">
-              <button @click="updateState(service._id, 'CANCELADA')" class="button button--primary-white">Cancelar</button>
-              <button @click="toggleDrawer(service.estado, service)" class="button button--primary-black">Detalles</button>
+              <button @click="updateState(service._id, 'CANCELADA')" class="button button--primary-white" v-if="userStore.userData.rol === 'CLIENTE'">Cancelar</button>
+              <button @click="toggleDrawer(service.estado, service)" class="button button--primary-black button--right">Detalles</button>
             </template>
             <template v-else-if="service.estado === 'CANCELADA'">
               <button @click="toggleDrawer(service.estado, service)" class="button button--primary-black button--right">Detalles</button>
