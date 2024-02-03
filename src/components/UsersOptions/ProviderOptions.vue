@@ -68,9 +68,17 @@
     <button class="button button--primary-black" @click.prevent="toggleChat(drawerRequest.requestData)">Chat</button>
   </template>
   <template v-if="!showingBudget && drawerRequest.requestAction === 'EDIT'">
-    <button class="button button--primary-black" @click.prevent="updateState(drawerRequest.requestData._id, 'ACEPTADA')">Aceptar solicitud</button>
-    <button class="button button--primary-black" @click.prevent="updateState(drawerRequest.requestData._id, 'RECHAZAR')">Cancelar solicitud</button>
+    <button class="button button--primary-black" @click.prevent="setService('ACEPTADA', 'aceptar')">Aceptar solicitud</button>
+    <button class="button button--primary-black" @click.prevent="setService('CANCELADA', 'cancelar')">Cancelar solicitud</button>
   </template>
+  <ModalConfirmAction 
+    :message="currentMessage"
+    :show="show"
+    :newState="newState"
+    :currentService="drawerRequest.requestData"
+    @updateState="updateState"
+    @setModal="setModal"
+  />
 </template>
 
 <script setup lang="ts">
@@ -81,9 +89,50 @@
   import { useModalChatStore } from '../../stores/modalChat'
   import type { IChat } from '../../interfaces/ChatInterfaces'
   import type { IServiceRequestGet } from '../../interfaces/ServiceRequestInterfaces'
+  import ModalConfirmAction from '@/components/modals/ModalConfirmAction.vue'
 
   const modalChat = useModalChatStore()
   const drawerRequest = useDrawerRequestStore()
+
+  const show = ref(false)
+  const currentService = ref({}) as Ref<IServiceRequestGet>
+  const currentMessage = ref('') as Ref<string>
+  const newState = ref('') as Ref<string>
+
+  const setModal = () => { 
+    show.value = !show.value 
+  }
+  
+  // @click="setService(service, 'CANCELADA', 'cancelar')"
+  
+  const setService = (action: string, actionMessage: string) => { 
+    newState.value = action
+    currentService.value = drawerRequest.requestData
+    currentMessage.value = `¿Está seguro que desea ${ actionMessage } la solicitud?`
+    setModal()
+  }
+
+  const updateState = async (data: string[] | undefined) => {
+    if(!data) return
+    const id = data[0]
+    const state = data[1]
+    console.log(data)
+    return
+    const result: boolean = await drawerRequest.updateState(id, state)
+    if(result) {
+      drawerRequest.requestAction = 'SEE'
+      setModal()
+    }
+  }
+
+  // @click.prevent="updateState(drawerRequest.requestData._id, 'RECHAZAR')"
+  // const updateState = async (id: string | undefined, state: string) => {
+  //   if(!id) return
+  //   const result = await drawerRequest.updateState(id, state)
+
+  //   if(result) 
+  // }
+
   const creatingBudget = ref(false) as Ref<boolean>
   const budgetAmount = ref(0) as Ref<number>
   const budgetDate = ref('') as Ref<string>
@@ -116,13 +165,6 @@
   const getBudgets = async () => { 
     if(!responseBudgets) return
     responseBudgets.value = await drawerRequest.getBudgets(drawerRequest.requestData._id) as IBudget[]
-  }
-
-  const updateState = async (id: string | undefined, state: string) => {
-    if(!id) return
-    const result = await drawerRequest.updateState(id, state)
-
-    if(result) drawerRequest.requestAction = 'SEE'
   }
 
   const parseDate = (dateString: string) => {

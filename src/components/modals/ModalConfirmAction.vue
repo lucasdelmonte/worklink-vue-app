@@ -1,35 +1,47 @@
 <template>
-  <div class="modal-action" :class="{ 'modal-action--open': modalAction.state }">
+  <div class="modal-action" :class="{ 'modal-action--open': reactiveProps.show }">
     <div class="modal-action__content">
-      <h2>{{ modalAction.title }}</h2>
-      <p>{{ modalAction.message }}</p>
+      <p class="modal-action__message">{{ reactiveProps.message }}</p>
+      <span class="modal-action__service-title">{{ reactiveProps.currentService.titulo }}</span>
       <div class="modal-action__buttons">
-        <button class="button button--primary-black" @click="">Aceptar</button>
-        <button class="button button--secondary-black" @click="closeClickModal">Cancelar</button>
+        <button class="button button--secondary-black" @click.prevent="$emit('setModal', false)" >Cancelar</button>
+        <button class="button button--primary-black" @click.prevent="$emit('updateState', [reactiveProps.currentService._id, reactiveProps.newState])">Aceptar</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue'
-  import { useModalActionStore } from '../../stores/modalAction'
+  import { ref, onMounted, watch } from 'vue'
+  import { computed } from '@vue/reactivity'
+  import type { IServiceRequestGet } from '../../interfaces/ServiceRequestInterfaces'
 
-  const modalAction = useModalActionStore()
+  const emit = defineEmits(['setModal', 'updateState'])
 
-  const closeModal = (evt: KeyboardEvent) => {
-    if(evt?.key === 'Escape') {
-      modalAction.state = false
+  const props = defineProps({
+    newState: {
+      type: String,
+      default: ''
+    },
+    currentService: {
+      type: Object,
+      default: {}
+    },
+    message: {
+      type: String,
+      default: ''
+    },
+    accept: {
+      type: Function,
+      default: () => Promise.resolve()
+    },
+    show: {
+      type: Boolean,
+      default: false
     }
-  }
-
-  const closeClickModal = () => {
-    modalAction.state = false
-  }
-
-  onMounted(() => {
-    window.addEventListener('keydown', closeModal)
   })
+
+  const reactiveProps = computed(() => props)
 </script>
 
 <style scoped lang="scss">
@@ -56,7 +68,38 @@
     }
     &:not(.modal-action--open) {
       .modal-action__content {
-        transform: translateY(-150%);
+        transform: translateY(-350%);
+      }
+    }
+    &__content {
+      background-color: $color-white;
+      padding: 2.4rem 1.6rem 1.6rem 1.6rem;
+      border-radius: 1.6rem;
+      width: calc(100% - 3.2rem);
+      max-width: 60rem;
+      transition: transform 350ms ease-in-out;
+    }
+    &__message {
+      margin: 0 auto 2.4rem auto;
+      text-align: center;
+      max-width: 53rem;
+      @include fontMedium(1.6rem, 0, 1.8rem, $color-black);
+    }
+    &__service-title {
+      margin: 0 auto 2.4rem auto;
+      text-align: center;
+      max-width: 53rem;
+      display: block;
+      @include fontRegular(1.4rem, 0, 1.8rem, $color-black);
+    }
+    &__buttons {
+      @include display-flex(row, space-between, center, nowrap, 1.6rem);
+
+      .button {
+        padding: 0 .8rem;
+        max-width: 10rem;
+        width: 100%;
+        min-height: 4rem;
       }
     }
   } 

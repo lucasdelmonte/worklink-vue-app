@@ -93,14 +93,6 @@
   }
 
   const updateBudgetState = async(id: string, state: string) => {
-    console.log(id, state);
-    console.log(drawerRequest.requestData._id);
-    /*
-      PENDIENTE = "PENDIENTE",
-      ACEPTADO = "ACEPTADO",
-      RECHAZADO = "RECHAZADO",
-      CANCELADO = "CANCELADO",
-    */
     if(!id) return
     await drawerRequest.updateBudget(id, state)
   }

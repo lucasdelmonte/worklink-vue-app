@@ -51,4 +51,4 @@
 
 <style scoped lang="scss">
   @import '../../../styles/main.scss';
-</style>../../stores/drawerRequest
+</style>
