@@ -19,7 +19,7 @@
           <div class="notification-item" v-if="notification.isActive" @click.prevent="requestDrawer(notification.solicitud as string)" :id="notification.solicitud">
             <h3 class="notification-item__type">{{ notification.notificacionType }}</h3>
             <p class="notification-item__description">{{ notification.mensaje }}</p>
-            <button class="notification-item__delete" @click="deleteNotification(notification._id)">Eliminar</button>
+            <button class="notification-item__delete" @click.prevent="deleteNotification(notification._id)">Eliminar</button>
           </div>
         </template>
       </div>
@@ -62,7 +62,6 @@
   }
 
   const requestDrawer = async (id: string) => {
-    
     if(!id) return
     await userStore.getServicesRequestById(id)
   }
@@ -76,6 +75,7 @@
   })
 
   onMounted(() => {
+    userStore.updateNotifications()
     window.addEventListener('keydown', closeNotifications)
   })
 </script>

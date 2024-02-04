@@ -28,11 +28,11 @@
       <template v-if="responseBudgets && responseBudgets.length > 0" v-for="(budget, index) in responseBudgets">
         <div class="budget">
           <div class="field">
-            <input :value="parseDate(budget.fecha)" class="field__input" :id="`budget-date-${ index }`" type="date" :disabled="validateInput(budget.estado)" />
+            <input :value="parseDate(budget.fecha)" @input="updateDate($event, budget)" class="field__input" :id="`budget-date-${ index }`" type="date" :disabled="validateInput(budget.estado)" />
             <label class="field__label" :for="`budget-date-${ index }`">Fecha de realización</label>
           </div>
           <div class="field">
-            <input :value="parseTime(budget.fecha)" class="field__input" :id="`budget-time-${ index }`" type="time" :disabled="validateInput(budget.estado)" />
+            <input :value="parseTime(budget.fecha)" @input="updateTime($event, budget)"  class="field__input" :id="`budget-time-${ index }`" type="time" :disabled="validateInput(budget.estado)" />
             <label class="field__label" :for="`budget-time-${ index }`">Hora</label>
           </div>
           <div class="field">
@@ -83,6 +83,7 @@
     <button class="button button--primary-black" @click.prevent="setService('CANCELADA', 'rechazar')">Rechazar solicitud</button>
   </template>
   <ModalConfirmAction 
+    :inDrawer="true"
     :message="currentMessage"
     :show="show"
     :newState="newState"
@@ -117,6 +118,16 @@
   const currentMessage = ref('') as Ref<string>
   const currentAction = ref('') as Ref<string>
   const newState = ref('') as Ref<string>
+
+  const updateDate = (evt: Event, budget: IBudget) => {
+    const target: HTMLInputElement = evt.target as HTMLInputElement || null
+    budget.fecha = `${ target.value }T${ parseTime(budget.fecha) }:00.000Z`
+  }
+
+  const updateTime = (evt: Event, budget: IBudget) => {
+    const target: HTMLInputElement = evt.target as HTMLInputElement || null
+    budget.fecha = `${ parseDate(budget.fecha) }T${ target.value }:00.000Z`
+  }
 
   const setModal = () => { 
     show.value = !show.value 

@@ -1,5 +1,10 @@
 <template>
-  <div class="modal-action" :class="{ 'modal-action--open': reactiveProps.show }">
+  <div class="modal-action" 
+    :class="{ 
+      'modal-action--open': reactiveProps.show,
+      'modal-action--drawer': reactiveProps.inDrawer
+    }"
+  >
     <div class="modal-action__content">
       <p class="modal-action__message">{{ reactiveProps.message }}</p>
       <template v-if="reactiveProps.currentAction === 'SERVICE'">
@@ -26,6 +31,10 @@
   const emit = defineEmits(['setModal', 'updateState', 'updateBudgetData'])
 
   const props = defineProps({
+    inDrawer: {
+      type: Boolean,
+      default: false
+    },
     newState: {
       type: String,
       default: ''
@@ -82,13 +91,29 @@
         transform: translateY(-350%);
       }
     }
+    &--drawer {
+      border-bottom-left-radius: 1.6rem;
+      border-top-left-radius: 1.6rem;
+      background-color: $color-white;
+
+      .modal-action__content {
+        transform: translateY(0%);
+        scale: 1;
+      }
+      &:not(.modal-action--open) {
+      .modal-action__content {
+        transform: translateY(0);
+        scale: 0;
+      }
+    }
+    }
     &__content {
       background-color: $color-white;
       padding: 2.4rem 1.6rem 1.6rem 1.6rem;
       border-radius: 1.6rem;
       width: calc(100% - 3.2rem);
       max-width: 60rem;
-      transition: transform 350ms ease-in-out;
+      transition: transform 350ms ease-in-out, scale 350ms ease-in-out;
     }
     &__message {
       margin: 0 auto 2.4rem auto;

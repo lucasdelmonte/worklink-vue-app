@@ -220,8 +220,7 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
     async updateBudgetData(id: string, data: IBudget, state: string) {
       const URL = `http://localhost:4000/presupuestos/${ id }`
       const toastAlertStore = useToastAlertStore()
-      console.log(id);
-      console.log(data);
+
       if(!id || !data) return
 
       let newData = {}
