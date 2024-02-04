@@ -23,7 +23,15 @@
             <label class="field__label" for="description">Descripción</label>
           </div>
           <div class="field field--file" :class="{ 'hidden': validateEdit }">
-            <input @change="(evt) => loadImages(evt)" class="field__input field__input--file" type="file" id="images" name="awsfiles" accept=".jpg,.jpeg,.png" multiple :disabled="validateEdit">
+            <input @change="seletedImages" class="field__input field__input--file" type="file" id="images" name="awsfiles" accept=".jpg,.jpeg,.png" multiple :disabled="validateEdit">
+          </div>
+          <div class="gallery" v-if="drawerRequest.requestData.imagenes">
+            <div class="gallery__image" v-for="url in drawerRequest.requestData.imagenes">
+              <img :src="url" alt="Image">
+            </div>
+            <div class="gallery__image" v-for="url in drawerRequest.requestData.imagenes">
+              <img :src="url" alt="Image">
+            </div>
           </div>
         </div>
         <div class="drawer__buttons">
@@ -64,15 +72,27 @@
   const description = ref('') as Ref<string>
   const images = ref([]) as Ref<string[]>
 
-  const loadImages = (evt: Event) => {
+  const seletedImages = (evt: Event) => {
     const target: HTMLInputElement = evt.target as HTMLInputElement || null
-    images.value = []
-    const files = target.files;
+    const files = target.files
+
     if(!files) return
-    const array = [...files].map((file) => {
-      return file.name
-    })
-    images.value = array as []
+
+    images.value = []
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const base64 = reader.result as string
+        images.value.push(base64)
+      }
+      reader.readAsDataURL(file)
+    }
+
+    console.log(images.value);
+
+    images.value = images.value
   }
 
   const closeClickModal = () => {
@@ -174,6 +194,42 @@
     background-color: rgba(0, 0, 0, .4);
     @include display-flex(row, flex-end, center, nowrap, 0);
 
+    .gallery {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      max-height: 15rem;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+
+      &::-webkit-scrollbar {
+        height: .4rem;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: $color-grey-15;
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background: $color-grey-50;
+      }
+
+      &__image {
+        flex: 0 0 40%;
+        width: 40%;
+        object-fit: cover;
+        scroll-snap-align: center;
+
+        img {
+          width: 100%;
+        }
+      }
+    }
     &__close {
       width: 100%;
       height: 100%;
