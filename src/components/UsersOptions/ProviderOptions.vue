@@ -28,20 +28,31 @@
       <template v-if="responseBudgets && responseBudgets.length > 0" v-for="(budget, index) in responseBudgets">
         <div class="budget">
           <div class="field">
-            <input :value="parseDate(budget.fecha)" class="field__input" :id="`budget-date-${ index }`" type="date" disabled />
+            <input :value="parseDate(budget.fecha)" class="field__input" :id="`budget-date-${ index }`" type="date" :disabled="validateInput(budget.estado)" />
             <label class="field__label" :for="`budget-date-${ index }`">Fecha de realización</label>
           </div>
           <div class="field">
-            <input :value="parseTime(budget.fecha)" class="field__input" :id="`budget-time-${ index }`" type="time" disabled />
+            <input :value="parseTime(budget.fecha)" class="field__input" :id="`budget-time-${ index }`" type="time" :disabled="validateInput(budget.estado)" />
             <label class="field__label" :for="`budget-time-${ index }`">Hora</label>
           </div>
           <div class="field">
-            <input :value="`$${ budget.monto }`" class="field__input" :id="`budget-amount-${ index }`" type="amount" disabled />
+            <input v-model="budget.monto" class="field__input" :id="`budget-amount-${ index }`" type="amount" :disabled="validateInput(budget.estado)" />
             <label class="field__label" :for="`budget-amount-${ index }`">Monto</label>
           </div>
           <div class="field">
-            <input v-model="budget.estado" class="field__input" :id="`budget-state-${ index }`" type="state" disabled />
+            <input :value="budget.estado" class="field__input" :id="`budget-state-${ index }`" type="state" disabled />
             <label class="field__label" :for="`budget-state-${ index }`">Estado</label>
+          </div>
+          <div class="budget__buttons" v-if="budget.estado === 'PENDIENTE'">
+            <button @click.prevent="setBudget(budget, 'CANCELADO', 'cancelar')" class="button button--tertiary-black hover-underline hover-underline--right">
+              Cancelar
+            </button>
+            <button 
+              @click.prevent="setBudget(budget, 'PENDIENTE', 'actualizar')"
+              class="button button--tertiary-black hover-underline hover-underline--right"
+            >
+                Guardar cambios
+            </button>
           </div>
         </div>
         <div class="field-divider">
@@ -69,20 +80,23 @@
   </template>
   <template v-if="!showingBudget && drawerRequest.requestAction === 'EDIT'">
     <button class="button button--primary-black" @click.prevent="setService('ACEPTADA', 'aceptar')">Aceptar solicitud</button>
-    <button class="button button--primary-black" @click.prevent="setService('CANCELADA', 'cancelar')">Cancelar solicitud</button>
+    <button class="button button--primary-black" @click.prevent="setService('CANCELADA', 'rechazar')">Rechazar solicitud</button>
   </template>
   <ModalConfirmAction 
     :message="currentMessage"
     :show="show"
     :newState="newState"
     :currentService="drawerRequest.requestData"
+    :currentBudget="currentBudget"
+    :currentAction="currentAction"
+    @updateBudgetData="updateBudgetData"
     @updateState="updateState"
     @setModal="setModal"
   />
 </template>
 
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { ref, watch, computed } from 'vue'
   import type { Ref } from 'vue'
   import { useDrawerRequestStore } from '../../stores/drawerRequest'
   import type { IBudget } from '../../interfaces/BudgetInterfaces'
@@ -90,24 +104,56 @@
   import type { IChat } from '../../interfaces/ChatInterfaces'
   import type { IServiceRequestGet } from '../../interfaces/ServiceRequestInterfaces'
   import ModalConfirmAction from '@/components/modals/ModalConfirmAction.vue'
+  import { useUserStore } from '../../stores/user'
+
 
   const modalChat = useModalChatStore()
   const drawerRequest = useDrawerRequestStore()
+  const userStore = useUserStore()
 
   const show = ref(false)
   const currentService = ref({}) as Ref<IServiceRequestGet>
+  const currentBudget = ref({}) as Ref<IBudget>
   const currentMessage = ref('') as Ref<string>
+  const currentAction = ref('') as Ref<string>
   const newState = ref('') as Ref<string>
 
   const setModal = () => { 
     show.value = !show.value 
   }
   
-  // @click="setService(service, 'CANCELADA', 'cancelar')"
+  // const updateBudgetState = async(id: string, state: string | undefined) => {
+  //   if(!id || !state) return
+  //   await drawerRequest.updateBudget(id, state)
+  //   await getBudgets()
+  // }
+
+  const updateBudgetData = async(data: [string, IBudget, string]) => {
+    console.log(currentBudget.value);
+    console.log(data[2]);
+    if(!data) return
+    const id = data[0]
+    const state = data[2]
+    const result: boolean | undefined = await drawerRequest.updateBudgetData(id, data[1], state)
+    if(result) {
+      setModal()
+      await getBudgets()
+    }
+  }
+
+  const setBudget = (budget: IBudget, estado: string,actionMessage: string) => { 
+    newState.value = estado
+    currentBudget.value = budget
+    currentAction.value = 'BUDGET'
+    currentMessage.value = `¿Está seguro que desea ${ actionMessage } el presupuesto?`
+    setModal()
+  }
   
   const setService = (action: string, actionMessage: string) => { 
     newState.value = action
+    currentBudget.value = {} as unknown as IBudget
     currentService.value = drawerRequest.requestData
+    currentAction.value = 'SERVICE'
     currentMessage.value = `¿Está seguro que desea ${ actionMessage } la solicitud?`
     setModal()
   }
@@ -116,8 +162,6 @@
     if(!data) return
     const id = data[0]
     const state = data[1]
-    console.log(data)
-    return
     const result: boolean = await drawerRequest.updateState(id, state)
     if(result) {
       drawerRequest.requestAction = 'SEE'
@@ -125,13 +169,13 @@
     }
   }
 
-  // @click.prevent="updateState(drawerRequest.requestData._id, 'RECHAZAR')"
-  // const updateState = async (id: string | undefined, state: string) => {
-  //   if(!id) return
-  //   const result = await drawerRequest.updateState(id, state)
+  const validateInput = (estado: string) => {
+    if(estado === 'ACEPTADA' || estado === 'CANCELADA') return true
 
-  //   if(result) 
-  // }
+    if(estado === 'PENDIENTE' && userStore.userData.rol === 'PROVEEDOR') return false
+
+    return true
+  }
 
   const creatingBudget = ref(false) as Ref<boolean>
   const budgetAmount = ref(0) as Ref<number>
@@ -186,6 +230,12 @@
       await getBudgets()
     }
   })
+
+  watch(() => drawerRequest.state, async (newValue, oldValue) => {
+    if(newValue === false) {
+      show.value = false
+    }
+  })
 </script>
 
 <style scoped lang="scss">
@@ -196,6 +246,28 @@
       padding-top: .8rem;
       position: relative;
       @include display-flex(column, space-between, stretch, nowrap, 0);
+    }
+    .budget {
+      position: relative;
+      &__buttons {
+        @include display-flex(row, center, center, nowrap, 0 1.6rem);
+        button {
+          border: none;
+          background: transparent;
+          width: fit-content;
+          padding: 0;
+          width: fit-content;
+          padding: 0 .8rem;
+          min-width: 5rem;
+          min-height: 4rem;
+          cursor: pointer;
+          margin: 0;
+
+          img {
+            width: 100%;
+          }
+        }
+      }
     }
     .budget-void {
       width: 100%;

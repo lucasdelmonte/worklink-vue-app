@@ -67,6 +67,7 @@
         :message="currentMessage"
         :show="show"
         :newState="newState"
+        :currentAction="currentAction"
         :currentService="currentService"
         @updateState="updateState"
         @setModal="setModal"
@@ -96,6 +97,7 @@
   const show = ref(false)
   const currentService = ref({}) as Ref<IServiceRequestGet>
   const currentMessage = ref('') as Ref<string>
+  const currentAction = ref('') as Ref<string>
   const newState = ref('') as Ref<string>
 
   const setModal = () => { 
@@ -105,6 +107,7 @@
   const setService = (service: IServiceRequestGet , action: string, actionMessage: string) => { 
     newState.value = action
     currentService.value = service
+    currentAction.value = 'SERVICE'
     currentMessage.value = `¿Está seguro que desea ${ actionMessage } la solicitud?`
     setModal()
   }

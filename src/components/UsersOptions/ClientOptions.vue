@@ -44,7 +44,7 @@
     </template>
   </div>
   <template v-if="drawerRequest.requestAction === 'CREATE'">
-    <button class="button button--primary-black" @click.prevent="emit('createRequest')">Crear solicitud</button>
+    <button class="button button--primary-black" @click.prevent="emit('createRequest')">Finalizar solicitud</button>
   </template>
   <template v-else-if="drawerRequest.requestAction === 'EDIT'">
     <button class="button button--primary-black" @click.prevent="emit('editRequest')">Actualizar solicitud</button>
@@ -95,6 +95,7 @@
   const updateBudgetState = async(id: string, state: string) => {
     if(!id) return
     await drawerRequest.updateBudget(id, state)
+    await getBudgets()
   }
 
   const parseDate = (dateString: string) => {

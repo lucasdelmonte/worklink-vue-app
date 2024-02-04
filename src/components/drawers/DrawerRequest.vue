@@ -9,8 +9,7 @@
       <form class="form">
         <div>
           <h2 class="form__title form__title--left" :class="{ 'form__title--with-subtitle': drawerRequest.requestState }">Solicitud</h2>
-          <h4 class="form__subtitle form__title--left" v-if="drawerRequest.requestState">{{ drawerRequest.requestData.estado }}</h4>
-          <h4 class="form__subtitle form__title--left" v-if=" drawerRequest.requestData.estado === 'ACEPTADA'">Cotización: $23499</h4>
+          <h4 class="form__subtitle form__title--left" :class="`form__subtitle--${ drawerRequest.requestData.estado?.toLowerCase() }`" v-if="drawerRequest.requestState">{{ drawerRequest.requestData.estado }}</h4>
           <div class="field">
             <input v-model="date" class="field__input" id="date" type="date" :disabled="validateEdit" />
             <label class="field__label" for="date">Fecha límite</label>
@@ -210,6 +209,25 @@
     .form {
       position: relative;
       @include display-flex(column, space-between, stretch, nowrap, 0);
+
+      &__subtitle {
+        color: $color-black;
+        width: fit-content;
+        border-radius: .5rem;
+        padding: 0.2rem 0.4rem;
+        &--aceptada {
+          background-color: rgb(8, 184, 8);
+        }
+        &--cancelada {
+          background-color: rgb(255, 46, 46);
+        }
+        &--finalizada {
+          background-color: rgb(250, 120, 73);
+        }
+        &--pendiente {
+          background-color: rgb(68, 186, 254);
+        }
+      }
     }
     &__content {
       box-sizing: border-box;

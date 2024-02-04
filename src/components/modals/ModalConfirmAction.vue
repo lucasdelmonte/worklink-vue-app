@@ -2,21 +2,28 @@
   <div class="modal-action" :class="{ 'modal-action--open': reactiveProps.show }">
     <div class="modal-action__content">
       <p class="modal-action__message">{{ reactiveProps.message }}</p>
-      <span class="modal-action__service-title">{{ reactiveProps.currentService.titulo }}</span>
-      <div class="modal-action__buttons">
-        <button class="button button--secondary-black" @click.prevent="$emit('setModal', false)" >Cancelar</button>
-        <button class="button button--primary-black" @click.prevent="$emit('updateState', [reactiveProps.currentService._id, reactiveProps.newState])">Aceptar</button>
-      </div>
+      <template v-if="reactiveProps.currentAction === 'SERVICE'">
+        <span class="modal-action__service-title">{{ reactiveProps.currentService.titulo }}</span>
+        <div class="modal-action__buttons">
+          <button class="button button--secondary-black" @click.prevent="$emit('setModal', false)" >Cancelar</button>
+          <button class="button button--primary-black" @click.prevent="$emit('updateState', [reactiveProps.currentService._id, reactiveProps.newState])">Aceptar</button>
+        </div>
+      </template>
+      <template v-else-if="reactiveProps.currentAction === 'BUDGET'">
+        <span class="modal-action__budget-title">{{ reactiveProps.currentService.titulo }}</span>
+        <div class="modal-action__buttons">
+          <button class="button button--secondary-black" @click.prevent="$emit('setModal', false)" >Cancelar</button>
+          <button class="button button--primary-black" @click.prevent="$emit('updateBudgetData', [reactiveProps.currentBudget._id, reactiveProps.currentBudget, reactiveProps.newState])">Aceptar</button>
+        </div>
+      </template>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted, watch } from 'vue'
   import { computed } from '@vue/reactivity'
-  import type { IServiceRequestGet } from '../../interfaces/ServiceRequestInterfaces'
 
-  const emit = defineEmits(['setModal', 'updateState'])
+  const emit = defineEmits(['setModal', 'updateState', 'updateBudgetData'])
 
   const props = defineProps({
     newState: {
@@ -27,13 +34,17 @@
       type: Object,
       default: {}
     },
-    message: {
+    currentBudget: {
+      type: Object,
+      default: {}
+    },
+    currentAction: {
       type: String,
       default: ''
     },
-    accept: {
-      type: Function,
-      default: () => Promise.resolve()
+    message: {
+      type: String,
+      default: ''
     },
     show: {
       type: Boolean,
@@ -85,7 +96,8 @@
       max-width: 53rem;
       @include fontMedium(1.6rem, 0, 1.8rem, $color-black);
     }
-    &__service-title {
+    &__service-title,
+    &__budget-title {
       margin: 0 auto 2.4rem auto;
       text-align: center;
       max-width: 53rem;
