@@ -16,7 +16,7 @@
       <h2 class="notifications__title">Notificaciones</h2>
       <div class="notifications__items" v-if="userStore.notifications.length > 0">
         <template v-for="notification in (userStore.notifications as INotifications[]) ">
-          <div class="notification-item" v-if="notification.isActive" @click.prevent="requestDrawer(notification.solicitud as string)" :id="notification.solicitud">
+          <div class="notification-item" v-if="notification.isActive" @click.prevent="requestDrawer($event, notification.solicitud as string)" :id="notification.solicitud">
             <h3 class="notification-item__type">{{ notification.notificacionType }}</h3>
             <p class="notification-item__description">{{ notification.mensaje }}</p>
             <button class="notification-item__delete" @click.prevent="deleteNotification(notification._id)">Eliminar</button>
@@ -61,13 +61,19 @@
     }
   }
 
-  const requestDrawer = async (id: string) => {
+  const requestDrawer = async (evt: Event, id: string) => {
     if(!id) return
+    const target: HTMLButtonElement = evt.target as HTMLButtonElement || null
+    if(target.classList.contains('notification-item__delete')) {
+      await userStore.updateNotifications()
+      return
+    }
     await userStore.getServicesRequestById(id)
   }
 
   const deleteNotification = async(id: string) => {
     await userStore.deleteNotification(id)
+    await userStore.updateNotifications()
   }
 
   const props = defineProps({
