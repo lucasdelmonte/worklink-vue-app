@@ -29,9 +29,6 @@
             <div class="gallery__image" v-for="url in drawerRequest.requestData.imagenes">
               <img :src="url" alt="Image">
             </div>
-            <div class="gallery__image" v-for="url in drawerRequest.requestData.imagenes">
-              <img :src="url" alt="Image">
-            </div>
           </div>
         </div>
         <div class="drawer__buttons">
@@ -89,8 +86,6 @@
       }
       reader.readAsDataURL(file)
     }
-
-    console.log(images.value);
 
     images.value = images.value
   }
@@ -196,6 +191,7 @@
 
     .gallery {
       display: flex;
+      gap: 0 .8rem;
       width: 100%;
       height: 100%;
       max-height: 15rem;
@@ -224,9 +220,11 @@
         width: 40%;
         object-fit: cover;
         scroll-snap-align: center;
+        display: flex;
 
         img {
           width: 100%;
+          object-fit: contain;
         }
       }
     }
