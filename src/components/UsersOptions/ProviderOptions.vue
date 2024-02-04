@@ -70,7 +70,7 @@
     </template>
   </div>
   <template v-if="!creatingBudget && drawerRequest.requestData.estado === 'ACEPTADA'">
-    <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudget()">Crear presupuesto</button>
+    <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudget()" v-if="checkBudgets">Crear presupuesto</button>
   </template>
   <template v-if="!showingBudget && drawerRequest.requestAction != 'CREATE' && drawerRequest.requestData.estado === 'ACEPTADA'">
     <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudgets">Ver presupuestos</button>
@@ -121,16 +121,8 @@
   const setModal = () => { 
     show.value = !show.value 
   }
-  
-  // const updateBudgetState = async(id: string, state: string | undefined) => {
-  //   if(!id || !state) return
-  //   await drawerRequest.updateBudget(id, state)
-  //   await getBudgets()
-  // }
 
   const updateBudgetData = async(data: [string, IBudget, string]) => {
-    console.log(currentBudget.value);
-    console.log(data[2]);
     if(!data) return
     const id = data[0]
     const state = data[2]
@@ -140,6 +132,12 @@
       await getBudgets()
     }
   }
+
+  const checkBudgets = computed(() => {
+    if(!responseBudgets?.value) return true
+    const hasAccepted = responseBudgets?.value.find(x => x.estado === 'ACEPTADO')
+    return hasAccepted ? false : true
+  })
 
   const setBudget = (budget: IBudget, estado: string,actionMessage: string) => { 
     newState.value = estado
@@ -234,6 +232,7 @@
   watch(() => drawerRequest.state, async (newValue, oldValue) => {
     if(newValue === false) {
       show.value = false
+      creatingBudget.value = false
     }
   })
 </script>
