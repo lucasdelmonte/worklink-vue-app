@@ -239,7 +239,15 @@ export const useUserStore = defineStore('user', {
 
         if (dataRes.error || data.length === 0) return
 
-        this.notifications = data
+        [...data].forEach((newNotification) => {
+          const exists = this.notifications.some(
+            (existingNotification) => existingNotification._id === newNotification._id
+          )
+
+          if (!exists) {
+            this.notifications.push(newNotification)
+          }
+        })
       } catch (error) {
         console.log(error)
       }
@@ -247,7 +255,7 @@ export const useUserStore = defineStore('user', {
     startUpdatingNotifications() {
       updateNotifications = setInterval(() => {
         this.updateNotifications()
-      }, 10000);
+      }, 1000);
     },
     stopUpdatingNotifications() {
       if (updateNotifications !== null) {
@@ -268,9 +276,15 @@ export const useUserStore = defineStore('user', {
         if (!response.ok) throw new Error('Request error')
 
         const dataRes = await response.json()
-        const data = dataRes.data as INotifications[]
+        const deletedNotification = dataRes.data as INotifications
 
-        this.notifications = data
+        const index = this.notifications.findIndex(
+          (existingNotification) => existingNotification._id === deletedNotification._id
+        )
+
+        if (index !== -1) {
+          this.notifications.splice(index, 1)
+        }
       } catch (error) {
         console.log(error)
       }

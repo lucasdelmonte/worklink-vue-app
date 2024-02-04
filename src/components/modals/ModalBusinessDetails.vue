@@ -22,8 +22,8 @@
         <p class="card__description">{{ modalBusiness.provider_business_description }}</p>
       </div>
       <div class="card__buttons">
-        <button @click="toggleModal" class="card__create-request button button--primary-white">Close</button>
-        <button @click="toggleRequest" class="card__create-request button button--primary-black">Create Request <IconArrowRight :width="16" :height="16" :fill="'#FFFFFF'" /></button>
+        <button @click="toggleModal" class="card__create-request button button--primary-white">Cerrar</button>
+        <button @click="toggleRequest" class="card__create-request button button--primary-black">Crear solicitud<IconArrowRight :width="16" :height="16" :fill="'#FFFFFF'" /></button>
       </div>
       <div class="card__gradient"></div>
     </div>
@@ -51,4 +51,4 @@
 
 <style scoped lang="scss">
   @import '../../../styles/main.scss';
-</style>../../stores/drawerRequest
+</style>

@@ -217,6 +217,53 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
         toastAlertStore.updateToast(toastAction, toastTitle, toastMessage)
       }
     },
+    async updateBudgetData(id: string, data: IBudget, state: string) {
+      const URL = `http://localhost:4000/presupuestos/${ id }`
+      const toastAlertStore = useToastAlertStore()
+
+      if(!id || !data) return
+
+      let newData = {}
+      if(data.estado != state) {
+        newData = {
+          "fecha": data.fecha,
+          "monto": data.monto,
+          "estado": state
+        }
+      } else {
+        newData = {
+          "fecha": data.fecha,
+          "monto": data.monto
+        }
+      }
+
+      try {
+        const response = await fetch(URL, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newData),
+        })
+
+        const responseData = await response.json()
+        if (!response.ok && responseData.error) throw new Error(responseData.message)
+
+        toastAction.value = true
+        toastTitle.value = 'Operación éxitosa'
+        toastMessage.value = 'Presupuesto actualizado'
+
+        return true
+      } catch (error) {
+        console.error(error)
+        toastAction.value = false
+        toastTitle.value = 'Ocurrió un error actualizar el presupuesto'
+        toastMessage.value = `${ error }`
+        return false
+      } finally {
+        toastAlertStore.updateToast(toastAction, toastTitle, toastMessage)
+      }
+    },
     resetAttributes() {
       this.state = false as boolean
       this.requestAction = '' as 'CREATE' | 'EDIT' | 'SEE' | '',

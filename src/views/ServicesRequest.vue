@@ -47,23 +47,31 @@
 
           <div class="card-service__buttons">
             <template v-if="service.estado === 'PENDIENTE'">
-              <button @click="updateState(service._id, 'CANCELADA')" class="button button--primary-white" v-if="userStore.userData.rol === 'CLIENTE'">Cancelar</button>
-              <button @click="toggleDrawer(service.estado, service)" class="button button--primary-black button--right">Detalles</button>
-            </template>
-            <template v-else-if="service.estado === 'CANCELADA'">
-              <button @click="toggleDrawer(service.estado, service)" class="button button--primary-black button--right">Detalles</button>
+              <button @click="setService(service, 'CANCELADA', 'cancelar')" class="button button--primary-white" v-if="userStore.userData.rol === 'CLIENTE'">
+                Cancelar
+              </button>
             </template>
             <template v-else-if="service.estado === 'ACEPTADA'">
               <button class="button button--primary-white" @click="toggleChat(service)">Chat</button>
-              <button @click="toggleDrawer(service.estado, service)" class="button button--primary-black button--right">Detalles</button>
             </template>
             <template v-else-if="service.estado === 'FINALIZADA'">
               <button class="button button--primary-white">Pagar</button>
-              <button @click="toggleDrawer(service.estado, service)" class="button button--primary-black">Detalles</button>
+            </template>
+            <template v-if="service.estado != 'FINALIZADA'">
+              <button @click="toggleDrawer(service.estado, service)" class="button button--primary-black button--right">Detalles</button>
             </template>
           </div>
         </div>
       </template>
+      <ModalConfirmAction 
+        :message="currentMessage"
+        :show="show"
+        :newState="newState"
+        :currentAction="currentAction"
+        :currentService="currentService"
+        @updateState="updateState"
+        @setModal="setModal"
+      />
     </div>
   </div>
 </template>
@@ -81,9 +89,28 @@
   import { useDrawerRequestStore } from '../stores/drawerRequest'
   import { useModalChatStore } from '../stores/modalChat'
   import type { IChat } from '../interfaces/ChatInterfaces'
+  import ModalConfirmAction from '@/components/modals/ModalConfirmAction.vue'
 
   const modalChat = useModalChatStore()
   const drawerRequest = useDrawerRequestStore()
+
+  const show = ref(false)
+  const currentService = ref({}) as Ref<IServiceRequestGet>
+  const currentMessage = ref('') as Ref<string>
+  const currentAction = ref('') as Ref<string>
+  const newState = ref('') as Ref<string>
+
+  const setModal = () => { 
+    show.value = !show.value 
+  }
+
+  const setService = (service: IServiceRequestGet , action: string, actionMessage: string) => { 
+    newState.value = action
+    currentService.value = service
+    currentAction.value = 'SERVICE'
+    currentMessage.value = `¿Está seguro que desea ${ actionMessage } la solicitud?`
+    setModal()
+  }
 
   const route = useRoute()
   const router = useRouter()
@@ -96,7 +123,7 @@
   const langStore = useLangStore()
   const categoryFiltered = ref('view-all') as Ref<string>
 
-  const toggleDrawer = (requestState: string, requestData: IServiceRequestGet) => {
+  const toggleDrawer = (requestState: string | undefined, requestData: IServiceRequestGet) => {
     drawerRequest.state = !drawerRequest.state
     drawerRequest.requestState = requestState as string
     drawerRequest.requestData = requestData as IServiceRequestGet
@@ -136,9 +163,12 @@
     }
   }
 
-  const updateState = async (id: string | undefined, state: string) => {
-    if(!id) return
-    await drawerRequest.updateState(id, state)
+  const updateState = async (data: string[] | undefined) => {
+    if(!data) return
+    const id = data[0]
+    const state = data[1]
+    const result: boolean = await drawerRequest.updateState(id, state)
+    if(result) setModal()
   }
 
   const parseDate = (dateString: string | undefined) => {
