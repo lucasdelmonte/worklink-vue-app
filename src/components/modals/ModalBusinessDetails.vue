@@ -2,7 +2,7 @@
   <div class="modal-card" :class="{ 'modal-card--open' : modalBusiness.state }">
     <div class="card">
       <div class="card__content" :style="`background-image: url('${ modalBusiness.provider_business_images[0] }');`">
-        <img class="card__media" src="https://cdn.shopify.com/s/files/1/0618/8115/5826/files/user.jpg?v=1701717572" alt="Provider" lazyload>
+        <img class="card__media" src="https://cdn.shopify.com/s/files/1/0618/8115/5826/files/user.jpg?v=1701717572" alt="Provider" lazyload="lazy">
       </div>
       <div class="card__information">
         <div class="card__rating">
