@@ -10,7 +10,7 @@
   const { images } = defineProps(["images"])
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
   .gallery {
     &__image {
     flex: 0 0 40%;
