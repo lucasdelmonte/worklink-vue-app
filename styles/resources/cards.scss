@@ -246,7 +246,7 @@
     max-width: 83.2rem;
     max-height: 58.2rem;
     width: 100%;
-    grid-template-rows: 6rem 1fr 6rem 1rem;
+    grid-template-rows: 12rem 1fr 6rem 1rem;
     transition: transform 350ms ease;
     &__title {
       margin: 0 0 .4rem 0;
@@ -254,6 +254,9 @@
       display: flex;
       align-items: center;
       @include fontBold(1.8rem, 0, 3rem, $color-black);
+    }
+    &__content {
+      height: 100%;
     }
     &__category {
       margin: 0 0 1.4rem 0;

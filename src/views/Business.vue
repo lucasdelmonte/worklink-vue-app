@@ -16,7 +16,7 @@
     <div class="grid grid--desktop-4 grid--tablet-3 grid--mobile-1">
       <template v-if="!providerStore.isLoading" v-for="business in (businessFiltered as IBusinessFiltered[])">
         <div class="card" v-if="business.is_active">
-          <div class="card__content" style="background-image: url('https://cdn.shopify.com/s/files/1/0618/8115/5826/files/white-black-digital-art-monochrome-abstract-reflection-206803-wallhere.com.jpg?v=1701723919');">
+          <div class="card__content" :style="`background-image: url('${ business.images[0] }');`">
             <div class="card__wishlist">
               <IconWishlist :width="17" :height="16" />
             </div>
@@ -74,6 +74,7 @@
     modalBusiness.provider_business_description = business.description
     modalBusiness.provider_business_category = business.category
     modalBusiness.provider_business_rating = business.rating ? business.rating : 0
+    modalBusiness.provider_business_images = business.images ? business.images : []
   }
 
   const userStore = useUserStore()
