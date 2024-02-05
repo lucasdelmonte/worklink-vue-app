@@ -26,9 +26,7 @@
             <input @change="seletedImages" class="field__input field__input--file" type="file" id="images" name="awsfiles" accept=".jpg,.jpeg,.png" multiple :disabled="validateEdit">
           </div>
           <div class="gallery" v-if="drawerRequest.requestData.imagenes">
-            <div class="gallery__image" v-for="url in drawerRequest.requestData.imagenes">
-              <img :src="url" alt="Image">
-            </div>
+            <ServiceImages :images="drawerRequest.requestData.imagenes" />
           </div>
         </div>
         <div class="drawer__buttons">
@@ -56,6 +54,7 @@
   import ProviderOptions from '../UsersOptions/ProviderOptions.vue'
   import ClientOptions from '../UsersOptions/ClientOptions.vue'
   import IconClose from '../icons/IconClose.vue'
+  import ServiceImages from '../Images/ServiceImages.vue'
 
   const cookies = useCookies()
   const userRol = ref(cookies.cookies.get('userRol')) as Ref<string>
