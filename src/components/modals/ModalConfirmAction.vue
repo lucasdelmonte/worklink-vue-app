@@ -101,11 +101,11 @@
         scale: 1;
       }
       &:not(.modal-action--open) {
-      .modal-action__content {
-        transform: translateY(0);
-        scale: 0;
+        .modal-action__content {
+          transform: translateY(0);
+          scale: 0;
+        }
       }
-    }
     }
     &__content {
       background-color: $color-white;

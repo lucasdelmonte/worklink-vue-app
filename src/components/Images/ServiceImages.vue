@@ -18,6 +18,7 @@
     object-fit: cover;
     scroll-snap-align: center;
     display: flex;
+    gap: 0 0.8rem;
 
     img {
       width: 100%;

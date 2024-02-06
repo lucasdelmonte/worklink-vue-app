@@ -25,9 +25,15 @@
           <div class="field field--file" :class="{ 'hidden': validateEdit }">
             <input @change="seletedImages" class="field__input field__input--file" type="file" id="images" name="awsfiles" accept=".jpg,.jpeg,.png" multiple :disabled="validateEdit">
           </div>
-          <div class="gallery" v-if="drawerRequest.requestData.imagenes">
-            <ServiceImages :images="drawerRequest.requestData.imagenes" />
-          </div>
+          <template v-if="drawerRequest.requestData.imagenes">
+            <div class="gallery">
+              <ServiceImages :images="drawerRequest.requestData.imagenes" />
+            </div>
+            <button @click.prevent="setImages(drawerRequest.requestData.imagenes)" class="button-gallery">
+              Abrir galería
+            </button>
+            <ModalSlider @setModalSlider="setModalSlider" :show="show" :currentImages="currentImages" />
+          </template>
         </div>
         <div class="drawer__buttons">
           <template v-if="userRol === 'CLIENTE'">
@@ -55,6 +61,7 @@
   import ClientOptions from '../UsersOptions/ClientOptions.vue'
   import IconClose from '../icons/IconClose.vue'
   import ServiceImages from '../Images/ServiceImages.vue'
+  import ModalSlider from '../modals/ModalSlider.vue'
 
   const cookies = useCookies()
   const userRol = ref(cookies.cookies.get('userRol')) as Ref<string>
@@ -63,6 +70,9 @@
   const modalBusiness = useModalBusinessStore()
   const drawerRequest = useDrawerRequestStore()
 
+
+  const show = ref(false) as Ref<boolean>
+  const currentImages = ref([]) as Ref<string[]>
   const date = ref('') as Ref<string>
   const title = ref('') as Ref<string>
   const description = ref('') as Ref<string>
@@ -89,7 +99,18 @@
     images.value = images.value
   }
 
+  const setImages = (images: Array<string>) => { 
+    currentImages.value = images
+    setModalSlider()
+  }
+
+  const setModalSlider = () => { 
+    show.value = !show.value 
+  }
+
   const closeClickModal = () => {
+    show.value = false
+    currentImages.value = []
     drawerRequest.state = false
     drawerRequest.resetAttributes()
   }
@@ -100,6 +121,8 @@
 
   const closeDrawer = (evt: KeyboardEvent) => {
     if(evt.key === 'Escape') {
+      show.value = false
+      currentImages.value = []
       drawerRequest.state = false
       drawerRequest.resetAttributes()
     }
@@ -196,7 +219,6 @@
       max-height: 15rem;
       overflow-x: scroll;
       overflow-y: hidden;
-      scroll-snap-type: x mandatory;
 
       &::-webkit-scrollbar {
         height: .4rem;
@@ -225,6 +247,20 @@
           width: 100%;
           object-fit: contain;
         }
+      }
+
+      & + .button-gallery {
+        border: none;
+        background: transparent;
+        width: fit-content;
+        padding: 0;
+        padding: 0 .8rem;
+        min-width: 5rem;
+        min-height: 4rem;
+        cursor: pointer;
+        margin: 0;
+        text-transform: uppercase;
+        @include fontBold(1.4rem, 0, 2rem, $color-black); 
       }
     }
     &__close {
