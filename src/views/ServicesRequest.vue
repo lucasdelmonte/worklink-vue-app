@@ -265,7 +265,7 @@
     }
     &__header-facets {
       margin: 0 0 4rem 0;
-      @include display-flex(row, space-between, center, wrap, 0);
+      @include display-flex(row, space-between, center, wrap, 1rem 0);
     }
     .grid {
       position: relative;

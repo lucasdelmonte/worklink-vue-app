@@ -23,7 +23,7 @@
             <label class="field__label" for="description">Descripción</label>
           </div>
           <div class="field field--file" :class="{ 'hidden': validateEdit }">
-            <input @change="seletedImages" class="field__input field__input--file" type="file" id="images" name="awsfiles" accept=".jpg,.jpeg,.png" multiple :disabled="validateEdit">
+            <input @change="seletedImages" class="field__input field__input--file" type="file" id="images" name="awsfiles" accept=".jpg,.jpeg,.png" multiple :disabled="validateEdit" v-if="Object.keys(drawerRequest.requestData).length === 0">
           </div>
           <template v-if="drawerRequest.requestData.imagenes">
             <div class="gallery">
@@ -277,6 +277,7 @@
       top: 1.6rem;
       right: 1.6rem;
       z-index: 1;
+      cursor: pointer;
       @include display-flex(row, center, center, nowrap, 0);
       @include desktop-up {
         display: none;

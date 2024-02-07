@@ -13,6 +13,7 @@
   </header>
   <div class="notifications" :class="{ 'notifications--open': showNotifications }">
     <div class="notifications__content">
+      <span @click="closeClickNotifications" class="notifications__mobile-close"><IconClose :width="16" :height="16" :fill="`#000000`" /></span>
       <h2 class="notifications__title">Notificaciones</h2>
       <div class="notifications__items" v-if="userStore.notifications.length > 0">
         <template v-for="notification in (userStore.notifications as INotifications[]) ">
@@ -36,6 +37,7 @@
   import type { INotifications } from '../../interfaces/NotificationInterfaces'
   import { useUserStore } from '@/stores/user'
   import { useDrawerRequestStore } from '../../stores/drawerRequest'
+  import IconClose from '../icons/IconClose.vue'
 
   const drawerRequest = useDrawerRequestStore()
 
@@ -108,6 +110,17 @@
       left: 0;
       z-index: -1;
       cursor: url('../../assets/Icons/cursor-close.png'), auto;
+    }
+    &__mobile-close {
+      position: absolute;
+      top: 1.6rem;
+      right: 1.6rem;
+      z-index: 1;
+      cursor: pointer;
+      @include display-flex(row, center, center, nowrap, 0);
+      @include desktop-up {
+        display: none;
+      }
     }
     &--open {
       z-index: 3;
@@ -229,7 +242,10 @@
     }
     &__user {
       text-align: right;
-      @include display-flex(row, flex-end, center, nowrap, 0 1.6rem);
+      @include display-flex(row, flex-end, center, nowrap, 0 .8rem);
+      @include desktop-up {
+        gap: 0 1.6rem;
+      }
 
       a,
       button {
