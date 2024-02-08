@@ -51,11 +51,11 @@
             <textarea v-model="budget.detalle" rows="10" id="detail" class="field__input field__input--text-area" name="detail" :disabled="validateInput(budget.estado)"></textarea>
             <label class="field__label" for="detail">Detalle</label>
           </div>
-          <div class="field field--file">
+          <div class="field field--file" v-if="budget.estado === 'PENDIENTE'">
             <input @change="seletedDocuments" class="field__input field__input--file" type="file" id="document" name="awsfiles" accept=".pdf" multiple>
             <label class="field__label" for="detail">Sólo se puede cargar un archivo por presupuesto, el nuevo archivo reemplazará al anterior.</label>
           </div>
-          <div class="field" v-if="budget.documentos && budget.documentos?.length === 1">
+          <div class="field" v-if="budget.documentos && budget.documentos?.length === 1 && (budget.estado === 'ACEPTADO' || budget.estado === 'PENDIENTE') ">
             <template v-for="documento in budget.documentos" :key="index">
               <a download :href="documento" class="field__download">Descargar archivo adjunto</a>
             </template>
@@ -244,7 +244,8 @@
 
   const createBudget = async (id: string | undefined) => { 
     if(!drawerRequest.requestData || !id || !budgetDate.value || !budgetTime.value || !budgetAmount.value || !budgetDetail.value || documents.value.length > 1) return
-    await drawerRequest.createBudget(id, budgetAmount.value, `${ budgetDate.value }T${ budgetTime.value }:00.000Z`, `${ budgetDetail.value }`, documents.value)
+    const result = await drawerRequest.createBudget(id, budgetAmount.value, `${ budgetDate.value }T${ budgetTime.value }:00.000Z`, `${ budgetDetail.value }`, documents.value)
+    if(result) creatingBudget.value = false
   }
 
   const toggleChat = (service: IServiceRequestGet) => {

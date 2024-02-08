@@ -167,11 +167,14 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
         toastAction.value = true
         toastTitle.value = 'Operación éxitosa'
         toastMessage.value = 'Presupuesto creado con éxito'
+
+        return true
       } catch (error) {
         console.error(error)
         toastAction.value = false
         toastTitle.value = 'Ocurrió un error al crear el presupuesto'
         toastMessage.value = `${ error }`
+        return false
       } finally {
         toastAlertStore.updateToast(toastAction, toastTitle, toastMessage)
       }

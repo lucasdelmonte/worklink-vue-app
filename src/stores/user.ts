@@ -255,7 +255,7 @@ export const useUserStore = defineStore('user', {
     startUpdatingNotifications() {
       updateNotifications = setInterval(() => {
         this.updateNotifications()
-      }, 1000);
+      }, 5000);
     },
     stopUpdatingNotifications() {
       if (updateNotifications !== null) {
