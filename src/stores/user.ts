@@ -227,6 +227,23 @@ export const useUserStore = defineStore('user', {
         console.log(error)
       }
     },
+    async getServicesRequestByState(state: string) {
+      if(!state) return
+      const URL = `http://localhost:4000/solicitudes_servicio?estado=${ state }`
+
+      try {
+        const response = await fetch(URL)
+
+        if (!response.ok) throw new Error('Request error')
+        
+        const dataRes = await response.json()
+        const data = dataRes.data as IServiceRequestGet[]
+
+        return data
+      } catch (error) {
+        console.log(error)
+      }
+    },
     async updateNotifications() {
       if(this.userData._id === undefined) return
       const URL = `http://localhost:4000/notificaciones/${ this.userData._id }`
@@ -255,7 +272,7 @@ export const useUserStore = defineStore('user', {
     startUpdatingNotifications() {
       updateNotifications = setInterval(() => {
         this.updateNotifications()
-      }, 1000);
+      }, 5000);
     },
     stopUpdatingNotifications() {
       if (updateNotifications !== null) {

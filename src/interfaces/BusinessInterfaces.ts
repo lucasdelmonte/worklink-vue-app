@@ -19,6 +19,7 @@ export interface IBusinessFiltered {
   category: string,
   description: string,
   is_active: boolean,
+  images: string[], 
   provider: {
     id: string,
     full_name: string,

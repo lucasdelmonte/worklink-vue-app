@@ -52,6 +52,17 @@
     z-index: -1;
     cursor: url('../../assets/Icons/cursor-close.png'), auto;
   }
+  &__mobile-close {
+    position: absolute;
+    top: 2.2rem;
+    right: 1.6rem;
+    z-index: 1;
+    cursor: pointer;
+    @include display-flex(row, center, center, nowrap, 0);
+    @include desktop-up {
+      display: none;
+    }
+  }
   &__list-first-level {
     margin: 0;
     padding: 0 0 2.4rem;

@@ -6,7 +6,7 @@
 
     <div class="user-options" :open="userOptionsState">
       <ul class="user-options__list">
-        <li><RouterLink class="hover-underline hover-underline--right" :to="`/account/${userStore.userData._id}`">{{ langStore.lang.header.user.view_profile }}</RouterLink></li>
+        <li v-if="userStore.userData.rol != 'ADMIN'"><RouterLink class="hover-underline hover-underline--right" :to="`/account/${userStore.userData._id}`">{{ langStore.lang.header.user.view_profile }}</RouterLink></li>
         <li><RouterLink class="hover-underline hover-underline--right" @click="userStore.logoutUser" :to="'/login-register'">{{ langStore.lang.header.user.logout }}</RouterLink></li>
       </ul>
     </div>
@@ -140,6 +140,9 @@
       case 'FINALIZADA':
         drawerRequest.requestAction = 'SEE'
         break;
+      case 'DISPUTA':
+        drawerRequest.requestAction = 'SEE'
+        break;
     
       default:
         break;
@@ -265,7 +268,7 @@
     }
     &__header-facets {
       margin: 0 0 4rem 0;
-      @include display-flex(row, space-between, center, wrap, 0);
+      @include display-flex(row, space-between, center, wrap, 1rem 0);
     }
     .grid {
       position: relative;

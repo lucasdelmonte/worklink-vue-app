@@ -14,6 +14,14 @@
         <input v-model="budgetAmount" class="field__input" id="budget-amount" type="number" />
         <label class="field__label" for="budget-amount">Presupuesto*</label>
       </div>
+      <div class="field field--text-area">
+        <textarea v-model="budgetDetail" rows="10" id="detail" class="field__input field__input--text-area" name="detail"></textarea>
+        <label class="field__label" for="detail">Detalle*</label>
+      </div>
+      <div class="field field--file">
+        <input @change="seletedDocuments" class="field__input field__input--file" type="file" id="document" name="awsfiles" accept=".pdf">
+        <label class="field__label" for="detail">Sólo se puede cargar un archivo por presupuesto</label>
+      </div>
     </div>
     <template v-if="creatingBudget">
       <div class="drawer__create-buttons">
@@ -39,6 +47,19 @@
             <input v-model="budget.monto" class="field__input" :id="`budget-amount-${ index }`" type="amount" :disabled="validateInput(budget.estado)" />
             <label class="field__label" :for="`budget-amount-${ index }`">Monto</label>
           </div>
+          <div class="field field--text-area" v-if="budget.detalle && budget.detalle != ''">
+            <textarea v-model="budget.detalle" rows="10" id="detail" class="field__input field__input--text-area" name="detail" :disabled="validateInput(budget.estado)"></textarea>
+            <label class="field__label" for="detail">Detalle</label>
+          </div>
+          <div class="field field--file" v-if="budget.estado === 'PENDIENTE'">
+            <input @change="evt => seletedDocumentsDinamic(budget as IBudget, evt as Event)" class="field__input field__input--file" type="file" id="document" name="awsfiles" accept=".pdf">
+            <label class="field__label" for="document">Sólo se puede cargar un archivo por presupuesto, el nuevo archivo reemplazará al anterior.</label>
+          </div>
+          <div class="field" v-if="budget.documentos && budget.documentos?.length === 1 && (budget.estado === 'ACEPTADO' || budget.estado === 'PENDIENTE') ">
+            <template v-for="documento in budget.documentos" :key="index">
+              <a download :href="documento" class="field__download">Descargar archivo adjunto</a>
+            </template>
+          </div>
           <div class="field">
             <input :value="budget.estado" class="field__input" :id="`budget-state-${ index }`" type="state" disabled />
             <label class="field__label" :for="`budget-state-${ index }`">Estado</label>
@@ -51,7 +72,7 @@
               @click.prevent="setBudget(budget, 'PENDIENTE', 'actualizar')"
               class="button button--tertiary-black hover-underline hover-underline--right"
             >
-                Guardar cambios
+              Guardar cambios
             </button>
           </div>
         </div>
@@ -118,6 +139,7 @@
   const currentMessage = ref('') as Ref<string>
   const currentAction = ref('') as Ref<string>
   const newState = ref('') as Ref<string>
+  const documents = ref([]) as Ref<string[]>
 
   const updateDate = (evt: Event, budget: IBudget) => {
     const target: HTMLInputElement = evt.target as HTMLInputElement || null
@@ -133,8 +155,46 @@
     show.value = !show.value 
   }
 
+  const seletedDocuments = (evt: Event) => {
+    const target: HTMLInputElement = evt.target as HTMLInputElement || null
+    const files = target.files
+    if(!files) return
+
+    documents.value = []
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const base64 = reader.result as string
+        documents.value.push(base64)
+      }
+      reader.readAsDataURL(file)
+    } 
+
+    documents.value = documents.value
+  }
+
+  const seletedDocumentsDinamic = (budget: IBudget, evt: Event) => {
+    const target: HTMLInputElement = evt.target as HTMLInputElement || null
+    const files = target.files
+    if(!files || files.length > 1) return
+
+    budget.documentos = []
+
+    for (let i = 0; i < 1; i++) {
+      const file = files[i]
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const base64 = reader.result as string
+        budget.documentos.push(base64)
+      }
+      reader.readAsDataURL(file)
+    } 
+  }
+
   const updateBudgetData = async(data: [string, IBudget, string]) => {
-    if(!data) return
+    if(!data || data[1]?.documentos.length > 1) return
     const id = data[0]
     const state = data[2]
     const result: boolean | undefined = await drawerRequest.updateBudgetData(id, data[1], state)
@@ -150,7 +210,8 @@
     return hasAccepted ? false : true
   })
 
-  const setBudget = (budget: IBudget, estado: string,actionMessage: string) => { 
+  const setBudget = (budget: IBudget, estado: string, actionMessage: string) => { 
+    if(budget.documentos.length > 1) return
     newState.value = estado
     currentBudget.value = budget
     currentAction.value = 'BUDGET'
@@ -190,6 +251,7 @@
   const budgetAmount = ref(0) as Ref<number>
   const budgetDate = ref('') as Ref<string>
   const budgetTime = ref('') as Ref<string>
+  const budgetDetail = ref('') as Ref<string>
   const responseBudgets = ref([]) as Ref<IBudget[]> | undefined
   const showingBudget = ref(false) as Ref<boolean>
 
@@ -198,8 +260,9 @@
   }
 
   const createBudget = async (id: string | undefined) => { 
-    if(!drawerRequest.requestData || !id || !budgetDate.value || !budgetTime.value || !budgetAmount.value) return
-    await drawerRequest.createBudget(id, budgetAmount.value, `${ budgetDate.value }T${ budgetTime.value }:00.000Z`)
+    if(!drawerRequest.requestData || !id || !budgetDate.value || !budgetTime.value || !budgetAmount.value || !budgetDetail.value || documents.value.length > 1) return
+    const result = await drawerRequest.createBudget(id, budgetAmount.value, `${ budgetDate.value }T${ budgetTime.value }:00.000Z`, `${ budgetDetail.value }`, documents.value)
+    if(result) creatingBudget.value = false
   }
 
   const toggleChat = (service: IServiceRequestGet) => {

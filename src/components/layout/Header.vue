@@ -6,13 +6,17 @@
     </div>
     <h1 class="header__title"><RouterLink to="/">Work<span>Link</span></RouterLink></h1>
     <div class="header__user">
-      <button @click="toggleNotifications"><img src="../../assets/Icons/icons8-notifications.png" alt="Notificaciones"></button>
-      <a href="/"><IconWishlist :width="17" :height="16" /></a>
+      <button @click="toggleNotifications" class="notifications__icon">
+        <img src="../../assets/Icons/icons8-notifications.png" alt="Notificaciones">
+        <span class="notifications__count" v-if="userStore.notifications.length > 0">{{ userStore.notifications.length < 10 ? userStore.notifications.length : '+' }}</span>
+      </button>
+      <a href="/" v-if="userStore.userData.rol != 'ADMIN'"><IconWishlist :width="17" :height="16" /></a>
       <a @click="emit('toggleUserOptions')"><IconUser :width="12" :height="18" /></a>
     </div>
   </header>
   <div class="notifications" :class="{ 'notifications--open': showNotifications }">
     <div class="notifications__content">
+      <span @click="closeClickNotifications" class="notifications__mobile-close"><IconClose :width="16" :height="16" :fill="`#000000`" /></span>
       <h2 class="notifications__title">Notificaciones</h2>
       <div class="notifications__items" v-if="userStore.notifications.length > 0">
         <template v-for="notification in (userStore.notifications as INotifications[]) ">
@@ -36,6 +40,7 @@
   import type { INotifications } from '../../interfaces/NotificationInterfaces'
   import { useUserStore } from '@/stores/user'
   import { useDrawerRequestStore } from '../../stores/drawerRequest'
+  import IconClose from '../icons/IconClose.vue'
 
   const drawerRequest = useDrawerRequestStore()
 
@@ -100,6 +105,24 @@
     background-color: rgba(0, 0, 0, .4);
     @include display-flex(row, flex-end, center, nowrap, 0);
 
+    &__icon {
+      position: relative;
+    }
+    &__count {
+      position: absolute;
+      top: -.6rem;
+      right: -.6rem;
+      width: 1.8rem;
+      height: 1.8rem;
+      border-radius: 50%;
+      border: .1rem solid $color-white;
+      background-color: $color-black;
+      @include fontBold(1.4rem, 0, 1.8rem, $color-white);
+
+      &:empty {
+        display: none;
+      }
+    }
     &__close {
       width: 100%;
       height: 100%;
@@ -108,6 +131,17 @@
       left: 0;
       z-index: -1;
       cursor: url('../../assets/Icons/cursor-close.png'), auto;
+    }
+    &__mobile-close {
+      position: absolute;
+      top: 1.6rem;
+      right: 1.6rem;
+      z-index: 1;
+      cursor: pointer;
+      @include display-flex(row, center, center, nowrap, 0);
+      @include desktop-up {
+        display: none;
+      }
     }
     &--open {
       z-index: 3;
@@ -229,7 +263,10 @@
     }
     &__user {
       text-align: right;
-      @include display-flex(row, flex-end, center, nowrap, 0 1.6rem);
+      @include display-flex(row, flex-end, center, nowrap, 0 .8rem);
+      @include desktop-up {
+        gap: 0 1.6rem;
+      }
 
       a,
       button {

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', (): void => {
-  const inputs = document.querySelectorAll('.field__input:not([type=radio])') as NodeListOf<HTMLInputElement> | undefined
+  const inputs = document.querySelectorAll('.field__input:not([type=radio]):not([type=file])') as NodeListOf<HTMLInputElement> | undefined
   if(inputs) [...inputs].forEach(input => setEventsListener(input))
 })
 

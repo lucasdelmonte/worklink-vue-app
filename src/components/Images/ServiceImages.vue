@@ -5,8 +5,6 @@
 </template>
 
 <script setup lang="ts">
-  import { defineProps } from "vue"
-
   const { images } = defineProps(["images"])
 </script>
 
@@ -18,6 +16,7 @@
     object-fit: cover;
     scroll-snap-align: center;
     display: flex;
+    gap: 0 0.8rem;
 
     img {
       width: 100%;

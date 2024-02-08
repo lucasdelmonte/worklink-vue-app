@@ -47,6 +47,7 @@ export const useProviderStore = defineStore('provider', {
             category: business.categoria,
             description: business.descripcion,
             is_active: business.isActive,
+            images: business.imagenes,
             provider
           })
         })

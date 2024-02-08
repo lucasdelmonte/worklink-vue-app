@@ -5,7 +5,7 @@
       <nav class="megamenu__nav" v-if="userRol === 'CLIENTE'">
         <div class="megamenu__nav-first-level">
           <ul class="megamenu__list-first-level">
-            <li><a>Negocios</a><IconArrowDown :width="24" :height="24" :fill="'#000000'" /></li>
+            <li><a>Negocios</a></li>
           </ul>
           <ul class="megamenu__list-second-level">
             <li v-for="category in CategoriasType">
@@ -25,7 +25,7 @@
         </div>
       </nav>
       <!-- User type provider -->
-      <nav class="megamenu__nav" v-else>
+      <nav class="megamenu__nav" v-else-if="userRol === 'PROVEEDOR'">
         <div class="megamenu__nav-first-level">
           <ul class="megamenu__list-first-level">
             <li><RouterLink :to="`/services-request`">Solicitudes</RouterLink></li>
@@ -37,6 +37,16 @@
           </ul>
         </div>
       </nav>
+      <nav class="megamenu__nav" v-else-if="userRol === 'ADMIN'">
+        <div class="megamenu__nav-first-level">
+          <ul class="megamenu__list-first-level">
+            <li><RouterLink :to="`/`">Solicitudes</RouterLink></li>
+          </ul>
+        </div>
+      </nav>
+      <div @click="emit('toggleMenu')" class="megamenu__mobile-close">
+        <IconClose :width="16" :height="16" :fill="`#000000`" />
+      </div>
     </div>
     <div v-if="menuState" class="megamenu__close" @click="emit('toggleMenu')"></div>
   </div>
@@ -48,13 +58,13 @@
   import { onMounted } from 'vue'
   import { CategoriasType } from '../../interfaces/CategoriesInterfaces'
   import { useCookies } from 'vue3-cookies'
-  import IconArrowDown from '@/components/icons/IconArrowDown.vue'
+  import IconClose from '@/components/icons/IconClose.vue'
 
   const emit = defineEmits(['toggleMenu'])
 
   const cookies = useCookies()
 
-  const userRol = cookies.cookies.get('userRol') as 'CLIENTE' | 'PROVEEDOR' | undefined
+  const userRol = cookies.cookies.get('userRol') as 'CLIENTE' | 'PROVEEDOR' | 'ADMIN' | undefined
 
   const langStore = useLangStore()
 

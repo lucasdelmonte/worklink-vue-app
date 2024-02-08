@@ -16,6 +16,15 @@
             <input :value="`$${ budget.monto }`" class="field__input" :id="`budget-amount-${ index }`" type="amount" disabled />
             <label class="field__label" :for="`budget-amount-${ index }`">Monto</label>
           </div>
+          <div class="field field--text-area" v-if="budget.detalle && budget.detalle != ''">
+            <textarea v-model="budget.detalle" rows="10" id="detail" class="field__input field__input--text-area" name="detail" disabled></textarea>
+            <label class="field__label" for="detail">Detalle</label>
+          </div>
+          <div class="field" v-if="budget.documentos && budget.documentos?.length === 1">
+            <template v-for="documento in budget.documentos" :key="index">
+              <a download :href="documento" class="field__download">Descargar archivo adjunto</a>
+            </template>
+          </div>
           <div class="field">
             <input v-model="budget.estado" class="field__input" :id="`budget-state-${ index }`" type="state" disabled />
             <label class="field__label" :for="`budget-state-${ index }`">Estado</label>

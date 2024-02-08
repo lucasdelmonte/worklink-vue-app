@@ -8,7 +8,8 @@ export const useModalBusinessStore = defineStore('modalBusiness', {
     provider_business_id: '',
     provider_business_description: '',
     provider_business_category: '',
-    provider_business_rating: 0
+    provider_business_rating: 0,
+    provider_business_images: [] as string[]
   }),
   actions: {
     resetAttributes() {
@@ -18,7 +19,8 @@ export const useModalBusinessStore = defineStore('modalBusiness', {
       this.provider_business_category = ''
       this.provider_business_description = ''
       this.provider_business_id = ''
-      this.provider_business_rating = 0
+      this.provider_business_rating = 0,
+      this.provider_business_images = []
     }
   },
 })
