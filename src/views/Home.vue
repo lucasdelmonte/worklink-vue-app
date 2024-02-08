@@ -6,7 +6,7 @@
 
     <div class="user-options" :open="userOptionsState">
       <ul class="user-options__list">
-        <li><RouterLink class="hover-underline hover-underline--right" :to="`/account/${userStore.userData._id}`">{{ langStore.lang.header.user.view_profile }}</RouterLink></li>
+        <li v-if="userStore.userData.rol != 'ADMIN'"><RouterLink class="hover-underline hover-underline--right" :to="`/account/${userStore.userData._id}`">{{ langStore.lang.header.user.view_profile }}</RouterLink></li>
         <li><RouterLink class="hover-underline hover-underline--right" @click="userStore.logoutUser" :to="'/login-register'">{{ langStore.lang.header.user.logout }}</RouterLink></li>
       </ul>
     </div>
@@ -87,9 +87,15 @@
       </div>
     </template>
 
-    <HowDoesWork />
-    
-    <Blogs />
+    <template v-if="userRol != 'ADMIN'">
+      <HowDoesWork />
+
+      <Blogs />
+    </template>
+
+    <template v-if="userRol === 'ADMIN'">
+      <DisputeRequests />
+    </template>
   </div>
 </template>
 
@@ -103,6 +109,7 @@
   import { useCookies } from 'vue3-cookies'
   import HowDoesWork from '../components/layout/HowDoesWork.vue'
   import Blogs from '../components/layout/Blogs.vue'
+  import DisputeRequests from '../components/layout/DisputeRequests.vue'
 
   const cookies = useCookies()
 

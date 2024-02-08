@@ -23,7 +23,7 @@
         <p>Disfruta del servicio!</p>
       </div>
     </div>
-    <div class="section__steps" v-else>
+    <div class="section__steps" v-else-if="userRol === 'PROVEEDOR'">
       <div class="step">
         <img src="../../assets/Icons/icons8-buscar-cliente-50.png" alt="Paso 1">
         <p>Revisa las solicitudes.</p>

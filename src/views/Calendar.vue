@@ -5,7 +5,7 @@
     <Megamenu @toggleMenu="toggleMenu" :menuState="menuState"></Megamenu>
     <div class="user-options" :open="userOptionsState">
       <ul class="user-options__list">
-        <li><RouterLink class="hover-underline hover-underline--right" :to="`/account/${ userStore.userData._id }`">{{ langStore.lang.header.user.view_profile }}</RouterLink></li>
+        <li v-if="userStore.userData.rol != 'ADMIN'"><RouterLink class="hover-underline hover-underline--right" :to="`/account/${ userStore.userData._id }`">{{ langStore.lang.header.user.view_profile }}</RouterLink></li>
         <li><RouterLink class="hover-underline hover-underline--right" @click="userStore.logoutUser" :to="'/login-register'">{{ langStore.lang.header.user.logout }}</RouterLink></li>
       </ul>
     </div>
@@ -56,7 +56,7 @@
   const langStore = useLangStore()
   const cookies = useCookies()
   const userId = cookies.cookies.get('userId') as '' | undefined
-  const userRol = cookies.cookies.get('userRol') as 'CLIENTE' | 'PROVEEDOR' | undefined
+  const userRol = cookies.cookies.get('userRol') as 'CLIENTE' | 'PROVEEDOR' | 'ADMIN' | undefined
   const userOptionsState: Ref<boolean> = ref(false)
 
   const menuState: Ref<boolean> = ref(false)

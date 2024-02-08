@@ -39,8 +39,11 @@
           <template v-if="userRol === 'CLIENTE'">
             <ClientOptions @createRequest="createRequest" @editRequest="editRequest" />
           </template>
-          <template v-else>
+          <template v-else-if="userRol === 'PROVEEDOR'">
             <ProviderOptions />
+          </template>
+          <template v-else-if="userRol === 'ADMIN'">
+            <AdminOptions />
           </template>
         </div>
       </form>
@@ -59,6 +62,7 @@
   import { useCookies } from 'vue3-cookies'
   import ProviderOptions from '../UsersOptions/ProviderOptions.vue'
   import ClientOptions from '../UsersOptions/ClientOptions.vue'
+  import AdminOptions from '../UsersOptions/AdminOptions.vue'
   import IconClose from '../icons/IconClose.vue'
   import ServiceImages from '../Images/ServiceImages.vue'
   import ModalSlider from '../modals/ModalSlider.vue'
@@ -316,6 +320,9 @@
         }
         &--pendiente {
           background-color: rgb(68, 186, 254);
+        }
+        &--disputa {
+          background-color: rgb(254, 99, 68);
         }
       }
     }

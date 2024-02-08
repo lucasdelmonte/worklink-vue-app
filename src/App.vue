@@ -21,7 +21,7 @@
 
   const cookies = useCookies()
   const userId = cookies.cookies.get('userId') as '' | undefined
-  const userRol = cookies.cookies.get('userRol') as 'CLIENTE' | 'PROVEEDOR' | undefined
+  const userRol = cookies.cookies.get('userRol') as 'CLIENTE' | 'PROVEEDOR' | 'ADMIN' | undefined
   const userNombreApellido = cookies.cookies.get('userNombreApellido') as '' | undefined
   const userPuntuacion = cookies.cookies.get('userPuntuacion') as '' | undefined
   const userTelefono = cookies.cookies.get('userTelefono') as '' | undefined

@@ -25,7 +25,7 @@
         </div>
       </nav>
       <!-- User type provider -->
-      <nav class="megamenu__nav" v-else>
+      <nav class="megamenu__nav" v-else-if="userRol === 'PROVEEDOR'">
         <div class="megamenu__nav-first-level">
           <ul class="megamenu__list-first-level">
             <li><RouterLink :to="`/services-request`">Solicitudes</RouterLink></li>
@@ -34,6 +34,13 @@
         <div class="megamenu__nav-first-level">
           <ul class="megamenu__list-first-level">
             <li><RouterLink :to="`/calendar`">Calendario</RouterLink></li>
+          </ul>
+        </div>
+      </nav>
+      <nav class="megamenu__nav" v-else-if="userRol === 'ADMIN'">
+        <div class="megamenu__nav-first-level">
+          <ul class="megamenu__list-first-level">
+            <li><RouterLink :to="`/`">Solicitudes</RouterLink></li>
           </ul>
         </div>
       </nav>
@@ -57,7 +64,7 @@
 
   const cookies = useCookies()
 
-  const userRol = cookies.cookies.get('userRol') as 'CLIENTE' | 'PROVEEDOR' | undefined
+  const userRol = cookies.cookies.get('userRol') as 'CLIENTE' | 'PROVEEDOR' | 'ADMIN' | undefined
 
   const langStore = useLangStore()
 
