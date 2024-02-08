@@ -4,5 +4,7 @@ export interface IBudget {
   monto: number
   fecha: string
   estado: string
+  detalle: string
+  documentos: string[]
   __v: number
 }

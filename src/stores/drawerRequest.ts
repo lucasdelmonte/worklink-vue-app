@@ -128,14 +128,28 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
         toastAlertStore.updateToast(toastAction, toastTitle, toastMessage)
       }
     },
-    async createBudget(id: string, amount: number, date: string) {
-      if(!id || !amount || !date) return
+    async createBudget(id: string, amount: number, date: string, detail: string, document: string[] | undefined) {
+      if(!id || !amount || !date || !detail) return
       const URL = `http://localhost:4000/presupuestos`
       const toastAlertStore = useToastAlertStore()
-      const data = {
-        "solicitud_servicio": id,
-        "fecha": date,
-        "monto": amount
+
+      let data = {}
+
+      if(document && document.length > 0) {
+        data = {
+          "solicitud_servicio": id,
+          "fecha": date,
+          "monto": amount,
+          "detalle": detail,
+          "documentos": document
+        }
+      } else {
+        data = {
+          "solicitud_servicio": id,
+          "fecha": date,
+          "monto": amount,
+          "detalle": detail
+        }
       }
 
       try {
@@ -228,14 +242,20 @@ export const useDrawerRequestStore = defineStore('drawerRequest', {
         newData = {
           "fecha": data.fecha,
           "monto": data.monto,
-          "estado": state
+          "detalle": data.detalle,
+          "estado": state,
+          "documentos": data.documentos
         }
       } else {
         newData = {
           "fecha": data.fecha,
-          "monto": data.monto
+          "monto": data.monto,
+          "detalle": data.detalle,
+          "documentos": data.documentos
         }
       }
+
+      console.log(data)
 
       try {
         const response = await fetch(URL, {

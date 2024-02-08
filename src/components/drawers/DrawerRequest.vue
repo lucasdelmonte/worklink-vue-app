@@ -25,7 +25,7 @@
           <div class="field field--file" :class="{ 'hidden': validateEdit }">
             <input @change="seletedImages" class="field__input field__input--file" type="file" id="images" name="awsfiles" accept=".jpg,.jpeg,.png" multiple :disabled="validateEdit" v-if="Object.keys(drawerRequest.requestData).length === 0">
           </div>
-          <template v-if="drawerRequest.requestData.imagenes">
+          <template v-if="drawerRequest.requestData.imagenes && drawerRequest.requestData.imagenes.length != 0">
             <div class="gallery">
               <ServiceImages :images="drawerRequest.requestData.imagenes" />
             </div>
