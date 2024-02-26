@@ -22,7 +22,7 @@
               'calendar__day--other-day': d.date != date
             }">
               <span class="calendar__number">
-                {{ `${ d.date }` }}
+                {{ d.date }}
               </span>
               <div class="calendar__services">
                 <template v-for="service in getServicesRequest(`${d.date}/${calendarStore.month}/${calendarStore.year}`)">
