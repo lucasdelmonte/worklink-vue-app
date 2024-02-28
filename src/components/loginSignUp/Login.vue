@@ -16,7 +16,6 @@
           <input v-model="userData.password" class="field__input" type="password" name="password" />
           <label class="field__label" for="password">{{ langStore.lang.login.form.password_input }}</label>
         </div>
-        <a href="#" class="form__forgot hover-underline hover-underline--right">{{ langStore.lang.login.form.forgot_password }}</a>
         <button class="button button--primary-black" :class="{ 'button--loading': userStore.loadingUser }">
           {{ langStore.lang.login.form.button }}
           <IconSpinner :width="20" :height="20" :stroke="'#000000'" />

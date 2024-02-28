@@ -29,7 +29,7 @@
   const modalChat = useModalChatStore()
   const cookies = useCookies()
 
-  const userId = cookies.cookies.get('userId')
+  let userId = cookies.cookies.get('userId')
 
   const message = ref('')
   const toastAction = ref(false)
@@ -60,6 +60,7 @@
   }
 
   watch(() => modalChat.state, (newVal, oldVal) => {
+    userId = cookies.cookies.get('userId')
     if(newVal != oldVal && newVal == true) {
       modalChat.updateChats()
     }
