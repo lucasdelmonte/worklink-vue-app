@@ -10,7 +10,6 @@
         <img src="../../assets/Icons/icons8-notifications.png" alt="Notificaciones">
         <span class="notifications__count" v-if="userStore.notifications.length > 0">{{ userStore.notifications.length < 10 ? userStore.notifications.length : '+' }}</span>
       </button>
-      <a href="/" v-if="userStore.userData.rol != 'ADMIN'"><IconWishlist :width="17" :height="16" /></a>
       <a @click="emit('toggleUserOptions')"><IconUser :width="12" :height="18" /></a>
     </div>
   </header>
