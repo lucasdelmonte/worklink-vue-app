@@ -91,7 +91,7 @@
     </template>
   </div>
   <template v-if="!creatingBudget && drawerRequest.requestData.estado === 'ACEPTADA'">
-    <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudget()" v-if="checkBudgets">Crear presupuesto</button>
+    <button class="drawer__create-request drawer__create-request--create-budget button button--primary-black hidden" @click.prevent="toggleBudget()" :class="checkBudgets">Crear presupuesto</button>
   </template>
   <template v-if="!showingBudget && drawerRequest.requestAction != 'CREATE' && drawerRequest.requestData.estado === 'ACEPTADA'">
     <button class="drawer__create-request button button--primary-black" @click.prevent="toggleBudgets">Ver presupuestos</button>
@@ -207,7 +207,7 @@
   const checkBudgets = computed(() => {
     if(!responseBudgets?.value) return true
     const hasAccepted = responseBudgets?.value.find(x => x.estado === 'ACEPTADO')
-    return hasAccepted ? false : true
+    return hasAccepted ? '' : 'visible'
   })
 
   const setBudget = (budget: IBudget, estado: string, actionMessage: string) => { 
@@ -426,6 +426,16 @@
     .button {
       min-height: 4rem;
       margin: 0;
+    }
+    &__create-request {
+      &--create-budget {
+        &.hidden {
+          display: none;
+        }
+        &.visible {
+          display: block;
+        }
+      }
     }
   }
 </style>
