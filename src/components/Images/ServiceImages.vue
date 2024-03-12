@@ -11,8 +11,8 @@
 <style scoped lang="scss">
   .gallery {
     &__image {
-    flex: 0 0 40%;
-    width: 40%;
+    flex: 0 0 29%;
+    width: 29%;
     object-fit: cover;
     scroll-snap-align: center;
     display: flex;
