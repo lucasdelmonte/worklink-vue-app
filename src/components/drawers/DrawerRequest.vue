@@ -220,7 +220,7 @@
       gap: 0 .8rem;
       width: 100%;
       height: 100%;
-      max-height: 15rem;
+      max-height: 11rem;
       overflow-x: scroll;
       overflow-y: hidden;
 
@@ -241,8 +241,8 @@
       }
 
       &__image {
-        flex: 0 0 40%;
-        width: 40%;
+        flex: 0 0 29%;
+        width: 29%;
         object-fit: cover;
         scroll-snap-align: center;
         display: flex;
